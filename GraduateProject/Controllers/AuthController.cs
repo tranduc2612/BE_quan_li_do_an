@@ -51,7 +51,7 @@ namespace GraduateProject.Controllers
         }
         
         [HttpPost("login")]
-        public Response Login(string username, string password)
+        public Response Login(AccountLogin account)
         {
             Response response = new Response();
             // Validate 
@@ -63,14 +63,14 @@ namespace GraduateProject.Controllers
             try
             {
                 // Nếu thông tin đăng nhập ko đúng
-                if (!_accountService.VerifyLoginInfo(username, password, out string message))
+                if (!_accountService.VerifyLoginInfo(account.LoginName, account.Password, out string message))
                 {
                     response.SetError(message);
                     return response;
                 }
 
-                string token = _accountService.CreateToken(username);
-                _accountService.GenAndSetRefreshToken(Response, username);
+                string token = _accountService.CreateToken(account.LoginName);
+                _accountService.GenAndSetRefreshToken(Response, account.LoginName);
 
                 response.ReturnObj = token;
             }

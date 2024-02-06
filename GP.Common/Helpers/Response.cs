@@ -51,6 +51,7 @@ namespace GP.Common.Helpers
         {
             Success = true;
             Msg = string.Empty;
+            //Code = 200;
         }
 
         public Response(string message) : this()

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GP.Common.Helpers
+namespace GP.Common.Models
 {
     public class RefreshToken
     {

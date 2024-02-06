@@ -5,6 +5,7 @@ using GP.DAL.IRepository;
 using GP.DAL.Repository;
 using GP.Models.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -28,12 +29,20 @@ builder.Services.AddDbContext<QuizletDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("QuizletDb"));
 });
 
+// Turn off default Validate
+//builder.Services.Configure<ApiBehaviorOptions>(options =>
+//{
+//    options.SuppressModelStateInvalidFilter = true;
+//});
+
 // Add service
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ICreditService, CreditService>();
 
 
-// Add interface 
+// Add repository 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<ICreditRepository, CreditRepository>();
 
 
 // Add healper

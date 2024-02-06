@@ -2768,19 +2768,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\OSC\\.nuget\\packages\\": {}
+    "C:\\Users\\MyPc\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\QLDoAn\\be_quan_li_do_an\\GP.DAL\\GP.DAL.csproj",
+      "projectUniqueName": "F:\\DocumentD\\Ki2Nam3\\DOAN\\Quizlet_Real\\Project\\GraduateProject\\GP.DAL\\GP.DAL.csproj",
       "projectName": "GP.DAL",
-      "projectPath": "E:\\QLDoAn\\be_quan_li_do_an\\GP.DAL\\GP.DAL.csproj",
-      "packagesPath": "C:\\Users\\OSC\\.nuget\\packages\\",
-      "outputPath": "E:\\QLDoAn\\be_quan_li_do_an\\GP.DAL\\obj\\",
+      "projectPath": "F:\\DocumentD\\Ki2Nam3\\DOAN\\Quizlet_Real\\Project\\GraduateProject\\GP.DAL\\GP.DAL.csproj",
+      "packagesPath": "C:\\Users\\MyPc\\.nuget\\packages\\",
+      "outputPath": "F:\\DocumentD\\Ki2Nam3\\DOAN\\Quizlet_Real\\Project\\GraduateProject\\GP.DAL\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\OSC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\MyPc\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2794,11 +2794,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "E:\\QLDoAn\\be_quan_li_do_an\\GP.Common\\GP.Common.csproj": {
-              "projectPath": "E:\\QLDoAn\\be_quan_li_do_an\\GP.Common\\GP.Common.csproj"
+            "F:\\DocumentD\\Ki2Nam3\\DOAN\\Quizlet_Real\\Project\\GraduateProject\\GP.Common\\GP.Common.csproj": {
+              "projectPath": "F:\\DocumentD\\Ki2Nam3\\DOAN\\Quizlet_Real\\Project\\GraduateProject\\GP.Common\\GP.Common.csproj"
             },
-            "E:\\QLDoAn\\be_quan_li_do_an\\GP.Models\\GP.Models.csproj": {
-              "projectPath": "E:\\QLDoAn\\be_quan_li_do_an\\GP.Models\\GP.Models.csproj"
+            "F:\\DocumentD\\Ki2Nam3\\DOAN\\Quizlet_Real\\Project\\GraduateProject\\GP.Models\\GP.Models.csproj": {
+              "projectPath": "F:\\DocumentD\\Ki2Nam3\\DOAN\\Quizlet_Real\\Project\\GraduateProject\\GP.Models\\GP.Models.csproj"
             }
           }
         }
@@ -2828,7 +2828,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

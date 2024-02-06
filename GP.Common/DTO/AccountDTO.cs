@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +9,10 @@ namespace GP.Common.DTO
 {
     public class AccountDTO
     {
-        public string Username { get; set; } = null!;
+        public string Username { get; set; }
 
-        public string Email { get; set; } = null!;
+        [Required]
+        public string? Email { get; set; }
 
         public string? PasswordText { get; set; }
 
