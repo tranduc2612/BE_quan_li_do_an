@@ -9,12 +9,14 @@ namespace GP.Common.DTO
 {
     public class AccountDTO
     {
-        public string Username { get; set; }
-
         [Required]
+        public string UserName { get; set; } = null!;
         public string? Email { get; set; }
-
-        public string? PasswordText { get; set; }
-
+        public string? Password { get; set; }
+        public int? Age { get; set; }
+        public DateTime? DOB { get; set; }
+        public string? Token { get; set; }
+        public string? RefreshToken { get; set; }
+        public DateTime? TokenExpires { get; set; }
     }
 }

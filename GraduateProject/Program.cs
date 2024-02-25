@@ -3,7 +3,7 @@ using GP.Business.Service;
 using GP.Common.Helpers;
 using GP.DAL.IRepository;
 using GP.DAL.Repository;
-using GP.Models.Data;
+using GP.Models.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +24,7 @@ builder.Services.AddControllers(
 );
 
 
-builder.Services.AddDbContext<QuizletDbContext>(options =>
+builder.Services.AddDbContext<ManagementGraduationProjectContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("QuizletDb"));
 });
@@ -37,12 +37,10 @@ builder.Services.AddDbContext<QuizletDbContext>(options =>
 
 // Add service
 builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<ICreditService, CreditService>();
 
 
 // Add repository 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-builder.Services.AddScoped<ICreditRepository, CreditRepository>();
 
 
 // Add healper
@@ -76,6 +74,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 ValidateAudience = false
             };
         });
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("http://example.com",
+                                "http://localhost:5173").AllowAnyOrigin()
+                                                         .AllowAnyMethod()
+                                                         .AllowAnyHeader();
+        });
+});
 
 var app = builder.Build();
 
@@ -85,6 +94,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 

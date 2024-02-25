@@ -5,7 +5,7 @@ using GP.Common.DTO;
 using GP.Common.Helpers;
 using GP.Common.Models;
 using GP.DAL.IRepository;
-using GP.Models.Data;
+using GP.Models.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using System;
@@ -20,16 +20,16 @@ namespace GP.Business.Service
 {
     public class AccountService : IAccountService
     {
-        private readonly MappingProfile _mapper;
         private readonly IAccountRepository _accountRepository;
         private readonly AuthHelper _authHelper;
+        private readonly MappingProfile _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountService(MappingProfile mapper, IAccountRepository accountRepository, AuthHelper authHelper, IHttpContextAccessor httpContextAccessor)
+        public AccountService( IAccountRepository accountRepository, AuthHelper authHelper, IHttpContextAccessor httpContextAccessor, MappingProfile mapper)
         {
-            _mapper = mapper;
             _accountRepository = accountRepository;
             _authHelper = authHelper;
+            _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -48,7 +48,7 @@ namespace GP.Business.Service
                 return true;
             }
 
-            account = _accountRepository.GetByUsername(accountDTO.Username);
+            account = _accountRepository.GetByUsername(accountDTO.UserName);
             if (account != null)
             {
                 message = "Username này đã được tài khoản khác sử dụng";
@@ -58,63 +58,23 @@ namespace GP.Business.Service
             return false;
         }
 
-        public string CreateToken(string username)
+        public AccountDTO CreateToken(string username)
         {
             Account account = _accountRepository.GetByUsernameOrEmail(username);
+            AccountDTO accountDTO = _mapper.MapAccountToDTO(account);
 
-            // TODO: create token 
             string token = _authHelper.CreateToken(account);
-            return token;
-        }
 
-        // Giống với bên AuthHelper.cs
-        public string GetCurrentUsername()
-        {
-            var username = string.Empty;
-            if (_httpContextAccessor.HttpContext != null)
-            {
-                username = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
-            }
-            return username;
-        }
+            accountDTO.Token = token;
 
-        public Account GetCurrentAccount()
-        {
-            string username = GetCurrentUsername();
-            Account account = _accountRepository.GetByUsername(username);
 
-            return account;
-        }
-
-        /// <summary>
-        /// Generate and set refresh token to Cookies and Account table db 
-        /// </summary>
-        /// <returns></returns>
-        public void GenAndSetRefreshToken(HttpResponse response, string username = null)
-        {
+            // Generate and set refresh token (như hàm GenAndSetRefreshToken bên dưới nhưng ko set vào cookies)
             var refreshToken = new RefreshToken
             {
                 Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
                 Expires = DateTime.Now.AddDays(7),
                 Created = DateTime.Now
             };
-
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Expires = refreshToken.Expires
-            };
-
-            response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
-            
-            Account account;
-            // trường hợp đăng nhập
-            if (username != null)
-            {
-                account = _accountRepository.GetByUsername(username);
-            }
-            // trường hợp refresh token
-            else  account = GetCurrentAccount();
 
             // cập nhật thông tin user 
             if (account != null)
@@ -125,12 +85,36 @@ namespace GP.Business.Service
 
                 _accountRepository.UpdateAccount(account);
             }
+
+            accountDTO.RefreshToken = refreshToken.Token;
+
+            return accountDTO;
+        }
+
+        // Giống với bên AuthHelper.cs
+        public string GetCurrentUsername()
+        {
+            var username = string.Empty;
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                username = _httpContextAccessor.HttpContext.User.FindFirstValue("username");
+            }
+            return username;
+        }
+
+        public AccountDTO GetCurrentAccount()
+        {
+            string username = GetCurrentUsername();
+            
+            AccountDTO account = _mapper.MapAccountToDTO(_accountRepository.GetByUsername(username));
+
+            return account;
         }
 
         public bool CheckValidRefreshToken(string refreshToken, out string message)
         {
             message = string.Empty;
-            Account account = GetCurrentAccount();
+            AccountDTO account = GetCurrentAccount();
 
             if (account.RefreshToken == null || !account.RefreshToken.Equals(refreshToken))
             {
@@ -148,13 +132,10 @@ namespace GP.Business.Service
 
         public void Register(AccountDTO accountDTO)
         {
-            //Account account = _mapper.MapDTOToAccount(accountDTO);
+            Account account = _mapper.MapDTOToAccount(accountDTO);
 
-            Account account = new Account();
-            account.Username = accountDTO.Username;
-            account.Email = accountDTO.Email;
 
-            AuthHelper.CreatePassHash(accountDTO.PasswordText, out byte[] passwordHash, out byte[] passwordSalt);
+            AuthHelper.CreatePassHash(accountDTO.Password, out byte[] passwordHash, out byte[] passwordSalt);
             account.Password = passwordHash;
             account.PasswordSalt = passwordSalt;
 

@@ -1,6 +1,6 @@
 ﻿using GP.Common.DTO;
 using GP.Common.Helpers;
-using GP.Models.Data;
+using GP.Models.Model;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -18,11 +18,9 @@ namespace GP.Business.IService
 
         public bool VerifyLoginInfo(string username, string password, out string message);
 
-        public string CreateToken(string username);
+        public AccountDTO CreateToken(string username);
 
-        public void GenAndSetRefreshToken(HttpResponse response, string username = null);
-
-        public Account GetCurrentAccount();
+        public AccountDTO GetCurrentAccount();
 
         public string GetCurrentUsername();
 

@@ -39,14 +39,15 @@ namespace GraduateProject.Controllers
                     return response;
                 }
 
+                response.Msg = "Register sucess";
+
                 // đăng kí: hash pass, tạo user mới ...
                 _accountService.Register(accountDTO);
             } catch (Exception ex)
             {
                 response.SetError("Có lỗi xảy ra");
-                response.ExceptionInfo = ex;
+                response.ExceptionInfo = ex.ToString();
             }
-            response.Msg = "Register sucess";
             return response;
         }
         
@@ -63,33 +64,43 @@ namespace GraduateProject.Controllers
             try
             {
                 // Nếu thông tin đăng nhập ko đúng
-                if (!_accountService.VerifyLoginInfo(account.LoginName, account.Password, out string message))
+                if (!_accountService.VerifyLoginInfo(account.UserName, account.Password, out string message))
                 {
-                    response.SetError(message);
+                    response.SetError("Sai thông tin đăng nhập");
+                    response.ReturnObj = new
+                    {
+                        typeError = "username",
+                        messageError = message
+                    };
                     return response;
                 }
 
-                string token = _accountService.CreateToken(account.LoginName);
-                _accountService.GenAndSetRefreshToken(Response, account.LoginName);
+                AccountDTO account_dto = _accountService.CreateToken(account.UserName);
 
-                response.ReturnObj = token;
+                response.ReturnObj = account_dto;
+                response.Msg = "Login sucess";
             }
             catch (Exception ex)
             {
                 response.SetError("Có lỗi xảy ra");
-                response.ExceptionInfo = ex;
+                response.ExceptionInfo = ex.ToString();
             }
-            response.Msg = "Login sucess";
+            
             return response;
         }
 
 
         [HttpPost("refresh-token"), Authorize]
-        public Response RefreshToken()
+        public Response RefreshToken([FromBody] string refreshToken)
         {
             Response response = new Response();
-            var refreshToken = Request.Cookies["refreshToken"];
-
+            //var refreshToken = Request.Cookies["refreshToken"];
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Validate Error");
+                return response;
+            }
             try
             {
                 if (!_accountService.CheckValidRefreshToken(refreshToken, out string message))
@@ -100,15 +111,17 @@ namespace GraduateProject.Controllers
 
                 string curentUsername = _accountService.GetCurrentUsername();
 
-                string token = _accountService.CreateToken(curentUsername);
-                _accountService.GenAndSetRefreshToken(Response);
+                AccountDTO accountDTO = _accountService.CreateToken(curentUsername);
+                //string token = _accountService.CreateToken(curentUsername);
+                //_accountService.GenAndSetRefreshToken(Response);
 
-                response.ReturnObj = token;
+                //response.ReturnObj = token;
+                response.ReturnObj = accountDTO;
             }
             catch (Exception ex)
             {
                 response.SetError("Có lỗi xảy ra");
-                response.ExceptionInfo = ex;
+                response.ExceptionInfo = ex.ToString();
             }
             response.Msg = "Refresh token sucess";
             return response;

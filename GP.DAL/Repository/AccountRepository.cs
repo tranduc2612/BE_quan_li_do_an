@@ -1,5 +1,5 @@
 ﻿using GP.DAL.IRepository;
-using GP.Models.Data;
+using GP.Models.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +10,8 @@ namespace GP.DAL.Repository
 {
     public class AccountRepository : IAccountRepository
     {
-        private readonly QuizletDbContext _dbContext;
-        public AccountRepository(QuizletDbContext dbContext)
+        private readonly ManagementGraduationProjectContext _dbContext;
+        public AccountRepository(ManagementGraduationProjectContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -22,6 +22,7 @@ namespace GP.DAL.Repository
             return account;
         }
 
+
         public Account GetByEmail(string email)
         {
             return _dbContext.Accounts.SingleOrDefault(account => account.Email == email);
@@ -29,12 +30,12 @@ namespace GP.DAL.Repository
 
         public Account GetByUsername(string username)
         {
-            return _dbContext.Accounts.SingleOrDefault(account => account.Username == username);
+            return _dbContext.Accounts.SingleOrDefault(account => account.UserName == username);
         }
 
         public Account GetByUsernameOrEmail(string username)
         {
-            return _dbContext.Accounts.SingleOrDefault(account => account.Username == username || account.Email == username);
+            return _dbContext.Accounts.SingleOrDefault(account => account.UserName == username || account.Email == username);
         }
 
         public void UpdateAccount(Account account)

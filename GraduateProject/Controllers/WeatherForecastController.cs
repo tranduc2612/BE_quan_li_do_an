@@ -1,6 +1,6 @@
 using GP.Business.IService;
 using GP.Common.Helpers;
-using GP.Models.Data;
+using GP.Models.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,14 +16,14 @@ namespace GraduateProject.Controllers
     };
 
         private readonly ILogger<WeatherForecastController> _logger;
-        private QuizletDbContext _quizletDbContext;
+        private ManagementGraduationProjectContext _quizletDbContext;
         private AuthHelper _authHelper;
         private readonly IAccountService _accountService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public WeatherForecastController(
             ILogger<WeatherForecastController> logger, 
-            QuizletDbContext quizletDbContext, 
+            ManagementGraduationProjectContext quizletDbContext, 
             AuthHelper authHelper, 
             IHttpContextAccessor httpContextAccessor,
             IAccountService accountService)
@@ -51,7 +51,7 @@ namespace GraduateProject.Controllers
         public Response TestDB()
         {
             string currentUser = _accountService.GetCurrentUsername();
-            var res = _quizletDbContext.Accounts.Where(x => x.Username == currentUser);
+            var res = _quizletDbContext.Accounts.Where(x => x.UserName == currentUser);
             return new Response(StatusCodes.Status200OK, res);
         }
     }

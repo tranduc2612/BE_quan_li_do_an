@@ -1,5 +1,5 @@
 ﻿using GP.Common.DTO;
-using GP.Models.Data;
+using GP.Models.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Configuration;
@@ -49,9 +49,9 @@ namespace GP.Common.Helpers
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, account.Username),
-                new Claim(ClaimTypes.Email, account.Email),
-                new Claim(ClaimTypes.Role, account.Role)
+                new Claim("username", account.UserName),
+                new Claim("email", String.IsNullOrEmpty(account.Email) ? String.Empty: account.Email),
+                new Claim("role", String.IsNullOrEmpty(account.Role) ? String.Empty: account.Role)
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(

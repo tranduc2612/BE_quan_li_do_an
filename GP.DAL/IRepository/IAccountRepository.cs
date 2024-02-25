@@ -1,4 +1,5 @@
-﻿using GP.Models.Data;
+﻿using GP.Common.DTO;
+using GP.Models.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
