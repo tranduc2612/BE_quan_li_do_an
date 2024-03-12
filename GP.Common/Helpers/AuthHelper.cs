@@ -45,13 +45,13 @@ namespace GP.Common.Helpers
             }
         }
 
-        public string CreateToken(Account account)
+        public string CreateToken(LoginResponseDTO account)
         {
             List<Claim> claims = new List<Claim>
             {
                 new Claim("username", account.UserName),
                 new Claim("email", String.IsNullOrEmpty(account.Email) ? String.Empty: account.Email),
-                new Claim("role", String.IsNullOrEmpty(account.Role) ? String.Empty: account.Role)
+                new Claim("rolee", String.IsNullOrEmpty(account.Role) ? String.Empty: account.Role)
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(

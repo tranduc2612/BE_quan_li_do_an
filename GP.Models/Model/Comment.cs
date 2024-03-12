@@ -11,9 +11,9 @@ public partial class Comment
 
     public string? CreatedBy { get; set; }
 
-    public string? CreatedDate { get; set; }
+    public DateTime? CreatedDate { get; set; }
 
-    public string? ProjectOutlineId { get; set; }
+    public string? UserName { get; set; }
 
-    public virtual ProjectOutline? ProjectOutline { get; set; }
+    public virtual ProjectOutline? UserNameNavigation { get; set; }
 }

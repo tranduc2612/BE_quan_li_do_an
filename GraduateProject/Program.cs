@@ -7,9 +7,11 @@ using GP.Models.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +23,7 @@ builder.Services.AddControllers(
     //{
     //    options.Filters.Add(typeof(CustomExceptionFilter));
     //}
-);
+).AddNewtonsoftJson(option => option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 
 builder.Services.AddDbContext<ManagementGraduationProjectContext>(options =>
@@ -37,15 +39,35 @@ builder.Services.AddDbContext<ManagementGraduationProjectContext>(options =>
 
 // Add service
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IClassificationService, ClassificationService>();
+builder.Services.AddScoped<ISemesterService, SemesterService>();
+builder.Services.AddScoped<IMajorService, MajorService>();
+builder.Services.AddScoped<IClassificationService, ClassificationService>();
+
 
 
 // Add repository 
-builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IClassificationRepository, ClassificationRepository>();
+builder.Services.AddScoped<IProjectOutlineRepository, ProjectOutlineRepository>();
+builder.Services.AddScoped<ISemesterRepository, SemesterRepository>();
+builder.Services.AddScoped<IMajorRepository, MajorRepository>();
+builder.Services.AddScoped<IClassificationRepository, ClassificationRepository>();
+
+
+
+
+
 
 
 // Add healper
 builder.Services.AddScoped<MappingProfile>();
 builder.Services.AddScoped<AuthHelper>();
+builder.Services.AddScoped<HelperCommon>();
+
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -62,6 +84,12 @@ builder.Services.AddSwaggerGen(options =>
     });
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+
+//builder.Services.AddDbContext<ManagementGraduationProjectContext>(options =>
+//{
+//    options.UseSqlServer("Data Source=MSI\\SQLEXPRESS;Initial Catalog=ManagementGraduationProject;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+//    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+//});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>

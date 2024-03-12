@@ -46,13 +46,5 @@ namespace GraduateProject.Controllers
             })
             .ToArray();
         }
-
-        [HttpGet("test"), Authorize]
-        public Response TestDB()
-        {
-            string currentUser = _accountService.GetCurrentUsername();
-            var res = _quizletDbContext.Accounts.Where(x => x.UserName == currentUser);
-            return new Response(StatusCodes.Status200OK, res);
-        }
     }
 }

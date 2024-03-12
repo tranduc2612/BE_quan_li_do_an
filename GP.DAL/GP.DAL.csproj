@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="IRepository\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GP.Common\GP.Common.csproj" />
     <ProjectReference Include="..\GP.Models\GP.Models.csproj" />
   </ItemGroup>

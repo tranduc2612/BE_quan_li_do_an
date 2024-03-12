@@ -186,3 +186,7 @@ E:\QLDoAn\be_quan_li_do_an\GraduateProject\obj\Debug\net6.0\refint\GraduateProje
 E:\QLDoAn\be_quan_li_do_an\GraduateProject\obj\Debug\net6.0\GraduateProject.pdb
 E:\QLDoAn\be_quan_li_do_an\GraduateProject\obj\Debug\net6.0\GraduateProject.genruntimeconfig.cache
 E:\QLDoAn\be_quan_li_do_an\GraduateProject\obj\Debug\net6.0\ref\GraduateProject.dll
+E:\QLDoAn\be_quan_li_do_an\GraduateProject\bin\Debug\net6.0\Microsoft.AspNetCore.JsonPatch.dll
+E:\QLDoAn\be_quan_li_do_an\GraduateProject\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+E:\QLDoAn\be_quan_li_do_an\GraduateProject\bin\Debug\net6.0\Newtonsoft.Json.dll
+E:\QLDoAn\be_quan_li_do_an\GraduateProject\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll

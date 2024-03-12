@@ -5,19 +5,21 @@ namespace GP.Models.Model;
 
 public partial class ProjectOutline
 {
-    public string ProjectOutlineId { get; set; } = null!;
+    public string UserName { get; set; } = null!;
 
-    public int? NameProject { get; set; }
+    public string? NameProject { get; set; }
 
-    public int? PlantOutline { get; set; }
+    public string? PlantOutline { get; set; }
 
-    public int? TechProject { get; set; }
+    public string? TechProject { get; set; }
 
-    public int? ExpectResult { get; set; }
+    public string? ExpectResult { get; set; }
 
-    public string? ProjectId { get; set; }
+    public string? GroupReviewOutlineId { get; set; }
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
-    public virtual Project? Project { get; set; }
+    public virtual GroupReviewOutline? GroupReviewOutline { get; set; }
+
+    public virtual Project UserNameNavigation { get; set; } = null!;
 }

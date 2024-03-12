@@ -13,5 +13,13 @@ public partial class Semester
 
     public DateTime? ToDate { get; set; }
 
+    public string? ScheduleSemesterId { get; set; }
+
+    public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
+
+    public virtual ScheduleSemester? ScheduleSemester { get; set; }
+
+    public virtual ICollection<ScheduleWeek> ScheduleWeeks { get; set; } = new List<ScheduleWeek>();
+
     public virtual ICollection<Teaching> Teachings { get; set; } = new List<Teaching>();
 }
