@@ -44,6 +44,9 @@ builder.Services.AddScoped<IClassificationService, ClassificationService>();
 builder.Services.AddScoped<ISemesterService, SemesterService>();
 builder.Services.AddScoped<IMajorService, MajorService>();
 builder.Services.AddScoped<IClassificationService, ClassificationService>();
+builder.Services.AddScoped<IScheduleSemesterService, ScheduleSemesterService>();
+builder.Services.AddScoped<IGroupReviewOutlineService, GroupReviewOutlineService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 
 
@@ -56,6 +59,11 @@ builder.Services.AddScoped<IProjectOutlineRepository, ProjectOutlineRepository>(
 builder.Services.AddScoped<ISemesterRepository, SemesterRepository>();
 builder.Services.AddScoped<IMajorRepository, MajorRepository>();
 builder.Services.AddScoped<IClassificationRepository, ClassificationRepository>();
+builder.Services.AddScoped<IScheduleSemesterRepository, ScheduleSemesterRepository>();
+builder.Services.AddScoped<IGroupReviewOutlineRepository, GroupReviewOutlineRepository>();
+builder.Services.AddScoped<ITeachingRepository, TeachingRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+
 
 
 
@@ -107,7 +115,7 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policy =>
         {
-            policy.WithOrigins("http://example.com",
+            policy.WithOrigins("Access-Control-Allow-Origin:*",
                                 "http://localhost:5173").AllowAnyOrigin()
                                                          .AllowAnyMethod()
                                                          .AllowAnyHeader();
@@ -123,7 +131,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors();
+app.UseCors(builder =>
+{
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+});
 
 app.UseHttpsRedirection();
 

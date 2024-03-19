@@ -32,6 +32,9 @@ namespace GP.Common.DTO
         public int? IsAdmin { get; set; }
         public string UserName { get; set; } = null!;
         public int? IsDelete { get; set; }
+        public int? Gender { get; set; }
+
+        public string? Address { get; set; }
         public virtual MajorDTO? Major { get; set; }
 
 

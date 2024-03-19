@@ -30,12 +30,22 @@ namespace GP.Common.Helpers
 
                 cfg.CreateMap<Student, LoginResponseDTO>().ReverseMap();
                 cfg.CreateMap<Student, StudentDTO>().ReverseMap();
+                cfg.CreateMap<ProjectOutlineDTO, ProjectOutline>().ReverseMap();
+                cfg.CreateMap<GroupReviewOutline, GroupReviewOutlineDTO>().ReverseMap();
+                cfg.CreateMap<TeachingDTO, Teaching>().ReverseMap();
+
 
                 cfg.CreateMap<Major, MajorDTO>().ReverseMap();
 
 
                 cfg.CreateMap<Teacher, LoginResponseDTO>().ReverseMap();
+                cfg.CreateMap<Comment, CommentDTO>().ReverseMap();
+
                 cfg.CreateMap<Project, ProjectDTO>().ReverseMap();
+                cfg.CreateMap<ScheduleSemester, ScheduleSemesterDTO>().ReverseMap();
+                cfg.CreateMap<ScheduleSemesterModel, ScheduleSemester>().ReverseMap();
+
+
 
             });
 
@@ -139,6 +149,59 @@ namespace GP.Common.Helpers
         public Semester MapSemesterDTOToSemester(SemesterDTO semesterDTO)
         {
             return _mapper.Map<Semester>(semesterDTO);
+        }
+
+        public SemesterDTO MapSemesterToSemesterDTO(Semester semester)
+        {
+            return _mapper.Map<SemesterDTO>(semester);
+        }
+
+        public List<Semester> MapSemesterDTOsToSemesters(List<SemesterDTO> semesterDTO)
+        {
+            return _mapper.Map<List<Semester>>(semesterDTO);
+        }
+
+        public ScheduleSemesterDTO MapScheduleSemesterToScheduleSemesterDTO(ScheduleSemester semester)
+        {
+            return _mapper.Map<ScheduleSemesterDTO>(semester);
+        }
+
+        public ScheduleSemester MapScheduleSemesterDTOToScheduleSemester(ScheduleSemesterDTO semester)
+        {
+            return _mapper.Map<ScheduleSemester>(semester);
+        }
+
+        public ScheduleSemester MapScheduleSemesterModelToScheduleSemester(ScheduleSemesterModel semester)
+        {
+            return _mapper.Map<ScheduleSemester>(semester);
+        }
+        public List<ScheduleSemesterDTO> MapScheduleSemestersToScheduleSemesterDTOs(List<ScheduleSemester> semester)
+        {
+            return _mapper.Map<List<ScheduleSemesterDTO>>(semester);
+        }
+
+        public Comment MapCommentDTOToComment(CommentDTO comment)
+        {
+            return _mapper.Map<Comment>(comment);
+        }
+
+        public Teaching MapTeachingDTOToTeaching(TeachingDTO teaching)
+        {
+            return _mapper.Map<Teaching>(teaching);
+        }
+        public List<Teaching> MapTeachingDTOsToTeachings(List<TeachingDTO> teaching)
+        {
+            return _mapper.Map<List<Teaching>>(teaching);
+        }
+
+        public TeachingDTO MapTeachingToTeachingDTO(Teaching teaching)
+        {
+            return _mapper.Map<TeachingDTO>(teaching);
+        }
+
+        public List<TeachingDTO> MapTeachingsToTeachingDTOs(List<Teaching> teaching)
+        {
+            return _mapper.Map<List<TeachingDTO>>(teaching);
         }
     }
 }

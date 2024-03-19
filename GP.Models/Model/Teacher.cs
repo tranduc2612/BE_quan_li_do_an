@@ -45,6 +45,10 @@ public partial class Teacher
 
     public string? MajorId { get; set; }
 
+    public int? Gender { get; set; }
+
+    public string? Address { get; set; }
+
     public virtual Major? Major { get; set; }
 
     public virtual ICollection<Project> ProjectUserNameCommentatorNavigations { get; set; } = new List<Project>();
@@ -54,6 +58,8 @@ public partial class Teacher
     public virtual ICollection<ScheduleSemester> ScheduleSemesters { get; set; } = new List<ScheduleSemester>();
 
     public virtual ICollection<ScheduleWeek> ScheduleWeeks { get; set; } = new List<ScheduleWeek>();
+
+    public virtual ICollection<Semester> Semesters { get; set; } = new List<Semester>();
 
     public virtual ICollection<Teaching> Teachings { get; set; } = new List<Teaching>();
 }

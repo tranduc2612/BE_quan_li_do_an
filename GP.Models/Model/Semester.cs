@@ -15,9 +15,17 @@ public partial class Semester
 
     public string? ScheduleSemesterId { get; set; }
 
+    public string? CreatedBy { get; set; }
+
+    public DateTime? CreatedAt { get; set; }
+
+    public int? IsDelete { get; set; }
+
+    public virtual Teacher? CreatedByNavigation { get; set; }
+
     public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
 
-    public virtual ScheduleSemester? ScheduleSemester { get; set; }
+    public virtual ICollection<ScheduleSemester> ScheduleSemesters { get; set; } = new List<ScheduleSemester>();
 
     public virtual ICollection<ScheduleWeek> ScheduleWeeks { get; set; } = new List<ScheduleWeek>();
 

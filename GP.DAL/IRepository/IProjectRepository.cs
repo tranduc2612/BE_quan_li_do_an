@@ -10,8 +10,7 @@ namespace GP.DAL.IRepository
 {
     public interface IProjectRepository
     {
-        public Project GetByUsername(string username);
-        public List<Project> GetList(ProjectListModel data);
-        public Project Add(Project data);
+        public Project GetProjectByUsername(string username);
+        public Project AssignMentor(Teacher teacher,string username);
     }
 }

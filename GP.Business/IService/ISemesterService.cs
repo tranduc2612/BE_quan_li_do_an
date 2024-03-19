@@ -13,5 +13,6 @@ namespace GP.Business.IService
     {
         public List<Semester> GetListSemester(SemesterDTO req);
         public bool Add(SemesterDTO req, out string message);
+        public PaginatedResultBase<SemesterDTO> GetListSemesterPage(SemesterListModel data);
     }
 }

@@ -41,6 +41,27 @@ namespace GraduateProject.Controllers
             return response;
         }
 
+        // 
+        [HttpPost("get-list-page-semester")]
+        public Response GetListSemesterPage([FromBody] SemesterListModel req)
+        {
+            Response response = new Response();
+
+            try
+            {
+                //var currentAccount = _accountService.GetInfoAccount(username);
+                response.Msg = "Sucess";
+                response.Code = 200;
+                response.ReturnObj = _semesterService.GetListSemesterPage(req);
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
         [HttpPost("add-semester")]
         public Response AddSemeter([FromBody] SemesterDTO req)
         {
@@ -50,7 +71,11 @@ namespace GraduateProject.Controllers
             {
                 //var currentAccount = _accountService.GetInfoAccount(username);
                 response.Code = 201;
-                response.ReturnObj = _semesterService.Add(req, out string message);
+                bool isCheck = _semesterService.Add(req, out string message);
+                if(!isCheck)
+                {
+                    response.SetError(400,message);
+                }
                 response.Msg = message;
             }
             catch (Exception ex)

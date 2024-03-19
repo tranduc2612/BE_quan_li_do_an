@@ -7,9 +7,11 @@ public partial class GroupReviewOutline
 {
     public string GroupReviewOutlineId { get; set; } = null!;
 
-    public string? NameGroupReviewOutline { get; set; }
-
     public string? CreatedBy { get; set; }
+
+    public int? IsDelete { get; set; }
+
+    public string? NameGroupReviewOutline { get; set; }
 
     public DateTime? CreatedDate { get; set; }
 

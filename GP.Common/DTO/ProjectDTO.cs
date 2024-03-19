@@ -27,6 +27,7 @@ namespace GP.Common.DTO
         public int? ScoreUv3 { get; set; }
 
         public string? CommentUv3 { get; set; }
+        public string? StatusProject { get; set; }
 
         public string? CommentGroupReviewOutline { get; set; }
         [Required]

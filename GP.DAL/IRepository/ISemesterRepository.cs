@@ -12,9 +12,9 @@ namespace GP.DAL.IRepository
     public interface ISemesterRepository
     {
         public Semester GetById(string id);
-
+        public List<Semester> GetByDate(DateTime? fromDate, DateTime? toDate);
         public List<Semester> GetList(SemesterDTO req);
-
+        public PaginatedResultBase<SemesterDTO> GetListPage(SemesterListModel req);
         public bool Add(Semester req);
     }
 }

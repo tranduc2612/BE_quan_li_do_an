@@ -9,10 +9,11 @@ namespace GP.Common.DTO
 {
     public class StudentDTO
     {
+        public StudentDTO()
+        {
+
+        }
         public string UserName { get; set; } = null!;
-
-        public byte[]? Password { get; set; }
-
         public string? FullName { get; set; }
 
         public DateTime? Dob { get; set; }
@@ -38,6 +39,9 @@ namespace GP.Common.DTO
         public string? SchoolYearName { get; set; }
 
         public int? IsDelete { get; set; }
+        public int? Gender { get; set; }
+        public string? Address { get; set; }
+        public double? Gpa { get; set; }
 
         public virtual MajorDTO? Major { get; set; }
 

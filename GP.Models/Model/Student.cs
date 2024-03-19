@@ -45,6 +45,12 @@ public partial class Student
 
     public DateTime? TokenExpires { get; set; }
 
+    public int? Gender { get; set; }
+
+    public string? Address { get; set; }
+
+    public double? Gpa { get; set; }
+
     public virtual Major? Major { get; set; }
 
     public virtual Project? Project { get; set; }

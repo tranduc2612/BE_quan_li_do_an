@@ -23,16 +23,22 @@ namespace GP.Business.Service
 
         public bool Add(SemesterDTO req, out string message)
         {
-            if (_semesterRepository.Add(_mapper.MapSemesterDTOToSemester(req)))
-            {
-                message= "Thêm thành thành công !";
-                return true;
-            }
-            else
+            Semester semesterFind = _semesterRepository.GetById(req.SemesterId);
+            if (semesterFind != null)
             {
                 message = "học kỳ đã tồn tại !";
                 return false;
             }
+
+             List<Semester> lstSemesterCheck = _semesterRepository.GetByDate(req.FromDate, req.ToDate);
+            if(lstSemesterCheck.Count() > 0) {
+                message = "Khoảng thời gian này đã có học kỳ tồn tại !";
+                return false;
+            }
+
+            message = "Thêm thành công !";
+
+            return _semesterRepository.Add(_mapper.MapSemesterDTOToSemester(req));
 
         }
 
@@ -41,5 +47,9 @@ namespace GP.Business.Service
             return _semesterRepository.GetList(req);
         }
 
+        public PaginatedResultBase<SemesterDTO> GetListSemesterPage(SemesterListModel data)
+        {
+            return _semesterRepository.GetListPage(data);
+        }
     }
 }

@@ -17,40 +17,56 @@ namespace GP.Business.Service
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IProjectOutlineRepository _projectOutlineRepository;
+        private readonly ITeacherRepository _teacherRepository;
         private readonly IStudentRepository _studentRepository;
 
 
         private readonly MappingProfile _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ProjectService(IProjectRepository projectRepository, IHttpContextAccessor httpContextAccessor, IProjectOutlineRepository projectOutlineRepository, IStudentRepository studentRepository, MappingProfile mapper)
+        public ProjectService(IProjectRepository projectRepository, IHttpContextAccessor httpContextAccessor, IProjectOutlineRepository projectOutlineRepository, IStudentRepository studentRepository, ITeacherRepository teacherRepository, MappingProfile mapper)
         {
             _projectRepository = projectRepository;
             _projectOutlineRepository = projectOutlineRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _studentRepository = studentRepository;
+            _teacherRepository= teacherRepository;
         }
 
-        public ProjectOutlineDTO AddNewProjectOutline(ProjectOutlineDTO projectOutlineDTO)
+        public bool AddNewProjectOutline(ProjectOutlineDTO projectOutlineDTO, out string message)
         {
-            Project project_find = _projectRepository.GetByUsername(projectOutlineDTO.UserName);
+            Project project_find = _projectRepository.GetProjectByUsername(projectOutlineDTO.UserName);
             if(project_find == null)
             {
-                return null;
+                message = "Sinh viên chưa có đồ án";
+                return false;
             }
-            ProjectOutline new_project_outline = _mapper.MapProjectOutlineDTOToProjectOutline(projectOutlineDTO);
-            return _mapper.MapProjectOutlineToProjectOutlineDTO(_projectOutlineRepository.Add(new_project_outline));
+
+            ProjectOutline projectOutline = _mapper.MapProjectOutlineDTOToProjectOutline(projectOutlineDTO);
+            _projectOutlineRepository.Add(projectOutline);
+            message = "Thêm đề cương đồ án thành công !";
+            return true;
         }
 
-        public List<Project> GetListProject(ProjectListModel data)
+        public bool AssignMentorTeacher(string username_student,string username_teacher, out string message)
         {
-            return _projectRepository.GetList(data);
-        }
+            Teacher teacherFind = _teacherRepository.Get(username_teacher);
+            if(teacherFind == null)
+            {
+                message = "Giáo viên không tồn tại !";
+                return false;
+            }
 
-        public Project GetProjectByUsername(string username)
-        {
-            return _projectRepository.GetByUsername(username);
+            Project projectAssign = _projectRepository.AssignMentor(teacherFind, username_student);
+            if(projectAssign == null)
+            {
+                message = "Đồ án không tồn tại !";
+                return false;
+            }
+
+            message = "Gán giảng viên thành công !";
+            return true;
         }
 
         public ProjectOutline GetProjectOutlineByUsername(string username)

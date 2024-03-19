@@ -202,9 +202,6 @@ namespace GP.Business.Service
         public void RegisterStudent(StudentModel studentDTO)
         {
             _studentRepository.Create(studentDTO);
-            //new_project.UserName = student.UserName;
-            //new_project.SemesterId = studentDTO.SemesterId;
-            //_projectRepository.Add(new_project);
         }
         public void RegisterTeacher(TeacherModel teacherModel)
         {

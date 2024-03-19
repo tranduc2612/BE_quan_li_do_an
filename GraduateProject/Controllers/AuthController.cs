@@ -1,10 +1,17 @@
-﻿using GP.Business.IService;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Office2013.PowerPoint.Roaming;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
+using GP.Business.IService;
 using GP.Common.DTO;
 using GP.Common.Helpers;
 using GP.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
+using System.Globalization;
 
 namespace GraduateProject.Controllers
 {
@@ -13,10 +20,12 @@ namespace GraduateProject.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly HelperCommon _common;
 
-        public AuthController(IAccountService accountService)
+        public AuthController(IAccountService accountService, HelperCommon common)
         {
             _accountService = accountService;
+            _common = common;
         }
 
         [HttpPost("register-teacher")]
@@ -84,6 +93,114 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
+
+
+        [HttpPost("register-student-list-excel")]
+        public Response RegisterStudentExcel(IFormFile file,string idSemester)
+        {
+            Response response = new Response();
+            if (file == null || file.Length == 0)
+            {
+                response.SetError("File không hợp lệ !");
+                return response;
+            }
+            if (!_common.IsExcelFile(file.FileName))
+            {
+                response.SetError("File không đúng định dạng !");
+                return response;
+            }
+            string str = "";
+            try
+            {
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                // Ví dụ đọc dữ liệu từ file Excel
+                using (var stream = file.OpenReadStream())
+                {
+                    using (var package = new ExcelPackage(stream))
+                    {
+                        var worksheet = package.Workbook.Worksheets[0]; // Lấy worksheet đầu tiên
+
+                        // Lặp qua các cell trong worksheet và đọc dữusing OfficeOpenXml; liệu
+                        for (int row = 2; row <= worksheet.Dimension.Rows; row++)
+                        {
+                            var cellValue = worksheet.Cells[row, 2].Value;
+                            StudentModel newStudent = new StudentModel();
+                            newStudent.StudentCode = worksheet.Cells[row, 2].Value?.ToString();
+                            newStudent.FullName = worksheet.Cells[row, 3].Value?.ToString();
+                            newStudent.SemesterId = idSemester;
+
+                            str += newStudent.FullName + " " + worksheet.Cells[row, 4].Value;
+
+                            string dateString = worksheet.Cells[row, 4].Value?.ToString();
+                            string format = "dd/MM/yyyy";
+                            if(dateString != null)
+                            {
+                                newStudent.PasswordText = worksheet.Cells[row, 4].Value?.ToString();
+                                DateTime.TryParse(dateString,out DateTime dateTime);
+                                newStudent.Dob = dateTime;
+                            }
+                            else
+                            {
+                                newStudent.PasswordText = worksheet.Cells[row, 2].Value?.ToString();
+                            }
+                            newStudent.Address = worksheet.Cells[row, 5].Value?.ToString();
+                            newStudent.Gender = worksheet.Cells[row, 6].Value?.ToString() == "Nữ" ? 1 : 0;
+                            newStudent.ClassName = worksheet.Cells[row, 7].Value?.ToString();
+                            newStudent.SchoolYearName = worksheet.Cells[row, 8].Value?.ToString();
+                            newStudent.Phone = worksheet.Cells[row, 9].Value?.ToString();
+                            newStudent.Email = worksheet.Cells[row, 10].Value?.ToString();
+                            Double.TryParse(worksheet.Cells[row, 11].Value?.ToString(),out double gpa);
+                            newStudent.Gpa = gpa;
+                            if(newStudent.StudentCode != null && newStudent.FullName != null)
+                            {
+                                if (!_accountService.CheckStudent(newStudent, out string message))
+                                {
+                                    _accountService.RegisterStudent(newStudent);
+                                }
+                            }
+                            
+                            //for (int col = 1; col <= worksheet.Dimension.Columns; col++)
+                            //{
+                            //    var cellValue = worksheet.Cells[row, col].Value;
+                            //    // kiểm tra đã tồn tại user trong hệ thống chưa
+
+
+                            //    //newStudent
+                            //    //if (_accountService.CheckStudent(studentDTO, out string message))
+                            //    //{
+                            //    //    response.SetError(message);
+                            //    //    return response;
+                            //    //}
+
+                            //    //response.Msg = "Đăng ký thành công !";
+                            //    //response.Code = 201;
+                            //    //// đăng kí: hash pass, tạo user mới ...
+                            //    //_accountService.RegisterStudent(studentDTO);
+                            //    str += cellValue;
+                            //}
+                        }
+                    }
+                }
+                response.Msg = "Thêm thành công !";
+                    response.Code = 201;
+                    response.Success = true;
+                    response.ReturnObj = str;
+                return response;
+                
+
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+                response.ReturnObj = str;
+            }
+            return response;
+        }
+
+
+
+
 
         /// <summary>
         /// 788878

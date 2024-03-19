@@ -17,27 +17,20 @@ namespace GP.DAL.Repository
             _dbContext = dbContext;
         }
 
-        public Project Add(Project data)
-        {
-            _dbContext.Projects.Add(data);
-            _dbContext.SaveChanges();
-            return data;
+        public Project AssignMentor(Teacher teacher, string username)
+        {   
+            Project project= _dbContext.Projects.FirstOrDefault(x=>x.UserName == username);
+            if(project != null) { 
+                project.UserNameMentor = teacher.UserName;
+                _dbContext.SaveChanges();
+                return project;
+            }
+            return null;
         }
 
-        public Project GetByUsername(string username)
+        public Project GetProjectByUsername(string username)
         {
-            return _dbContext.Projects.FirstOrDefault(x => x.UserName == username);
+            return _dbContext.Projects.FirstOrDefault(x=>x.UserName == username);
         }
-
-        public List<Project> GetList(ProjectListModel data)
-        {
-            return _dbContext.Projects.Where(x=>
-                    (String.IsNullOrEmpty(data.NameProject) || x.UserName.Contains(data.NameProject)) 
-                    //&&
-                    //(String.IsNullOrEmpty(data.Datetime) || x.CommentUv1.Contains(data.Datetime))
-                ).Take(data.PageSize).Skip((data.PageIndex - 1) * data.PageSize).ToList();
-        }
-
-
     }
 }

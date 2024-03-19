@@ -33,55 +33,71 @@ namespace GP.DAL.Repository
         public PaginatedResultBase<StudentDTO> GetList(StudentListModel data)
         {
             PaginatedResultBase<StudentDTO> result = new PaginatedResultBase<StudentDTO>();
-            int totalItem = _dbContext.Students.Where(x =>
-                   x.IsDelete == 0 &&
-                   (String.IsNullOrEmpty(data.FullName) || x.FullName.Contains(data.FullName)) 
-                   &&
-                   (String.IsNullOrEmpty(data.StudentCode) || x.StudentCode.Contains(data.StudentCode))
-                   &&
-                   (String.IsNullOrEmpty(data.ClassName) || x.ClassName.Contains(data.ClassName))
-                   &&
-                   (String.IsNullOrEmpty(data.MajorId) || x.MajorId.Contains(data.MajorId))
-                   &&
-                   (String.IsNullOrEmpty(data.UserName) || x.UserName.Contains(data.UserName))
-                   &&
-                   (String.IsNullOrEmpty(data.SchoolYear) || x.SchoolYearName.Contains(data.SchoolYear))
-                   &&
-                   (String.IsNullOrEmpty(data.Status) || x.Status.Contains(data.Status))
-                   &&
-                   (String.IsNullOrEmpty(data.SemesterId) || x.Project.SemesterId.Contains(data.SemesterId))
-                   )
-                    .Count();
+            var query = (from student in _dbContext.Students
+                         join project in _dbContext.Projects on student.UserName equals project.UserName
+                         join Classification in _dbContext.Classifications on student.Status equals Classification.Code
+                         join teacherMentor in _dbContext.Teachers on project.UserNameMentor equals teacherMentor.UserName into mentorJoin
+                         from mentor in mentorJoin.DefaultIfEmpty()
+                         join teacherCommentator in _dbContext.Teachers on project.UserNameCommentator equals teacherCommentator.UserName
+                         into commentatorJoin
+                         from commentator in commentatorJoin.DefaultIfEmpty()
+                         where student.IsDelete == 0 && Classification.TypeCode == "STATUS_SYSTEM" &&
+                               (string.IsNullOrEmpty(data.FullName) || student.FullName.Contains(data.FullName)) &&
+                               (string.IsNullOrEmpty(data.StudentCode) || student.StudentCode.Contains(data.StudentCode)) &&
+                               (string.IsNullOrEmpty(data.ClassName) || student.ClassName == data.ClassName) &&
+                               (string.IsNullOrEmpty(data.MajorId) || student.MajorId == data.MajorId) &&
+                               (string.IsNullOrEmpty(data.UserName) || student.UserName == data.UserName) &&
+                               (string.IsNullOrEmpty(data.SchoolYear) || student.SchoolYearName.Contains(data.SchoolYear)) &&
+                               (string.IsNullOrEmpty(data.Status) || student.Status == data.Status) &&
+                               (string.IsNullOrEmpty(data.SemesterId) || student.Project.SemesterId == data.SemesterId)
+                         select new
+                         {
+                             Student = student,
+                             Major = student.Major,
+                             Project = student.Project,
+                             Semester = student.Project.Semester,
+                             MentorUserName = mentor,
+                             CommentatorUserName = commentator,
+                             StatusStudent = Classification.Value,
+                         });
+            int totalItem = query.Count();
 
-            List<Student> lstStudent = _dbContext.Students.Where(x =>
-                   x.IsDelete == 0 &&
-                   (String.IsNullOrEmpty(data.FullName) || x.FullName.Contains(data.FullName))
-                   &&
-                   (String.IsNullOrEmpty(data.StudentCode) || x.StudentCode.Contains(data.StudentCode))
-                   &&
-                   (String.IsNullOrEmpty(data.ClassName) || x.ClassName.Contains(data.ClassName))
-                   &&
-                   (String.IsNullOrEmpty(data.MajorId) || x.MajorId.Contains(data.MajorId))
-                   &&
-                   (String.IsNullOrEmpty(data.UserName) || x.UserName.Contains(data.UserName))
-                   &&
-                   (String.IsNullOrEmpty(data.SchoolYear) || x.SchoolYearName.Contains(data.SchoolYear))
-                   &&
-                   (String.IsNullOrEmpty(data.Status) || x.Status.Contains(data.Status))
-                   &&
-                   (String.IsNullOrEmpty(data.SemesterId) || x.Project.SemesterId.Contains(data.SemesterId)))
-                   .Include(x => x.Major)
-                   .Include(x=>x.Project)
-                   .ThenInclude(x=>x.UserNameCommentatorNavigation)
-                   .Include(x=>x.Project)
-                   .ThenInclude(x => x.UserNameMentorNavigation)
-                   .Include(x => x.Project)
-                   .ThenInclude(x=>x.Semester)
-                   .Skip((data.PageIndex - 1) * data.PageSize)
-                   .Take(data.PageSize).ToList();
+            //int totalItem = _dbContext.Students.Count(x =>
+            //       x.IsDelete == 0 &&
+            //       (String.IsNullOrEmpty(data.FullName) || x.FullName.Contains(data.FullName)) 
+            //       &&
+            //       (String.IsNullOrEmpty(data.StudentCode) || x.StudentCode.Contains(data.StudentCode))
+            //       &&
+            //       (String.IsNullOrEmpty(data.ClassName) || x.ClassName.Contains(data.ClassName))
+            //       &&
+            //       (String.IsNullOrEmpty(data.MajorId) || x.MajorId == data.MajorId)
+            //       &&
+            //       (String.IsNullOrEmpty(data.UserName) || x.UserName.Contains(data.UserName))
+            //       &&
+            //       (String.IsNullOrEmpty(data.SchoolYear) || x.SchoolYearName.Contains(data.SchoolYear))
+            //       &&
+            //       (String.IsNullOrEmpty(data.Status) || x.Status == data.Status)
+            //       &&
+            //       (String.IsNullOrEmpty(data.SemesterId) || x.Project.SemesterId == data.SemesterId)
+            //       );
+
+            List<Student> lstStudent = query.Skip((data.PageIndex - 1) * data.PageSize)
+                 .Take(data.PageSize)
+                 .ToList()
+                 .Select(x =>
+                 {
+                     x.Student.Major = x.Major;
+                     x.Student.Project = x.Project;
+                     x.Student.Project.Semester = x.Semester;
+                     x.Student.Project.UserNameMentorNavigation = x.MentorUserName != null ? x.MentorUserName : null;
+                     x.Student.Project.UserNameCommentatorNavigation = x.CommentatorUserName != null ? x.CommentatorUserName : null;
+                     return  x.Student
+;
+                 })
+                 .ToList();
 
             result.ListResult = _mapper.MapStudentsToStudentDTOs(lstStudent);
-            result.TotalPage = totalItem;
+            result.TotalItem = totalItem;
             result.PageIndex = data.PageIndex;
             //var query = from student in _dbContext.Students
             //            join project in _dbContext.Projects on student.UserName equals project.UserName

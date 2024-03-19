@@ -17,6 +17,12 @@ public partial class ScheduleSemester
 
     public string? CreatedBy { get; set; }
 
+    public string? Implementer { get; set; }
+
+    public string? Content { get; set; }
+
+    public string? Note { get; set; }
+
     public DateTime? CreatedDate { get; set; }
 
     public virtual Teacher? CreatedByNavigation { get; set; }

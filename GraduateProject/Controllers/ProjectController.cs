@@ -1,4 +1,5 @@
 ﻿using GP.Business.IService;
+using GP.Business.Service;
 using GP.Common.DTO;
 using GP.Common.Helpers;
 using GP.Common.Models;
@@ -7,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GraduateProject.Controllers
 {
-    public class ProjectController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProjectController : ControllerBase
     {
         private readonly IProjectService _projectService;
 
@@ -15,8 +18,9 @@ namespace GraduateProject.Controllers
         {
             _projectService = projectService;
         }
-        [HttpPost("get-list-project")]
-        public Response GetListProject(ProjectListModel data)
+
+        [HttpPost("assign-mentor")]
+        public Response AssignMentor(string username_student,string username_teacher)
         {
             Response response = new Response();
 
@@ -29,46 +33,13 @@ namespace GraduateProject.Controllers
 
             try
             {
-                List<Project> projects = _projectService.GetListProject(data);
-                response.SetData(200, projects);
-                response.Success = true;
-            }
-            catch (Exception ex)
-            {
-                response.SetError("Có lỗi xảy ra");
-                response.ExceptionInfo = ex.ToString();
-            }
-            return response;
-        }
-
-        [HttpGet("get-project-by-id")]
-        public Response ProjectById(string username)
-        {
-            Response response = new Response();
-
-            // Validate 
-            if (!ModelState.IsValid)
-            {
-                response.SetError(StatusCodes.Status422UnprocessableEntity, "Validate Error");
-                return response;
-            }
-
-            try
-            {
-                Project projectFind = _projectService.GetProjectByUsername(username);
-                if (projectFind == null)
+                response.Code = 200;
+                response.Success = _projectService.AssignMentorTeacher(username_student, username_teacher, out string message);
+                response.Msg = message;
+                if(response.Success == false)
                 {
-                    response.Code = 200;
-                    response.Success = false;
-                    response.Msg = "Không tìm thấy đồ án này !";
+                    response.Code = 400;
                 }
-                else
-                {
-                    response.Code = 200;
-                    response.Success = true;
-                    response.ReturnObj = projectFind;
-                }
-                
             }
             catch (Exception ex)
             {
@@ -128,17 +99,14 @@ namespace GraduateProject.Controllers
             }
             try
             {
-                response.Success = true;
-                ProjectOutlineDTO project_outline = _projectService.AddNewProjectOutline(req);
-                if (project_outline == null)
+                response.Msg = "Sucess";
+                response.Code = 201;
+                bool check = _projectService.AddNewProjectOutline(req, out string message);
+                if (!check)
                 {
-                    response.Code = 400;
-                    response.SetError("Bạn chưa khởi tạo đồ án !");
+                    response.SetError(400, message);
                 }
-                else
-                {
-                    response.SetData(201, project_outline);
-                }
+                response.Msg = message;
             }
             catch (Exception ex)
             {

@@ -33,6 +33,8 @@ public partial class Project
 
     public string? UserNameMentor { get; set; }
 
+    public string? StatusProject { get; set; }
+
     public virtual Council? Council { get; set; }
 
     public virtual ICollection<DetailScheduleWeek> DetailScheduleWeeks { get; set; } = new List<DetailScheduleWeek>();

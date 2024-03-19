@@ -10,7 +10,7 @@ namespace GP.Common.DTO
     public class ProjectOutlineDTO
     {
         [Required]
-        public string UserName { get; set; } = null!;
+        public string UserName { get; set; }
 
         public string? NameProject { get; set; }
 

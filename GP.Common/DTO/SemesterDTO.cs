@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GP.Models.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,28 @@ namespace GP.Common.DTO
 {
     public class SemesterDTO
     {
+        public SemesterDTO()
+        {
+
+        }
+        public SemesterDTO(string semesterId, string? nameSemester, DateTime? fromDate, DateTime? toDate, DateTime? createdAt, int? totalProjectAmount, int? rejectProjectAmount, int? doingProjectAmount, int? acceptProjectAmount, int? pauseProjectAmount, double? avgScoreProject, TeacherDTO? createdByNavigation,int? isDelete)
+        {
+            SemesterId = semesterId;
+            NameSemester = nameSemester;
+            FromDate = fromDate;
+            ToDate = toDate;
+            CreatedAt = createdAt;
+            TotalProjectAmount = totalProjectAmount;
+            RejectProjectAmount = rejectProjectAmount;
+            DoingProjectAmount = doingProjectAmount;
+            AcceptProjectAmount = acceptProjectAmount;
+            PauseProjectAmount = pauseProjectAmount;
+            AvgScoreProject = avgScoreProject;
+            CreatedByNavigation = createdByNavigation;
+            IsDelete = isDelete;
+
+        }
+
         public string SemesterId { get; set; } = null!;
 
         public string? NameSemester { get; set; }
@@ -17,5 +40,15 @@ namespace GP.Common.DTO
         public DateTime? ToDate { get; set; }
 
         public string? ScheduleSemesterId { get; set; }
+        public string? CreatedBy { get; set; }
+        public int? IsDelete { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public int? TotalProjectAmount { get; set; }
+        public int? RejectProjectAmount { get; set; }
+        public int? DoingProjectAmount { get; set; }
+        public int? AcceptProjectAmount { get; set; }
+        public int? PauseProjectAmount { get; set; }
+        public double? AvgScoreProject { get; set; }
+        public virtual TeacherDTO? CreatedByNavigation { get; set; }
     }
 }

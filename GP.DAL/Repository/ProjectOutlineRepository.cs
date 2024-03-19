@@ -1,5 +1,6 @@
 ﻿using GP.DAL.IRepository;
 using GP.Models.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace GP.DAL.Repository
 
         public ProjectOutline GetById(string username)
         {
-            return _dbContext.ProjectOutlines.FirstOrDefault(x => x.UserName == username);
+            return _dbContext.ProjectOutlines.Include(x=>x.UserNameNavigation).FirstOrDefault(x => x.UserName == username);
         }
     }
 }

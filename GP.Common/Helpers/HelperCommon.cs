@@ -78,5 +78,13 @@ namespace GP.Common.Helpers
         {
             return ConvertFullnameCode(fullname) + "_" + teacherCode;
         }
+
+        public bool IsExcelFile(string fileName)
+        {
+            // Kiểm tra phần mở rộng của tên file để đảm bảo đúng định dạng Excel
+            string[] allowedExtensions = { ".xlsx", ".xls" };
+            string extension = Path.GetExtension(fileName);
+            return allowedExtensions.Contains(extension.ToLower());
+        }
     }
 }

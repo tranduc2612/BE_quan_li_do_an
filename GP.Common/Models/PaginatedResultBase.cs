@@ -9,7 +9,7 @@ namespace GP.Common.Models
     public class PaginatedResultBase<T>
     {
         public int PageIndex { get; set; }
-        public int TotalPage { get; set; }
+        public int TotalItem { get; set; }
         public List<T> ListResult { get; set; }
 
         public PaginatedResultBase()
@@ -20,7 +20,7 @@ namespace GP.Common.Models
         public PaginatedResultBase(int pageIndex, int totalPage, List<T> listResult)
         {
             PageIndex = pageIndex;
-            TotalPage = totalPage;
+            TotalItem = totalPage;
             ListResult = listResult;
         }
     }

@@ -5,13 +5,11 @@ namespace GP.Models.Model;
 
 public partial class Teaching
 {
-    public string TeachingId { get; set; } = null!;
-
     public string? PostionInCouncil { get; set; }
 
-    public string? UserNameTeacher { get; set; }
+    public string UserNameTeacher { get; set; } = null!;
 
-    public string? SemesterId { get; set; }
+    public string SemesterId { get; set; } = null!;
 
     public string? GroupReviewOutlineId { get; set; }
 
@@ -21,7 +19,7 @@ public partial class Teaching
 
     public virtual GroupReviewOutline? GroupReviewOutline { get; set; }
 
-    public virtual Semester? Semester { get; set; }
+    public virtual Semester Semester { get; set; } = null!;
 
-    public virtual Teacher? UserNameTeacherNavigation { get; set; }
+    public virtual Teacher UserNameTeacherNavigation { get; set; } = null!;
 }

@@ -85,7 +85,7 @@ namespace GP.DAL.Repository
                    .Take(data.PageSize).ToList();
 
             result.ListResult = _mapper.MapTeachersToTeacherDTOs(lstTeacher);
-            result.TotalPage = totalItem;
+            result.TotalItem = totalItem;
             result.PageIndex = data.PageIndex;
 
             return result;

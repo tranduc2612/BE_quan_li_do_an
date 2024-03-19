@@ -37,5 +37,7 @@ namespace GP.Common.Models
         public string? Education { get; set; }
 
         public string? MajorId { get; set; }
+        public int? Gender { get; set; }
+        public string? Address { get; set; }
     }
 }
