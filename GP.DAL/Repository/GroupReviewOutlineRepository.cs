@@ -28,9 +28,8 @@ namespace GP.DAL.Repository
             _dbContext.SaveChanges();
         }
 
-        public void AssignGroupToOutline(ProjectOutline outline, string idGroup)
+        public void AssignGroupToOutline(ProjectOutline outline)
         {
-            outline.GroupReviewOutlineId = idGroup;
             _dbContext.ProjectOutlines.Update(outline);
             _dbContext.SaveChanges();
         }

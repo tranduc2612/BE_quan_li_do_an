@@ -49,6 +49,10 @@ public partial class Teacher
 
     public string? Address { get; set; }
 
+    public string? Role { get; set; }
+
+    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
     public virtual Major? Major { get; set; }
 
     public virtual ICollection<Project> ProjectUserNameCommentatorNavigations { get; set; } = new List<Project>();

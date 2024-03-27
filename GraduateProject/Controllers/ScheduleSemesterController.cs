@@ -1,4 +1,5 @@
-﻿using GP.Business.IService;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using GP.Business.IService;
 using GP.Common.DTO;
 using GP.Common.Helpers;
 using GP.Common.Models;
@@ -15,6 +16,27 @@ namespace GraduateProject.Controllers
         public ScheduleSemesterController(IScheduleSemesterService scheduleSemesterService)
         {
             _scheduleSemesterService= scheduleSemesterService;
+        }
+
+        [HttpGet("get-schedule-semester")]
+        public Response GetScheduleSemester(string id)
+        {
+            Response response = new Response();
+
+            try
+            {
+
+                response.Code = 200;
+                response.Success = true;
+                response.ReturnObj = _scheduleSemesterService.GetById(id);
+
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
         }
 
         [HttpPost("add-schedule-semester")]
@@ -77,7 +99,6 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
-
         [HttpDelete("delete-schedule-semester")]
         public Response DeleteScheduleSemester(string id)
         {

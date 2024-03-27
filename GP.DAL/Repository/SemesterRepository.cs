@@ -80,7 +80,9 @@ namespace GP.DAL.Repository
                          join teacher in _dbContext.Teachers on semester.CreatedBy equals teacher.UserName
                          join project in _dbContext.Projects on semester.SemesterId equals project.SemesterId into projectJoin
                          from project in projectJoin.DefaultIfEmpty()
-            where
+                         join project_outline in _dbContext.ProjectOutlines on project.UserName equals project_outline.UserName into projectOutlineJoin
+                         from project_outline in projectOutlineJoin.DefaultIfEmpty()
+                         where
                              ((req.FromDate.HasValue && semester.FromDate >= req.FromDate.Value) || !req.FromDate.HasValue) &&
                             ((req.ToDate.HasValue && semester.ToDate <= req.ToDate.Value) || !req.ToDate.HasValue) &&
                             (string.IsNullOrEmpty(req.SemesterId) || semester.SemesterId.Contains(req.SemesterId)) &&
@@ -89,7 +91,8 @@ namespace GP.DAL.Repository
                          {
                              Semester = semester,
                              Teacher = teacher,
-                             Project = project
+                             Project = project,
+                             ProjectOutline = project_outline
                          });
 
             var groupedQuery = query.AsEnumerable()
@@ -114,14 +117,15 @@ namespace GP.DAL.Repository
                     x.Key.FromDate,
                     x.Key.ToDate,
                     x.Key.CreatedAt,
-                    x.Count(p => p.Project != null),
+                    x.Count(p => p.ProjectOutline != null),
                     x.Count(p => p.Project != null && p.Project.StatusProject == "REJECT"),
                     x.Count(p => p.Project != null && p.Project.StatusProject == "DOING"),
                     x.Count(p => p.Project != null && p.Project.StatusProject == "ACCEPT"),
                     x.Count(p => p.Project != null && p.Project.StatusProject == "PAUSE"),
                     x.Average(p => p.Project?.ScoreFinal ?? 0),
                     _mapper.MapTeacherToTeacherDTO(x.First().Teacher),
-                    x.Key.IsDelete
+                    x.Key.IsDelete,
+                    x.Count(p => p.Project != null)
                 ))
                 .ToList();
 

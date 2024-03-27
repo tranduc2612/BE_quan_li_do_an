@@ -28,7 +28,7 @@ namespace GP.DAL.Repository
             return _dbContext.Teachings.FirstOrDefault(x => x.UserNameTeacher == username && x.SemesterId == semesterId);
         }
 
-        public List<Teaching> GetList(TeachingListModel data)
+        public List<Teaching> GetListTeaching(TeachingListModel data)
         {
             List<Teaching> query = _dbContext.Teachings.Include(x => x.UserNameTeacherNavigation).Include(x=>x.GroupReviewOutline)
                 .Where(x => (string.IsNullOrEmpty(data.SemesterId) || x.SemesterId == data.SemesterId) 

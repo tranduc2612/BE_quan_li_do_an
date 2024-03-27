@@ -12,7 +12,7 @@ namespace GP.DAL.IRepository
     public interface ITeachingRepository
     {
         public Teaching Get(string username,string semesterId);
-        public List<Teaching> GetList(TeachingListModel data);
+        public List<Teaching> GetListTeaching(TeachingListModel data);
         public List<Teaching> GetListByGroupReviewId(TeachingListModel data);
 
     }

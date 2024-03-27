@@ -21,4 +21,8 @@
     <ProjectReference Include="..\GP.Models\GP.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="file\file_week\" />
+  </ItemGroup>
+
 </Project>

@@ -17,6 +17,29 @@ namespace GraduateProject.Controllers
             _groupReviewOutlineService= groupReviewOutlineService;
         }
 
+        [HttpGet("get-group-review-outline-by-id")]
+        public Response GetGroupReviewId(string id)
+        {
+            Response response = new Response();
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Lỗi tham số đầu vào");
+                return response;
+            }
+            try
+            {
+                response.Msg = "Sucess";
+                response.Code = 200;
+                response.ReturnObj = _groupReviewOutlineService.getProjectOutline(id);
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
         [HttpPost("get-list-group-review-outline")]
         public Response GetListGroupReviewPage(GroupReviewOutlineListModel model)
         {
@@ -39,7 +62,6 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
-
         [HttpPost("get-list-group-review-outline-semester")]
         public Response GetListGroupReviewSemester(GroupReviewOutlineListSemesterModel model)
         {
@@ -62,7 +84,6 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
-
         [HttpPost("get-list-teaching")]
         public Response GetListTeaching(TeachingListModel model)
         {
@@ -86,8 +107,30 @@ namespace GraduateProject.Controllers
             return response;
         }
 
+        //sẽ chỉ lấy danh sách đề cương có trong group đó
+        [HttpPost("get-list-project-outline-by-groupid")]
+        public Response GetListProjectOutline(ProjectOutlineListModel model)
+        {
+            Response response = new Response();
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Lỗi tham số đầu vào");
+                return response;
+            }
+            try
+            {
+                response.Msg = "Sucess";
+                response.Code = 200;
+                response.ReturnObj = _groupReviewOutlineService.getListProjectOutline(model);
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
 
-        // 
         [HttpPost("add-group-review-outline")]
         public Response AddGroupReviewOutline([FromBody] GroupReviewOutlineModel model)
         {
@@ -115,7 +158,6 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
-
         [HttpPost("assign-group-review-outline-to-teaching")]
         public Response AssignGroupReviewOutlineToTeaching([FromBody]AssignTeachingGroupReviewOutlineModel model)
         {
@@ -143,7 +185,6 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
-
         [HttpPost("assign-group-review-outline-to-project-outline")]
         public Response AssignGroupReviewOutlineToProjectOutline([FromBody] AssignProjectOutlineGroupReviewOutlineModel model)
         {
@@ -157,7 +198,7 @@ namespace GraduateProject.Controllers
             {
                 response.Msg = "Sucess";
                 response.Code = 201;
-                bool check = _groupReviewOutlineService.AssignProjectToGroup(model.UsernameProjectOutline, model.GroupReviewOutlineId, out string message);
+                bool check = _groupReviewOutlineService.AssignProjectToGroup(model, out string message);
                 if (!check)
                 {
                     response.SetError(400, message);
@@ -171,10 +212,6 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
-
-
-
-
         [HttpPut("update-group-review-outline")]
         public Response UpdateGroupReviewOutline(GroupReviewOutlineModel model)
         {
@@ -202,7 +239,6 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
-
         [HttpDelete("delete-group-review-outline")]
         public Response UpdateGroupReviewOutline(string id)
         {

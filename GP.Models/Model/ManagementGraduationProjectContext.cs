@@ -65,7 +65,7 @@ public partial class ManagementGraduationProjectContext : DbContext
 
         modelBuilder.Entity<Comment>(entity =>
         {
-            entity.HasKey(e => e.CommentId).HasName("PK__Comment__C3B4DFCAE73131A1");
+            entity.HasKey(e => e.CommentId).HasName("PK__Comment__C3B4DFCA158A15F3");
 
             entity.ToTable("Comment");
 
@@ -77,6 +77,10 @@ public partial class ManagementGraduationProjectContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.UserName).HasMaxLength(50);
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.Comments)
+                .HasForeignKey(d => d.CreatedBy)
+                .HasConstraintName("FK_Comment_Teacher");
 
             entity.HasOne(d => d.UserNameNavigation).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.UserName)
@@ -100,13 +104,18 @@ public partial class ManagementGraduationProjectContext : DbContext
 
         modelBuilder.Entity<DetailScheduleWeek>(entity =>
         {
-            entity.HasKey(e => new { e.ScheduleWeekId, e.UserNameProject }).HasName("PK__DetailSc__459D05541981ABA1");
+            entity.HasKey(e => new { e.ScheduleWeekId, e.UserNameProject }).HasName("PK__DetailSc__459D0554A16973F4");
 
             entity.ToTable("DetailScheduleWeek");
 
             entity.Property(e => e.ScheduleWeekId).HasMaxLength(50);
             entity.Property(e => e.UserNameProject).HasMaxLength(50);
-            entity.Property(e => e.Status).HasMaxLength(50);
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("date")
+                .HasColumnName("createdDate");
+            entity.Property(e => e.NameFile).HasColumnName("nameFile");
+            entity.Property(e => e.SizeFile).HasColumnName("sizeFile");
 
             entity.HasOne(d => d.ScheduleWeek).WithMany(p => p.DetailScheduleWeeks)
                 .HasForeignKey(d => d.ScheduleWeekId)
@@ -152,21 +161,7 @@ public partial class ManagementGraduationProjectContext : DbContext
             entity.ToTable("Project");
 
             entity.Property(e => e.UserName).HasMaxLength(50);
-            entity.Property(e => e.CommentUv1)
-                .HasMaxLength(500)
-                .HasColumnName("CommentUV1");
-            entity.Property(e => e.CommentUv2)
-                .HasMaxLength(500)
-                .HasColumnName("CommentUV2");
-            entity.Property(e => e.CommentUv3)
-                .HasMaxLength(500)
-                .HasColumnName("CommentUV3");
             entity.Property(e => e.CouncilId).HasMaxLength(50);
-            entity.Property(e => e.ScoreGvhd).HasColumnName("ScoreGVHD");
-            entity.Property(e => e.ScoreGvpb).HasColumnName("ScoreGVPB");
-            entity.Property(e => e.ScoreUv1).HasColumnName("ScoreUV1");
-            entity.Property(e => e.ScoreUv2).HasColumnName("ScoreUV2");
-            entity.Property(e => e.ScoreUv3).HasColumnName("ScoreUV3");
             entity.Property(e => e.SemesterId).HasMaxLength(50);
             entity.Property(e => e.StatusProject)
                 .HasMaxLength(50)
@@ -310,6 +305,9 @@ public partial class ManagementGraduationProjectContext : DbContext
             entity.Property(e => e.MajorId).HasMaxLength(10);
             entity.Property(e => e.Phone).HasMaxLength(20);
             entity.Property(e => e.RefreshToken).IsUnicode(false);
+            entity.Property(e => e.Role)
+                .HasMaxLength(10)
+                .HasDefaultValueSql("('STUDENT')");
             entity.Property(e => e.SchoolYearName).HasMaxLength(50);
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
@@ -346,6 +344,9 @@ public partial class ManagementGraduationProjectContext : DbContext
             entity.Property(e => e.MajorId).HasMaxLength(10);
             entity.Property(e => e.Phone).HasMaxLength(20);
             entity.Property(e => e.RefreshToken).IsUnicode(false);
+            entity.Property(e => e.Role)
+                .HasMaxLength(10)
+                .HasDefaultValueSql("('TEACHER')");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .IsUnicode(false)

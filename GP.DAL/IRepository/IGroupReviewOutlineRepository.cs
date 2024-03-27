@@ -19,7 +19,7 @@ namespace GP.DAL.IRepository
         public void Update(GroupReviewOutline data);
         public void Delete(GroupReviewOutline data);
         public void AssignGroupToTeaching(Teaching teaching);
-        public void AssignGroupToOutline(ProjectOutline outline, string idGroup);
+        public void AssignGroupToOutline(ProjectOutline outline);
 
     }
 }

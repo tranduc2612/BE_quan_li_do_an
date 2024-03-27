@@ -51,6 +51,8 @@ public partial class Student
 
     public double? Gpa { get; set; }
 
+    public string? Role { get; set; }
+
     public virtual Major? Major { get; set; }
 
     public virtual Project? Project { get; set; }

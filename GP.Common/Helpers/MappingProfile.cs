@@ -26,12 +26,17 @@ namespace GP.Common.Helpers
 
                 cfg.CreateMap<TeacherDTO, Teacher>().ReverseMap();
                 cfg.CreateMap<SemesterDTO, Semester>().ReverseMap();
+                cfg.CreateMap<ScheduleWeek, ScheduleWeekDTO>().ReverseMap();
+                cfg.CreateMap<ScheduleWeek, ScheduleWeekModel>().ReverseMap();
 
 
                 cfg.CreateMap<Student, LoginResponseDTO>().ReverseMap();
                 cfg.CreateMap<Student, StudentDTO>().ReverseMap();
                 cfg.CreateMap<ProjectOutlineDTO, ProjectOutline>().ReverseMap();
                 cfg.CreateMap<GroupReviewOutline, GroupReviewOutlineDTO>().ReverseMap();
+                cfg.CreateMap<ScheduleWeekDetailModel, DetailScheduleWeek>().ReverseMap();
+                cfg.CreateMap<DetailScheduleWeekDTO, DetailScheduleWeek>().ReverseMap();
+
                 cfg.CreateMap<TeachingDTO, Teaching>().ReverseMap();
 
 
@@ -121,6 +126,11 @@ namespace GP.Common.Helpers
             return _mapper.Map<ProjectDTO>(project);
         }
 
+        public List<ProjectDTO> MapProjectsToProjectDTOs(List<Project> project)
+        {
+            return _mapper.Map<List<ProjectDTO>>(project);
+        }
+
         public ProjectOutline MapProjectOutlineDTOToProjectOutline(ProjectOutlineDTO projectOutlineDTO)
         {
             return _mapper.Map<ProjectOutline>(projectOutlineDTO);
@@ -129,6 +139,11 @@ namespace GP.Common.Helpers
         public ProjectOutlineDTO MapProjectOutlineToProjectOutlineDTO(ProjectOutline projectOutline)
         {
             return _mapper.Map<ProjectOutlineDTO>(projectOutline);
+        }
+
+        public List<ProjectOutlineDTO> MapProjectOutlinesToProjectOutlineDTOs(List<ProjectOutline> projectOutline)
+        {
+            return _mapper.Map<List<ProjectOutlineDTO>>(projectOutline);
         }
 
         public StudentDTO MapStudentToStudentDTO(Student student)
@@ -202,6 +217,33 @@ namespace GP.Common.Helpers
         public List<TeachingDTO> MapTeachingsToTeachingDTOs(List<Teaching> teaching)
         {
             return _mapper.Map<List<TeachingDTO>>(teaching);
+        }
+
+        public GroupReviewOutlineDTO MapGroupReviewToGroupReviewDTO(GroupReviewOutline group)
+        {
+            return _mapper.Map<GroupReviewOutlineDTO>(group);
+        }
+
+        public ScheduleWeek MapScheduleWeekModelToScheduleWeek(ScheduleWeekModel model)
+        {
+            return _mapper.Map<ScheduleWeek>(model);
+        }
+
+        public ScheduleWeekDTO MapScheduleWeekToScheduleWeekDTO(ScheduleWeek model)
+        {
+            return _mapper.Map<ScheduleWeekDTO>(model);
+        }
+        public List<ScheduleWeekDTO> MapScheduleWeeksToScheduleWeekDTOs(List<ScheduleWeek> model)
+        {
+            return _mapper.Map<List<ScheduleWeekDTO>>(model);
+        }
+        public DetailScheduleWeekDTO MapDetailScheduleWeekToDetailScheduleWeekDTO(DetailScheduleWeek model)
+        {
+            return _mapper.Map<DetailScheduleWeekDTO>(model);
+        }
+        public DetailScheduleWeek MapScheduleWeekDetailModelToDetailScheduleWeekDTO(ScheduleWeekDetailModel model)
+        {
+            return _mapper.Map<DetailScheduleWeek>(model);
         }
     }
 }

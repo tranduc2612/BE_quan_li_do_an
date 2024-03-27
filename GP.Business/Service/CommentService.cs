@@ -68,7 +68,7 @@ namespace GP.Business.Service
 
         public List<Comment> GetList(string username)
         {
-            throw new NotImplementedException();
+            return _commentRepository.GetList(username);
         }
 
         public Comment UpdateComment(CommentDTO comment)

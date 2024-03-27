@@ -48,7 +48,7 @@ namespace GP.DAL.Repository
 
         public Teacher Get(string username)
         {
-            return _dbContext.Teachers.FirstOrDefault(x => x.UserName == username);
+            return _dbContext.Teachers.Include(x=>x.Major).FirstOrDefault(x => x.UserName == username);
         }
 
         public PaginatedResultBase<TeacherDTO> GetList(TeacherListModel data)

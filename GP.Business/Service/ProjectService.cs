@@ -39,7 +39,7 @@ namespace GP.Business.Service
             Project project_find = _projectRepository.GetProjectByUsername(projectOutlineDTO.UserName);
             if(project_find == null)
             {
-                message = "Sinh viên chưa có đồ án";
+                message = "Sinh viên không tồn tại";
                 return false;
             }
 
@@ -69,9 +69,42 @@ namespace GP.Business.Service
             return true;
         }
 
+        public List<ProjectDTO> GetListProjectByUsernameMentor(string username, string semesterId)
+        {
+            List<Project> projectlst = _projectRepository.GetListProjectByUsernameMentor(username, semesterId);
+            List<ProjectDTO> map = _mapper.MapProjectsToProjectDTOs(projectlst);
+
+            return map;
+        }
+
         public ProjectOutline GetProjectOutlineByUsername(string username)
         {
             return _projectOutlineRepository.GetById(username);
+        }
+
+        public bool UpdateNewProjectOutline(ProjectOutlineDTO projectOutlineDTO, out string message)
+        {
+            Project project_find = _projectRepository.GetProjectByUsername(projectOutlineDTO.UserName);
+            if (project_find == null)
+            {
+                message = "Sinh viên không tồn tại";
+                return false;
+            }
+            ProjectOutline outline_fine = _projectOutlineRepository.GetById(projectOutlineDTO.UserName);
+            if (project_find == null)
+            {
+                message = "Sinh viên chưa tạo đề cương đồ án";
+                return false;
+            }
+            outline_fine.NameProject = projectOutlineDTO.NameProject;
+            outline_fine.ContentProject = projectOutlineDTO.ContentProject;
+            outline_fine.TechProject = projectOutlineDTO.TechProject;
+            outline_fine.ExpectResult = projectOutlineDTO.ExpectResult;
+            outline_fine.PlantOutline = projectOutlineDTO.PlantOutline;
+
+            _projectOutlineRepository.Update(outline_fine);
+            message = "Cập nhật cương đồ án thành công !";
+            return true;
         }
     }
 }

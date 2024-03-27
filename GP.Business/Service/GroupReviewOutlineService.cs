@@ -137,22 +137,39 @@ namespace GP.Business.Service
             return true;
         }
 
-        public bool AssignProjectToGroup(string usernameOutline, string idGroup, out string message)
+        public bool AssignProjectToGroup(AssignProjectOutlineGroupReviewOutlineModel model, out string message)
         {
-            ProjectOutline projectOutline = _projectOutlineRepository.GetById(usernameOutline);
-            if(projectOutline == null)
-            {
-                message = "Sinh viên chưa đăng ký đề cương đồ án !";
-                return false;
-            }
-            GroupReviewOutline group_find = _groupReviewOutlineRepository.GetById(idGroup);
+            GroupReviewOutline group_find = _groupReviewOutlineRepository.GetById(model.GroupReviewOutlineId);
             if (group_find == null)
             {
                 message = "Nhóm xét duyệt này không tồn tại !";
                 return false;
             }
+            ProjectOutlineListModel reqList = new ProjectOutlineListModel();
+            reqList.GroupReviewOutlineId = model.GroupReviewOutlineId;
+            reqList.SemesterId = model.SemesterTeachingId;
+            List<ProjectOutline> lstProjectOutline = _projectOutlineRepository.GetListProjectOutlineByGroupId(reqList);
 
-            _groupReviewOutlineRepository.AssignGroupToOutline(projectOutline, idGroup);
+            foreach (string username in model.UsernameProjectOutline)
+            {
+                ProjectOutline projectOutline = _projectOutlineRepository.GetById(username);
+                if (projectOutline == null)
+                {
+                    message = "Sinh viên chưa đăng ký đề cương đồ án !";
+                    return false;
+                }
+                projectOutline.GroupReviewOutlineId = model.GroupReviewOutlineId;
+                _groupReviewOutlineRepository.AssignGroupToOutline(projectOutline);
+            }
+            foreach (ProjectOutline outline_find in lstProjectOutline)
+            {
+                if (!model.UsernameProjectOutline.Any(x => outline_find.UserName == x))
+                {
+                    outline_find.GroupReviewOutlineId = null;
+                    _groupReviewOutlineRepository.AssignGroupToOutline(outline_find);
+                }
+            }
+
             message = "Gán đề cương vào nhóm xét duyệt thành công !";
             return true;
 
@@ -170,7 +187,22 @@ namespace GP.Business.Service
 
         public List<TeachingDTO> getListTeaching(TeachingListModel data)
         {
-            return _mapper.MapTeachingsToTeachingDTOs(_teachingRepository.GetList(data));
+            return _mapper.MapTeachingsToTeachingDTOs(_teachingRepository.GetListTeaching(data));
+        }
+
+        public List<ProjectOutlineDTO> getListProjectOutline(ProjectOutlineListModel data)
+        {
+            if(data.IsGetAll == 1)
+            {
+                return _mapper.MapProjectOutlinesToProjectOutlineDTOs(_projectOutlineRepository.GetListProjectOutline(data));
+            }
+            return _mapper.MapProjectOutlinesToProjectOutlineDTOs(_projectOutlineRepository.GetListProjectOutlineByGroupId(data));
+
+        }
+
+        public GroupReviewOutline getProjectOutline(string id)
+        {
+            return _groupReviewOutlineRepository.GetById(id);
         }
     }
 }

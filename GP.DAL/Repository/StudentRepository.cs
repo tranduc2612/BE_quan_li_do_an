@@ -192,6 +192,8 @@ namespace GP.DAL.Repository
                    .ThenInclude(x => x.UserNameCommentatorNavigation)
                    .Include(x => x.Project)
                    .ThenInclude(x => x.UserNameMentorNavigation)
+                   .Include(x => x.Project)
+                   .ThenInclude(x => x.Semester)
                    .FirstOrDefault(x=>x.UserName==username);
         }
 

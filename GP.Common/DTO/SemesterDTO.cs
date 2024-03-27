@@ -13,7 +13,7 @@ namespace GP.Common.DTO
         {
 
         }
-        public SemesterDTO(string semesterId, string? nameSemester, DateTime? fromDate, DateTime? toDate, DateTime? createdAt, int? totalProjectAmount, int? rejectProjectAmount, int? doingProjectAmount, int? acceptProjectAmount, int? pauseProjectAmount, double? avgScoreProject, TeacherDTO? createdByNavigation,int? isDelete)
+        public SemesterDTO(string semesterId, string? nameSemester, DateTime? fromDate, DateTime? toDate, DateTime? createdAt, int? totalProjectAmount, int? rejectProjectAmount, int? doingProjectAmount, int? acceptProjectAmount, int? pauseProjectAmount, double? avgScoreProject, TeacherDTO? createdByNavigation,int? isDelete, int? totalStudent)
         {
             SemesterId = semesterId;
             NameSemester = nameSemester;
@@ -28,7 +28,7 @@ namespace GP.Common.DTO
             AvgScoreProject = avgScoreProject;
             CreatedByNavigation = createdByNavigation;
             IsDelete = isDelete;
-
+            TotalStudent = totalStudent;
         }
 
         public string SemesterId { get; set; } = null!;
@@ -43,6 +43,7 @@ namespace GP.Common.DTO
         public string? CreatedBy { get; set; }
         public int? IsDelete { get; set; }
         public DateTime? CreatedAt { get; set; }
+        public int? TotalStudent { get; set; }
         public int? TotalProjectAmount { get; set; }
         public int? RejectProjectAmount { get; set; }
         public int? DoingProjectAmount { get; set; }

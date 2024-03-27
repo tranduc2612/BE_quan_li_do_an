@@ -90,6 +90,26 @@ namespace GP.Business.Service
 
         }
 
+        public LoginResponseDTO GetProfile(string username) {
+            LoginResponseDTO account = null;
+            Student student = null;
+            Teacher teacher = null;
+            student = _studentRepository.Get(username);
+            if(student != null)
+            {
+                account = _mapper.MapStudentToLoginResponseDTO(student);
+                return account;
+            }
+            teacher = _teacherRepository.Get(username);
+            if (teacher != null)
+            {
+                account = _mapper.MapTeacherToLoginResponseDTO(teacher);
+                return account;
+            }
+            return account;
+
+        }
+
         public LoginResponseDTO CreateToken(AccountLogin login)
         {
             LoginResponseDTO account = null;

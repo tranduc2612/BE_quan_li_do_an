@@ -11,6 +11,7 @@ namespace GP.Business.IService
 {
     public interface ISemesterService
     {
+        public Semester getSemester(string id);
         public List<Semester> GetListSemester(SemesterDTO req);
         public bool Add(SemesterDTO req, out string message);
         public PaginatedResultBase<SemesterDTO> GetListSemesterPage(SemesterListModel data);

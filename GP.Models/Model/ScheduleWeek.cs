@@ -17,6 +17,10 @@ public partial class ScheduleWeek
 
     public string? SemesterId { get; set; }
 
+    public string? Title { get; set; }
+
+    public string? Content { get; set; }
+
     public virtual Teacher? CreatedByNavigation { get; set; }
 
     public virtual ICollection<DetailScheduleWeek> DetailScheduleWeeks { get; set; } = new List<DetailScheduleWeek>();

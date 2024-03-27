@@ -19,6 +19,34 @@ namespace GraduateProject.Controllers
             _projectService = projectService;
         }
 
+        [HttpGet("get-list-project-by-mentor")]
+        public Response GetListProjectByMentor(string username_teacher, string semesterId)
+        {
+            Response response = new Response();
+
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Validate Error");
+                return response;
+            }
+
+            try
+            {
+                response.Code = 200;
+                response.Success = true;
+                response.ReturnObj = _projectService.GetListProjectByUsernameMentor(username_teacher, semesterId);
+                response.Msg = "Lấy danh sach thành công !";
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
+
         [HttpPost("assign-mentor")]
         public Response AssignMentor(string username_student,string username_teacher)
         {
@@ -115,5 +143,36 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
+
+        [HttpPut("update-project-outline")]
+        public Response UpdateProjectOutline([FromBody] ProjectOutlineDTO req)
+        {
+            Response response = new Response();
+
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Validate Error");
+                return response;
+            }
+            try
+            {
+                response.Msg = "Sucess";
+                response.Code = 201;
+                bool check = _projectService.UpdateNewProjectOutline(req, out string message);
+                if (!check)
+                {
+                    response.SetError(400, message);
+                }
+                response.Msg = message;
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
     }
 }

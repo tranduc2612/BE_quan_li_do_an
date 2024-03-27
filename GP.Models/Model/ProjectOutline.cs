@@ -17,6 +17,8 @@ public partial class ProjectOutline
 
     public string? GroupReviewOutlineId { get; set; }
 
+    public string? ContentProject { get; set; }
+
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual GroupReviewOutline? GroupReviewOutline { get; set; }

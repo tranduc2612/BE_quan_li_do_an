@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using GP.Business.IService;
+using GP.Business.Service;
 using GP.Common.DTO;
 using GP.Common.Helpers;
 using GP.Common.Models;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
+using System;
 using System.Globalization;
 
 namespace GraduateProject.Controllers
@@ -248,6 +250,38 @@ namespace GraduateProject.Controllers
                 response.ExceptionInfo = ex.ToString();
             }
             
+            return response;
+        }
+
+
+        /// <summary>
+        /// 788878
+        /// </summary>
+        /// <param name="login">aksnansdaksdnlkasdnkads</param>
+        /// <returns></returns>
+        [HttpGet("get-profile")]
+        public Response GetProfile(string username)
+        {
+            Response response = new Response();
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Lỗi tham số đầu vào");
+                return response;
+            }
+            try
+            {
+                //var currentAccount = _accountService.GetInfoAccount(username);
+                response.Msg = "Sucess";
+                response.Code = 200;
+                response.ReturnObj = _accountService.GetProfile(username);
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+
             return response;
         }
 

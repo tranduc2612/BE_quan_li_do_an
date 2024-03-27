@@ -1,9 +1,12 @@
-﻿using GP.Business.IService;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using GP.Business.IService;
 using GP.Common.DTO;
 using GP.Common.Helpers;
 using GP.Common.Models;
 using GP.DAL.IRepository;
 using GP.Models.Model;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +63,31 @@ namespace GP.Business.Service
             find.Implementer = data.Implementer;
             find.Content = data.Content;
             find.Note = data.Note;
+            //if(files != null)
+            //{
+            //    foreach (var file in files)
+            //    {
+            //        if (file.Length > 0)
+            //        {
+            //            var fileInformation = new ScheduleSemesterFile();
+            //            fileInformation.FileName = file.Name;
+            //            fileInformation.FileSize = file.Length.ToString();
+            //            fileInformation.FileType = file.ContentType;
+            //            fileInformation.ScheduleSemesterId = find.ScheduleSemesterId;
+
+            //            // Lưu thông tin vào cơ sở dữ liệu ở đây
+
+            //            // Lưu tệp tin vào máy chủ
+            //            _scheduleSemesterRepository.UpFile(fileInformation);
+            //            var filePath = Path.Combine("file/file_semester", file.FileName+ fileInformation.FileId);
+            //            using (var stream = new FileStream(filePath, FileMode.Create))
+            //            {
+            //                file.CopyToAsync(stream);
+            //            }
+
+            //        }
+            //    }
+            //}
             _scheduleSemesterRepository.Update(find);
             message = "Cập nhật thành công !";
             return true;
@@ -84,6 +112,13 @@ namespace GP.Business.Service
             _scheduleSemesterRepository.Delete(scheduleSemester);
             message = "Xóa thành công !"; 
             return true;
+        }
+
+        public ScheduleSemesterDTO GetById(string id)
+        {
+            ScheduleSemester find = _scheduleSemesterRepository.GetById(id);
+
+            return _mapper.MapScheduleSemesterToScheduleSemesterDTO(find);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace GraduateProject.Controllers
         }
 
         [HttpGet("get-list-comment")]
-        public Response GetComment(string username)
+        public Response GetListComment(string username)
         {
             Response response = new Response();
 
@@ -70,6 +70,7 @@ namespace GraduateProject.Controllers
                 }
                 else
                 {
+                    response.Msg = "Thêm nhận xét thành công !";
                     response.ReturnObj = cmt;
                 }
             }
@@ -106,6 +107,7 @@ namespace GraduateProject.Controllers
                 else
                 {
                     response.ReturnObj = cmt;
+                    response.Msg = "Cập nhật thành công !";
                 }
             }
             catch (Exception ex)
@@ -139,6 +141,36 @@ namespace GraduateProject.Controllers
                     response.SetError(400, message);
                 }
                 response.Msg = message;
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
+        [HttpGet("check-permisstion-comment")]
+        public Response CheckPermissionComment(string usernameOutline, string usernameTeacher, string semesterId)
+        {
+            Response response = new Response();
+
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Validate Error");
+                return response;
+            }
+
+            try
+            {
+                response.Msg = "Có quyền";
+                response.Code = 200;
+                bool check = _commentService.CheckPermissionComment(usernameOutline, usernameTeacher, semesterId);
+                if (!check)
+                {
+                    response.SetError("Không có quyền");
+                }
             }
             catch (Exception ex)
             {

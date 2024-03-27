@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GP.Models.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -19,5 +20,12 @@ namespace GP.Common.DTO
         public string? TechProject { get; set; }
 
         public string? ExpectResult { get; set; }
+        public string? ContentProject { get; set; }
+
+        public virtual ICollection<CommentDTO>? Comments { get; set; } = new List<CommentDTO>();
+
+        public virtual GroupReviewOutlineDTO? GroupReviewOutline { get; set; }
+
+        public virtual ProjectDTO? UserNameNavigation { get; set; }
     }
 }

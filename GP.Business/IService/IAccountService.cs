@@ -15,6 +15,7 @@ namespace GP.Business.IService
     {
         public bool CheckStudent(StudentModel accountDTO, out string message);
         public bool CheckTeacher(TeacherModel accountDTO, out string message);
+        public LoginResponseDTO GetProfile(string username);
 
         /// <summary>
         /// ytutututu

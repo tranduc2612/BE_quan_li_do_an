@@ -9,7 +9,6 @@ namespace GP.Common.DTO
     public class GroupReviewOutlineDTO
     {
         public string GroupReviewOutlineId { get; set; }
-
         public string? NameGroupReviewOutline { get; set; }
         public int? SLGV { get; set;}
         public int? SLSV { get; set; }

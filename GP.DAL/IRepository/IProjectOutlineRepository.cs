@@ -1,4 +1,5 @@
-﻿using GP.Models.Model;
+﻿using GP.Common.Models;
+using GP.Models.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,10 @@ namespace GP.DAL.IRepository
     public interface IProjectOutlineRepository
     {
         public ProjectOutline Add(ProjectOutline data);
-        public ProjectOutline GetById(string username);
+        public ProjectOutline Update(ProjectOutline data);
 
+        public ProjectOutline GetById(string username);
+        public List<ProjectOutline> GetListProjectOutlineByGroupId(ProjectOutlineListModel req);
+        public List<ProjectOutline> GetListProjectOutline(ProjectOutlineListModel req);
     }
 }

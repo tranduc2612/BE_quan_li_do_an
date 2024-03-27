@@ -15,6 +15,8 @@ namespace GP.Business.IService
     public interface IProjectService
     {
         public ProjectOutline GetProjectOutlineByUsername(string username);
+        public List<ProjectDTO> GetListProjectByUsernameMentor(string username,string semesterId);
+        public bool UpdateNewProjectOutline(ProjectOutlineDTO projectOutlineDTO, out string message);
         public bool AddNewProjectOutline(ProjectOutlineDTO projectOutlineDTO, out string message);
         public bool AssignMentorTeacher(string username_student,string username_teacher,out string message);
     }

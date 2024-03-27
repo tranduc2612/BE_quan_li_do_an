@@ -34,8 +34,9 @@ namespace GP.DAL.Repository
             {
                 return false;
             }
-            if(find_teaching.GroupReviewOutlineId == projectOutline.GroupReviewOutlineId && 
-                projectOutline.UserNameNavigation.SemesterId == find_teaching.SemesterId) {
+            Project project = _dbContext.Projects.FirstOrDefault(x => x.UserName == usernameOutline);
+            if (find_teaching.GroupReviewOutlineId == projectOutline.GroupReviewOutlineId &&
+               project.SemesterId == find_teaching.SemesterId) {
                 return true;
             }
 
@@ -56,7 +57,10 @@ namespace GP.DAL.Repository
 
         public List<Comment> GetList(string username)
         {
-            List<Comment> comments = _dbContext.Comments.Include(x=>x.UserNameNavigation).Where(x=>x.UserName == username).ToList();
+            List<Comment> comments = _dbContext.Comments
+                .Include(x=>x.UserNameNavigation)
+                .Include(x=>x.CreatedByNavigation)
+                .Where(x=>x.UserName == username).ToList();
             return comments;
         }
 

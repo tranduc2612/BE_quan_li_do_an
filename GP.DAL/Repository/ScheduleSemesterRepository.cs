@@ -31,7 +31,7 @@ namespace GP.DAL.Repository
 
         public ScheduleSemester GetById(string id)
         {
-            return _dbContext.ScheduleSemesters.FirstOrDefault(x => x.ScheduleSemesterId == id);
+            return _dbContext.ScheduleSemesters.Include(x=>x.CreatedByNavigation).FirstOrDefault(x => x.ScheduleSemesterId == id);
         }
 
         public List<ScheduleSemester> GetListScheduleSemester(string semesterId)

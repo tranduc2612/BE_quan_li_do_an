@@ -27,8 +27,9 @@ namespace GP.Common.Models
 
     public class AssignProjectOutlineGroupReviewOutlineModel
     {
+        public string? SemesterTeachingId { get; set; }
         public string? GroupReviewOutlineId { get; set; }
-        public string? UsernameProjectOutline { get; set; }
+        public List<string>? UsernameProjectOutline { get; set; }
 
     }
 }

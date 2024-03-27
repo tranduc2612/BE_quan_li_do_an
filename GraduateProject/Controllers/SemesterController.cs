@@ -20,6 +20,27 @@ namespace GraduateProject.Controllers
             _semesterService = semesterService;
         }
 
+        [HttpGet("get-semester")]
+        public Response GetListSemester(string idSemester)
+        {
+            Response response = new Response();
+
+            try
+            {
+                //var currentAccount = _accountService.GetInfoAccount(username);
+                response.Msg = "Sucess";
+                response.Code = 200;
+                response.ReturnObj = _semesterService.getSemester(idSemester);
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
+
         // 
         [HttpPost("get-list-semester")]
         public Response GetListSemester([FromBody]SemesterDTO req)

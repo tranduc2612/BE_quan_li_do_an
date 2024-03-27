@@ -15,5 +15,6 @@ namespace GP.DAL.IRepository
         public void Update(ScheduleSemester req);
         public void Delete(ScheduleSemester scheduleSemester);
 
+
     }
 }

@@ -51,5 +51,10 @@ namespace GP.Business.Service
         {
             return _semesterRepository.GetListPage(data);
         }
+
+        public Semester getSemester(string id)
+        {
+            return _semesterRepository.GetById(id);
+        }
     }
 }
