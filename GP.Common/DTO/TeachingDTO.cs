@@ -9,7 +9,7 @@ namespace GP.Common.DTO
 {
     public class TeachingDTO
     {
-        public string? PostionInCouncil { get; set; }
+        public string? PositionInCouncil { get; set; }
 
         public string? UserNameTeacher { get; set; }
 

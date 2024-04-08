@@ -40,28 +40,29 @@ namespace GraduateProject.Controllers
             return response;
         }
 
-        [HttpPost("get-list-group-review-outline")]
-        public Response GetListGroupReviewPage(GroupReviewOutlineListModel model)
-        {
-            Response response = new Response();
-            if (!ModelState.IsValid)
-            {
-                response.SetError(StatusCodes.Status422UnprocessableEntity, "Lỗi tham số đầu vào");
-                return response;
-            }
-            try
-            {
-                response.Msg = "Sucess";
-                response.Code = 200;
-                response.ReturnObj = _groupReviewOutlineService.getListGroupReview(model);
-            }
-            catch (Exception ex)
-            {
-                response.SetError("Có lỗi xảy ra");
-                response.ExceptionInfo = ex.ToString();
-            }
-            return response;
-        }
+        //[HttpPost("get-list-group-review-outline")]
+        //public Response GetListGroupReviewPage(GroupReviewOutlineListModel model)
+        //{
+        //    Response response = new Response();
+        //    if (!ModelState.IsValid)
+        //    {
+        //        response.SetError(StatusCodes.Status422UnprocessableEntity, "Lỗi tham số đầu vào");
+        //        return response;
+        //    }
+        //    try
+        //    {
+        //        response.Msg = "Sucess";
+        //        response.Code = 200;
+        //        response.ReturnObj = _groupReviewOutlineService.getListGroupReview(model);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.SetError("Có lỗi xảy ra");
+        //        response.ExceptionInfo = ex.ToString();
+        //    }
+        //    return response;
+        //}
+
         [HttpPost("get-list-group-review-outline-semester")]
         public Response GetListGroupReviewSemester(GroupReviewOutlineListSemesterModel model)
         {
@@ -212,6 +213,7 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
+        
         [HttpPut("update-group-review-outline")]
         public Response UpdateGroupReviewOutline(GroupReviewOutlineModel model)
         {

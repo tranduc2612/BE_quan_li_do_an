@@ -15,6 +15,7 @@ namespace GP.Common.Models
         public string? CreatedBy { get; set; }
 
         public int? IsDelete { get; set; }
+        public string? SemesterId { get; set; }
     }
 
     public class AssignTeachingGroupReviewOutlineModel

@@ -5,8 +5,6 @@ namespace GP.Models.Model;
 
 public partial class Teaching
 {
-    public string? PostionInCouncil { get; set; }
-
     public string UserNameTeacher { get; set; } = null!;
 
     public string SemesterId { get; set; } = null!;
@@ -14,6 +12,8 @@ public partial class Teaching
     public string? GroupReviewOutlineId { get; set; }
 
     public string? CouncilId { get; set; }
+
+    public string? PositionInCouncil { get; set; }
 
     public virtual Council? Council { get; set; }
 

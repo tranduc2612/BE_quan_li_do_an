@@ -99,7 +99,15 @@ public partial class ManagementGraduationProjectContext : DbContext
             entity.Property(e => e.CouncilName).HasMaxLength(100);
             entity.Property(e => e.CouncilZoom).HasMaxLength(100);
             entity.Property(e => e.CreatedBy).HasMaxLength(50);
-            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.IsDelete).HasDefaultValueSql("((0))");
+            entity.Property(e => e.SemesterId).HasMaxLength(50);
+
+            entity.HasOne(d => d.Semester).WithMany(p => p.Councils)
+                .HasForeignKey(d => d.SemesterId)
+                .HasConstraintName("FK__Council__Semeste__66EA454A");
         });
 
         modelBuilder.Entity<DetailScheduleWeek>(entity =>
@@ -143,6 +151,11 @@ public partial class ManagementGraduationProjectContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.IsDelete).HasDefaultValueSql("((0))");
             entity.Property(e => e.NameGroupReviewOutline).HasMaxLength(50);
+            entity.Property(e => e.SemesterId).HasMaxLength(50);
+
+            entity.HasOne(d => d.Semester).WithMany(p => p.GroupReviewOutlines)
+                .HasForeignKey(d => d.SemesterId)
+                .HasConstraintName("FK__GroupRevi__Semes__65F62111");
         });
 
         modelBuilder.Entity<Major>(entity =>
@@ -161,7 +174,17 @@ public partial class ManagementGraduationProjectContext : DbContext
             entity.ToTable("Project");
 
             entity.Property(e => e.UserName).HasMaxLength(50);
+            entity.Property(e => e.CommentCt).HasColumnName("CommentCT");
+            entity.Property(e => e.CommentTk).HasColumnName("CommentTK");
+            entity.Property(e => e.CommentUv1).HasColumnName("CommentUV1");
+            entity.Property(e => e.CommentUv2).HasColumnName("CommentUV2");
+            entity.Property(e => e.CommentUv3).HasColumnName("CommentUV3");
             entity.Property(e => e.CouncilId).HasMaxLength(50);
+            entity.Property(e => e.ScoreCt).HasColumnName("ScoreCT");
+            entity.Property(e => e.ScoreTk).HasColumnName("ScoreTK");
+            entity.Property(e => e.ScoreUv1).HasColumnName("ScoreUV1");
+            entity.Property(e => e.ScoreUv2).HasColumnName("ScoreUV2");
+            entity.Property(e => e.ScoreUv3).HasColumnName("ScoreUV3");
             entity.Property(e => e.SemesterId).HasMaxLength(50);
             entity.Property(e => e.StatusProject)
                 .HasMaxLength(50)
@@ -372,9 +395,7 @@ public partial class ManagementGraduationProjectContext : DbContext
             entity.Property(e => e.UserNameTeacher).HasMaxLength(50);
             entity.Property(e => e.CouncilId).HasMaxLength(50);
             entity.Property(e => e.GroupReviewOutlineId).HasMaxLength(50);
-            entity.Property(e => e.PostionInCouncil)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.PositionInCouncil).HasMaxLength(50);
 
             entity.HasOne(d => d.Council).WithMany(p => p.Teachings)
                 .HasForeignKey(d => d.CouncilId)

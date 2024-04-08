@@ -15,7 +15,11 @@ public partial class GroupReviewOutline
 
     public DateTime? CreatedDate { get; set; }
 
+    public string? SemesterId { get; set; }
+
     public virtual ICollection<ProjectOutline> ProjectOutlines { get; set; } = new List<ProjectOutline>();
+
+    public virtual Semester? Semester { get; set; }
 
     public virtual ICollection<Teaching> Teachings { get; set; } = new List<Teaching>();
 }

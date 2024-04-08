@@ -21,6 +21,8 @@ namespace GP.Common.DTO
 
         public string? ExpectResult { get; set; }
         public string? ContentProject { get; set; }
+        public string? GroupReviewOutlineId { get; set; }
+        public string? NameGroupReviewOutline { get; set; }
 
         public virtual ICollection<CommentDTO>? Comments { get; set; } = new List<CommentDTO>();
 

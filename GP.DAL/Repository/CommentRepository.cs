@@ -39,7 +39,14 @@ namespace GP.DAL.Repository
                project.SemesterId == find_teaching.SemesterId) {
                 return true;
             }
-
+            if (project.UserNameMentor == usernameTeacher)
+            {
+                return true;
+            }
+            if (project.UserNameCommentator == usernameTeacher)
+            {
+                return true;
+            }
             return false;
         }
 

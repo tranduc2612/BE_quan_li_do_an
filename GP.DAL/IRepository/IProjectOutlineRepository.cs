@@ -1,4 +1,5 @@
-﻿using GP.Common.Models;
+﻿using GP.Common.DTO;
+using GP.Common.Models;
 using GP.Models.Model;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace GP.DAL.IRepository
         public ProjectOutline Update(ProjectOutline data);
 
         public ProjectOutline GetById(string username);
-        public List<ProjectOutline> GetListProjectOutlineByGroupId(ProjectOutlineListModel req);
-        public List<ProjectOutline> GetListProjectOutline(ProjectOutlineListModel req);
+        public List<ProjectOutlineDTO> GetListProjectOutlineInGroup(ProjectOutlineListModel req);
+        public List<ProjectOutlineDTO> GetListProjectOutline(ProjectOutlineListModel req);
     }
 }

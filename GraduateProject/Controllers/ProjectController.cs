@@ -62,9 +62,39 @@ namespace GraduateProject.Controllers
             try
             {
                 response.Code = 200;
-                response.Success = _projectService.AssignMentorTeacher(username_student, username_teacher, out string message);
+                response.Success = _projectService.AssignMentorTeacherToProject(username_student, username_teacher, out string message);
                 response.Msg = message;
                 if(response.Success == false)
+                {
+                    response.Code = 400;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
+        [HttpPost("assign-commentator")]
+        public Response AssignCommentator(string username_student, string username_teacher)
+        {
+            Response response = new Response();
+
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Validate Error");
+                return response;
+            }
+
+            try
+            {
+                response.Code = 200;
+                response.Success = _projectService.AssignUserNameCommentatorToProject(username_student, username_teacher, out string message);
+                response.Msg = message;
+                if (response.Success == false)
                 {
                     response.Code = 400;
                 }
@@ -173,6 +203,37 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
+
+        [HttpPut("update-project-score")]
+        public Response UpdateScoreProject([FromBody] ProjectReqScore req)
+        {
+            Response response = new Response();
+
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Validate Error");
+                return response;
+            }
+            try
+            {
+                response.Msg = "Sucess";
+                response.Code = 201;
+                bool check = _projectService.UpdateScoreToProject(req.UserName,req.Role,req.Score,req.Comment, out string message);
+                if (!check)
+                {
+                    response.SetError(400, message);
+                }
+                response.Msg = message;
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
 
     }
 }

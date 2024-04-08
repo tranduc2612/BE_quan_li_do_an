@@ -70,7 +70,7 @@ namespace GP.DAL.Repository
         {
 
             return _dbContext.Semesters.Where(x =>
-                   (String.IsNullOrEmpty(req.NameSemester) || x.NameSemester.Contains(req.NameSemester))).OrderBy(x=>x.ToDate).ToList();
+                   (String.IsNullOrEmpty(req.NameSemester) || x.NameSemester.Contains(req.NameSemester))).OrderBy(x=>x.CreatedAt).ToList();
         }
 
         public PaginatedResultBase<SemesterDTO> GetListPage(SemesterListModel req)

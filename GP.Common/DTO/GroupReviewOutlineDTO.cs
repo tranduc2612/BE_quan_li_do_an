@@ -10,6 +10,9 @@ namespace GP.Common.DTO
     {
         public string GroupReviewOutlineId { get; set; }
         public string? NameGroupReviewOutline { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public string? CreatedBy { get; set; }
+
         public int? SLGV { get; set;}
         public int? SLSV { get; set; }
 

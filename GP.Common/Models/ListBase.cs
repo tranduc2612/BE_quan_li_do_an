@@ -62,7 +62,6 @@ namespace GP.Common.Models
     {
         public string? SemesterId { get; set; }
         public string? GroupReviewOutlineId { get; set; }
-
         public string? NameGroupReviewOutline { get; set; }
     }
 
@@ -70,8 +69,15 @@ namespace GP.Common.Models
     {
         public string SemesterId { get; set; }
         public string? GroupReviewOutlineId { get; set; }
+        public string? CouncilId { get; set; }
         public string? UserNameTeacher { get; set; }
+        public string? PositionInCouncil { get; set; }
+    }
 
+    public class StudentCouncilListModel
+    {
+        public string SemesterId { get; set; }
+        public string? CouncilId { get; set; }
     }
 
     public class ProjectOutlineListModel

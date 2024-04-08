@@ -23,16 +23,27 @@ namespace GP.DAL.Repository
             _mapper = mapper;
         }
 
-        public Teaching Get(string username, string semesterId)
+        public Teaching GetByUserNameSemester(string username, string semesterId)
         {
-            return _dbContext.Teachings.FirstOrDefault(x => x.UserNameTeacher == username && x.SemesterId == semesterId);
+            return _dbContext.Teachings.Include(x=>x.Council).FirstOrDefault(x => x.UserNameTeacher == username && x.SemesterId == semesterId);
+        }
+
+        public Teaching GetDetail(TeachingListModel data)
+        {
+            return _dbContext.Teachings.FirstOrDefault(x => (string.IsNullOrEmpty(data.SemesterId) || x.SemesterId == data.SemesterId)
+                            && (string.IsNullOrEmpty(data.UserNameTeacher) || x.UserNameTeacher.Contains(data.SemesterId))
+                            && (string.IsNullOrEmpty(data.CouncilId) || x.CouncilId == data.CouncilId)
+                            && (string.IsNullOrEmpty(data.PositionInCouncil) || x.PositionInCouncil == data.PositionInCouncil)
+                            );
         }
 
         public List<Teaching> GetListTeaching(TeachingListModel data)
         {
-            List<Teaching> query = _dbContext.Teachings.Include(x => x.UserNameTeacherNavigation).Include(x=>x.GroupReviewOutline)
+            List<Teaching> query = _dbContext.Teachings.Include(x => x.UserNameTeacherNavigation).Include(x=>x.GroupReviewOutline).Include(x=>x.Council)
                 .Where(x => (string.IsNullOrEmpty(data.SemesterId) || x.SemesterId == data.SemesterId) 
                             && (string.IsNullOrEmpty(data.UserNameTeacher) || x.UserNameTeacher.Contains(data.SemesterId))
+                            && (string.IsNullOrEmpty(data.CouncilId) || x.CouncilId == data.CouncilId)
+                            && (string.IsNullOrEmpty(data.PositionInCouncil) || x.PositionInCouncil == data.PositionInCouncil)
                             )
                 .OrderBy(x => x.GroupReviewOutlineId == data.GroupReviewOutlineId ? 0 : 1)
                 //.ThenBy(x => x.GroupReviewOutlineId)
@@ -43,12 +54,13 @@ namespace GP.DAL.Repository
             return query;
         }
 
-        public List<Teaching> GetListByGroupReviewId(TeachingListModel data)
+        public List<Teaching> GetListWithTeachingCondition(TeachingListModel data)
         {
-            List<Teaching> query = _dbContext.Teachings.Include(x => x.UserNameTeacherNavigation).Include(x => x.GroupReviewOutline)
-                .Where(x => (string.IsNullOrEmpty(data.SemesterId) || x.SemesterId == data.SemesterId)
+            List<Teaching> query = _dbContext.Teachings.Include(x=>x.UserNameTeacherNavigation)
+                .Where(x => (x.SemesterId == data.SemesterId)
                             && (string.IsNullOrEmpty(data.UserNameTeacher) || x.UserNameTeacher.Contains(data.SemesterId))
                             && (string.IsNullOrEmpty(data.GroupReviewOutlineId) || x.GroupReviewOutlineId == data.GroupReviewOutlineId)
+                            && (string.IsNullOrEmpty(data.CouncilId) || x.CouncilId == data.CouncilId)
                             )
                 //.ThenBy(x => x.GroupReviewOutlineId)
                 .ToList();
@@ -56,6 +68,13 @@ namespace GP.DAL.Repository
             int totalItem = query.Count();
 
             return query;
+        }
+
+        public Teaching Update(Teaching teaching)
+        {
+            _dbContext.Teachings.Update(teaching);
+            _dbContext.SaveChanges();
+            return teaching;
         }
     }
 }

@@ -84,7 +84,6 @@ namespace GP.Business.Service
             }
             if (CheckPermissionComment(find_outline.UserName, comment.CreatedBy, find_outline.UserNameNavigation.SemesterId))
             {
-                Comment update = _mapper.MapCommentDTOToComment(comment);
                 find_comment.ContentComment = comment.ContentComment;
                 find_comment.CreatedDate = DateTime.UtcNow;
                 _commentRepository.Update(find_comment);

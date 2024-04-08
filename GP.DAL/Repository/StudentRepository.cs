@@ -187,13 +187,15 @@ namespace GP.DAL.Repository
 
         public Student Get(string username)
         {
-           return _dbContext.Students.Include(x => x.Major)
+           return _dbContext.Students
                    .Include(x => x.Project)
                    .ThenInclude(x => x.UserNameCommentatorNavigation)
                    .Include(x => x.Project)
                    .ThenInclude(x => x.UserNameMentorNavigation)
                    .Include(x => x.Project)
                    .ThenInclude(x => x.Semester)
+                   .Include(x => x.Project)
+                   .ThenInclude(x => x.Council)
                    .FirstOrDefault(x=>x.UserName==username);
         }
 

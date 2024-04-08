@@ -12,6 +12,8 @@ namespace GP.DAL.IRepository
     {
         public Project GetProjectByUsername(string username);
         public List<Project> GetListProjectByUsernameMentor(string username_mentor,string semesterId);
-        public Project AssignMentor(Teacher teacher,string username);
+        public List<Project> GetListProjectByCouncilId(string semesterId, string councilId);
+        //public Project AssignMentor(Teacher teacher,string username);
+        public Project Update(Project project);
     }
 }

@@ -21,7 +21,11 @@ public partial class Semester
 
     public int? IsDelete { get; set; }
 
+    public virtual ICollection<Council> Councils { get; set; } = new List<Council>();
+
     public virtual Teacher? CreatedByNavigation { get; set; }
+
+    public virtual ICollection<GroupReviewOutline> GroupReviewOutlines { get; set; } = new List<GroupReviewOutline>();
 
     public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
 

@@ -48,6 +48,8 @@ builder.Services.AddScoped<IScheduleSemesterService, ScheduleSemesterService>();
 builder.Services.AddScoped<IGroupReviewOutlineService, GroupReviewOutlineService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IScheduleWeekService, ScheduleWeekService>();
+builder.Services.AddScoped<ICouncilService, CouncilService>();
+
 
 
 
@@ -65,6 +67,7 @@ builder.Services.AddScoped<IGroupReviewOutlineRepository, GroupReviewOutlineRepo
 builder.Services.AddScoped<ITeachingRepository, TeachingRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IScheduleWeekRepository, ScheduleWeekRepository>();
+builder.Services.AddScoped<ICouncilRepository, CouncilRepository>();
 
 
 

@@ -49,6 +49,8 @@ namespace GP.Common.Helpers
                 cfg.CreateMap<Project, ProjectDTO>().ReverseMap();
                 cfg.CreateMap<ScheduleSemester, ScheduleSemesterDTO>().ReverseMap();
                 cfg.CreateMap<ScheduleSemesterModel, ScheduleSemester>().ReverseMap();
+                cfg.CreateMap<CouncilModel, Council>().ReverseMap();
+                cfg.CreateMap<CouncilDTO, Council>().ReverseMap();
 
 
 
@@ -145,6 +147,7 @@ namespace GP.Common.Helpers
         {
             return _mapper.Map<List<ProjectOutlineDTO>>(projectOutline);
         }
+
 
         public StudentDTO MapStudentToStudentDTO(Student student)
         {
@@ -244,6 +247,19 @@ namespace GP.Common.Helpers
         public DetailScheduleWeek MapScheduleWeekDetailModelToDetailScheduleWeekDTO(ScheduleWeekDetailModel model)
         {
             return _mapper.Map<DetailScheduleWeek>(model);
+        }
+
+        public Council MapCouncilModelToCouncil(CouncilModel model)
+        {
+            return _mapper.Map<Council>(model);
+        }
+        public CouncilDTO MapCouncilToCouncilDTO(Council model)
+        {
+            return _mapper.Map<CouncilDTO>(model);
+        }
+        public List<CouncilDTO> MapCouncilsToCouncilDTOs(List<Council> model)
+        {
+            return _mapper.Map<List<CouncilDTO>>(model);
         }
     }
 }

@@ -36,16 +36,10 @@ namespace GP.Business.Service
         }
         public bool AddGroupReview(GroupReviewOutlineModel data, out string message)
         {
-            GroupReviewOutline find = _groupReviewOutlineRepository.GetById(data.GroupReviewOutlineId);
-            if(find != null)
-            {
-                message = "Mã nhóm xét duyệt đã tồn tại !";
-                return false;
-            }
             GroupReviewOutline group = new GroupReviewOutline();
-            group.GroupReviewOutlineId = data.GroupReviewOutlineId;
             group.NameGroupReviewOutline = data.NameGroupReviewOutline;
             group.CreatedBy= data.CreatedBy;
+            group.SemesterId = data.SemesterId;
             _groupReviewOutlineRepository.Add(group);
 
             message = "Thêm thành công !";
@@ -103,7 +97,7 @@ namespace GP.Business.Service
             TeachingListModel lstReq = new TeachingListModel();
             lstReq.SemesterId = model.SemesterTeachingId;
             lstReq.GroupReviewOutlineId = model.GroupReviewOutlineId;
-            List<Teaching> lstTeaching = _teachingRepository.GetListByGroupReviewId(lstReq);
+            List<Teaching> lstTeaching = _teachingRepository.GetListWithTeachingCondition(lstReq);
             
 
             foreach (string username in model.UsernameTeaching)
@@ -115,7 +109,7 @@ namespace GP.Business.Service
                     return false;
                 }
 
-                Teaching teaching_find = _teachingRepository.Get(username, model.SemesterTeachingId);
+                Teaching teaching_find = _teachingRepository.GetByUserNameSemester(username, model.SemesterTeachingId);
                 if (teaching_find == null)
                 {
                     message = "Giảng viên này chưa được thêm vào học kỳ này !";
@@ -148,7 +142,7 @@ namespace GP.Business.Service
             ProjectOutlineListModel reqList = new ProjectOutlineListModel();
             reqList.GroupReviewOutlineId = model.GroupReviewOutlineId;
             reqList.SemesterId = model.SemesterTeachingId;
-            List<ProjectOutline> lstProjectOutline = _projectOutlineRepository.GetListProjectOutlineByGroupId(reqList);
+            List<ProjectOutlineDTO> lstProjectOutline = _projectOutlineRepository.GetListProjectOutlineInGroup(reqList);
 
             foreach (string username in model.UsernameProjectOutline)
             {
@@ -161,12 +155,13 @@ namespace GP.Business.Service
                 projectOutline.GroupReviewOutlineId = model.GroupReviewOutlineId;
                 _groupReviewOutlineRepository.AssignGroupToOutline(projectOutline);
             }
-            foreach (ProjectOutline outline_find in lstProjectOutline)
+            foreach (ProjectOutlineDTO outline_find in lstProjectOutline)
             {
                 if (!model.UsernameProjectOutline.Any(x => outline_find.UserName == x))
                 {
-                    outline_find.GroupReviewOutlineId = null;
-                    _groupReviewOutlineRepository.AssignGroupToOutline(outline_find);
+                    ProjectOutline find = _projectOutlineRepository.GetById(outline_find.UserName);
+                    find.GroupReviewOutlineId = null;
+                    _groupReviewOutlineRepository.AssignGroupToOutline(find);
                 }
             }
 
@@ -192,12 +187,7 @@ namespace GP.Business.Service
 
         public List<ProjectOutlineDTO> getListProjectOutline(ProjectOutlineListModel data)
         {
-            if(data.IsGetAll == 1)
-            {
-                return _mapper.MapProjectOutlinesToProjectOutlineDTOs(_projectOutlineRepository.GetListProjectOutline(data));
-            }
-            return _mapper.MapProjectOutlinesToProjectOutlineDTOs(_projectOutlineRepository.GetListProjectOutlineByGroupId(data));
-
+            return _projectOutlineRepository.GetListProjectOutline(data);
         }
 
         public GroupReviewOutline getProjectOutline(string id)

@@ -17,15 +17,10 @@ namespace GP.DAL.Repository
             _dbContext = dbContext;
         }
 
-        public Project AssignMentor(Teacher teacher, string username)
-        {   
-            Project project= _dbContext.Projects.FirstOrDefault(x=>x.UserName == username);
-            if(project != null) { 
-                project.UserNameMentor = teacher.UserName;
-                _dbContext.SaveChanges();
-                return project;
-            }
-            return null;
+        public List<Project> GetListProjectByCouncilId(string semesterId, string councilId)
+        {
+            return _dbContext.Projects.Include(x=>x.ProjectOutline).Include(x=>x.UserNameNavigation).Include(x=>x.Council)
+                .Where(x => x.SemesterId == semesterId && (String.IsNullOrEmpty(councilId) || councilId == x.CouncilId)).ToList();
         }
 
         public List<Project> GetListProjectByUsernameMentor(string username_mentor,string semesterId)
@@ -41,6 +36,13 @@ namespace GP.DAL.Repository
         public Project GetProjectByUsername(string username)
         {
             return _dbContext.Projects.FirstOrDefault(x=>x.UserName == username);
+        }
+
+        public Project Update(Project project)
+        {
+            _dbContext.Update(project);
+            _dbContext.SaveChanges();
+           return project;
         }
     }
 }

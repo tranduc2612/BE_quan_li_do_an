@@ -19,7 +19,6 @@ namespace GP.Business.IService
         public bool AddGroupReview(GroupReviewOutlineModel data, out string message);
         public bool UpdateGroupReview(GroupReviewOutlineModel data, out string message);
         public bool DeleteGroupReview(string id, out string message);
-
         public bool AssignTeachingToGroup(AssignTeachingGroupReviewOutlineModel model, out string message);
         public bool AssignProjectToGroup(AssignProjectOutlineGroupReviewOutlineModel model, out string message);
 
