@@ -32,8 +32,6 @@ namespace GP.Common.Models
 
         public int? IsDelete { get; set; }
 
-        public string? TeacherCode { get; set; }
-
         public string? Education { get; set; }
 
         public string? MajorId { get; set; }

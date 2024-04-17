@@ -7,6 +7,7 @@ using GP.Models.Model;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,9 +43,10 @@ namespace GP.Business.Service
                 message = "Sinh viên không tồn tại";
                 return false;
             }
-
+            project_find.StatusProject = "DOING";
             ProjectOutline projectOutline = _mapper.MapProjectOutlineDTOToProjectOutline(projectOutlineDTO);
             _projectOutlineRepository.Add(projectOutline);
+            _projectRepository.Update(project_find);
             message = "Thêm đề cương đồ án thành công !";
             return true;
         }
@@ -99,6 +101,21 @@ namespace GP.Business.Service
             return map;
         }
 
+        public ProjectDTO GetProjectByHashKeyCommentator(string key)
+        {
+            return _mapper.MapProjectToProjectDTO(_projectRepository.GetProjectByHashKeyMentor(key));
+        }
+
+        public ProjectDTO GetProjectByHashKeyMentor(string key)
+        {
+            return _mapper.MapProjectToProjectDTO(_projectRepository.GetProjectByHashKeyCommentator(key));
+        }
+
+        public ProjectDTO GetProjectByUserName(string username)
+        {
+            return _mapper.MapProjectToProjectDTO(_projectRepository.GetProjectByUsernameData(username));
+        }
+
         public ProjectOutline GetProjectOutlineByUsername(string username)
         {
             return _projectOutlineRepository.GetById(username);
@@ -147,6 +164,10 @@ namespace GP.Business.Service
             {
                 project.ScoreCt = resultScore;
                 project.CommentCt = comment;
+                double totalHD = ((project.ScoreCt ?? 0) + (project.ScoreTk ?? 0) + (project.ScoreUv1 ?? 0) + (project.ScoreUv2 ?? 0) + (project.ScoreUv3 ?? 0)) / 5;
+                double totalQT = ((project.ScoreMentor ?? 0) + (project.ScoreCommentator ?? 0)) / 2;
+                double total = (totalHD + totalQT) / 2;
+                project.ScoreFinal = Math.Round(total,2);
                 _projectRepository.Update(project);
                 message = "Cập nhật đồ án thành công !";
                 return true;
@@ -155,6 +176,10 @@ namespace GP.Business.Service
             {
                 project.ScoreTk = resultScore;
                 project.CommentTk = comment;
+                double totalHD = ((project.ScoreCt ?? 0) + (project.ScoreTk ?? 0) + (project.ScoreUv1 ?? 0) + (project.ScoreUv2 ?? 0) + (project.ScoreUv3 ?? 0)) / 5;
+                double totalQT = ((project.ScoreMentor ?? 0) + (project.ScoreCommentator ?? 0)) / 2;
+                double total = (totalHD + totalQT) / 2;
+                project.ScoreFinal = Math.Round(total,2);
                 _projectRepository.Update(project);
                 message = "Cập nhật đồ án thành công !";
                 return true;
@@ -163,6 +188,10 @@ namespace GP.Business.Service
             {
                 project.ScoreUv1 = resultScore;
                 project.CommentUv1 = comment;
+                double totalHD = ((project.ScoreCt ?? 0) + (project.ScoreTk ?? 0) + (project.ScoreUv1 ?? 0) + (project.ScoreUv2 ?? 0) + (project.ScoreUv3 ?? 0)) / 5;
+                double totalQT = ((project.ScoreMentor ?? 0) + (project.ScoreCommentator ?? 0)) / 2;
+                double total = (totalHD + totalQT) / 2;
+                project.ScoreFinal = Math.Round(total,2);
                 _projectRepository.Update(project);
                 message = "Cập nhật đồ án thành công !";
                 return true;
@@ -171,6 +200,10 @@ namespace GP.Business.Service
             {
                 project.ScoreUv2 = resultScore;
                 project.CommentUv2 = comment;
+                double totalHD = ((project.ScoreCt ?? 0) + (project.ScoreTk ?? 0) + (project.ScoreUv1 ?? 0) + (project.ScoreUv2 ?? 0) + (project.ScoreUv3 ?? 0)) / 5;
+                double totalQT = ((project.ScoreMentor ?? 0) + (project.ScoreCommentator ?? 0)) / 2;
+                double total = (totalHD + totalQT) / 2;
+                project.ScoreFinal = Math.Round(total,2);
                 _projectRepository.Update(project);
                 message = "Cập nhật đồ án thành công !";
                 return true;
@@ -179,6 +212,34 @@ namespace GP.Business.Service
             {
                 project.ScoreUv3 = resultScore;
                 project.CommentUv3 = comment;
+                double totalHD = ((project.ScoreCt ?? 0) + (project.ScoreTk ?? 0) + (project.ScoreUv1 ?? 0) + (project.ScoreUv2 ?? 0) + (project.ScoreUv3 ?? 0)) / 5;
+                double totalQT = ((project.ScoreMentor ?? 0) + (project.ScoreCommentator ?? 0)) / 2;
+                double total = (totalHD + totalQT) / 2;
+                project.ScoreFinal = Math.Round(total,2);
+                _projectRepository.Update(project);
+                message = "Cập nhật đồ án thành công !";
+                return true;
+            }
+            if (role == "MENTOR")
+            {
+                project.ScoreMentor = resultScore;
+                project.CommentMentor = comment;
+                double totalHD = ((project.ScoreCt ?? 0) + (project.ScoreTk ?? 0) + (project.ScoreUv1 ?? 0) + (project.ScoreUv2 ?? 0) + (project.ScoreUv3 ?? 0)) / 5;
+                double totalQT = ((project.ScoreMentor ?? 0) + (project.ScoreCommentator ?? 0)) / 2;
+                double total = (totalHD + totalQT) / 2;
+                project.ScoreFinal = Math.Round(total, 2);
+                _projectRepository.Update(project);
+                message = "Cập nhật đồ án thành công !";
+                return true;
+            }
+            if (role == "COMMENTATOR")
+            {
+                project.ScoreCommentator = resultScore;
+                project.CommentCommentator = comment;
+                double totalHD = ((project.ScoreCt ?? 0) + (project.ScoreTk ?? 0) + (project.ScoreUv1 ?? 0) + (project.ScoreUv2 ?? 0) + (project.ScoreUv3 ?? 0)) / 5;
+                double totalQT = ((project.ScoreMentor ?? 0) + (project.ScoreCommentator ?? 0)) / 2;
+                double total = (totalHD + totalQT) / 2;
+                project.ScoreFinal = Math.Round(total, 2);
                 _projectRepository.Update(project);
                 message = "Cập nhật đồ án thành công !";
                 return true;

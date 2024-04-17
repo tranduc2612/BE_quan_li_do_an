@@ -46,6 +46,8 @@ namespace GP.Common.DTO
         public string? CommentTk { get; set; }
         public double? ScoreCt { get; set; }
         public string? CommentCt { get; set; }
+        public string? HashKeyMentor { get; set; }
+        public string? HashKeyCommentator { get; set; }
         public virtual StudentDTO? UserNameNavigation { get; set; }
         public virtual TeacherDTO? UserNameCommentatorNavigation { get; set; }
         public virtual TeacherDTO? UserNameMentorNavigation { get; set; }

@@ -20,7 +20,12 @@ namespace GP.DAL.Repository
         public List<Project> GetListProjectByCouncilId(string semesterId, string councilId)
         {
             return _dbContext.Projects.Include(x=>x.ProjectOutline).Include(x=>x.UserNameNavigation).Include(x=>x.Council)
-                .Where(x => x.SemesterId == semesterId && (String.IsNullOrEmpty(councilId) || councilId == x.CouncilId)).ToList();
+                .Where(x => x.SemesterId == semesterId 
+                      && 
+                      (String.IsNullOrEmpty(councilId) || councilId == x.CouncilId)
+                      &&
+                      x.ProjectOutline != null
+                      ).ToList();
         }
 
         public List<Project> GetListProjectByUsernameMentor(string username_mentor,string semesterId)
@@ -33,9 +38,24 @@ namespace GP.DAL.Repository
             return _dbContext.Projects.Include(x => x.UserNameNavigation).Include(x=>x.ProjectOutline).Where(x => x.SemesterId == semesterId && x.UserNameMentor == username_mentor).ToList();
         }
 
+        public Project GetProjectByHashKeyCommentator(string key)
+        {
+            return _dbContext.Projects.Include(x=>x.UserNameMentorNavigation).ThenInclude(x=>x.Major).Include(x=>x.ProjectOutline).Include(x=>x.UserNameNavigation).FirstOrDefault(x => x.HashKeyMentor == key);
+        }
+
+        public Project GetProjectByHashKeyMentor(string key)
+        {
+            return _dbContext.Projects.Include(x => x.UserNameCommentatorNavigation).ThenInclude(x => x.Major).Include(x => x.ProjectOutline).Include(x => x.UserNameNavigation).FirstOrDefault(x => x.HashKeyCommentator == key);
+        }
+
         public Project GetProjectByUsername(string username)
         {
             return _dbContext.Projects.FirstOrDefault(x=>x.UserName == username);
+        }
+
+        public Project GetProjectByUsernameData(string username)
+        {
+            return _dbContext.Projects.Include(x => x.ProjectOutline).Include(x => x.UserNameMentorNavigation).ThenInclude(x=>x.Major).Include(x => x.UserNameNavigation).FirstOrDefault(x => x.UserName == username);
         }
 
         public Project Update(Project project)

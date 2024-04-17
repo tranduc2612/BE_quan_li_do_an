@@ -29,8 +29,6 @@ public partial class Teacher
 
     public int? IsDelete { get; set; }
 
-    public string? TeacherCode { get; set; }
-
     public string? Education { get; set; }
 
     public string? Token { get; set; }
@@ -47,9 +45,9 @@ public partial class Teacher
 
     public int? Gender { get; set; }
 
-    public string? Address { get; set; }
-
     public string? Role { get; set; }
+
+    public string? Address { get; set; }
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 

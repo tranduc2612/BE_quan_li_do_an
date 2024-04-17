@@ -121,6 +121,39 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
+
+            [HttpDelete("delete-schedule-week")]
+            public Response DeleteScheduleWeek(string id)
+            {
+                Response response = new Response();
+
+                try
+                {
+
+                    response.Code = 201;
+                    bool checkReq = _scheduleWeekService.DeleteScheduleWeek(id, out string message);
+                    if (!checkReq)
+                    {
+                        response.Success = false;
+                        response.Code = 400;
+                        response.Msg = message;
+                    }
+                    else
+                    {
+                        response.ReturnObj = message;
+                        response.Msg = "Cập nhật thành công !";
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    response.SetError("Có lỗi xảy ra");
+                    response.ExceptionInfo = ex.ToString();
+                }
+                return response;
+            }
+
+
             [HttpPost("handle-detail-schedule-week")]
             public Response HandleDetailScheduleWeek([FromForm] ScheduleWeekDetailModel data)
             {

@@ -334,6 +334,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.102.2, )"
+            },
             "EPPlus": {
               "target": "Package",
               "version": "[7.0.10, )"

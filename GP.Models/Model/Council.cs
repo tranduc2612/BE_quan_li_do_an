@@ -13,11 +13,11 @@ public partial class Council
 
     public string? CreatedBy { get; set; }
 
+    public string? SemesterId { get; set; }
+
     public int? IsDelete { get; set; }
 
     public DateTime? CreatedDate { get; set; }
-
-    public string? SemesterId { get; set; }
 
     public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
 

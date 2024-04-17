@@ -1,4 +1,5 @@
 ﻿using GP.Models.Model;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,18 @@ namespace GP.Common.Models
         public string SemesterId { get; set; }
         public int? Gender { get; set; }
         public string? Address { get; set; }
+        public string? MsgError { get; set; }
+        public string? DOBOriginal { get; set; }
+
         public double? Gpa { get; set; }
+        public string? StatusProject { get; set; }
+
+    }
+    
+    public class ListStudentModel
+    {
+        public string? SemesterId { get; set; }
+        public IFormFile? file { get; set; }
 
     }
 }

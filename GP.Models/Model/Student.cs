@@ -47,9 +47,9 @@ public partial class Student
 
     public int? Gender { get; set; }
 
-    public string? Address { get; set; }
-
     public double? Gpa { get; set; }
+
+    public string? Address { get; set; }
 
     public string? Role { get; set; }
 

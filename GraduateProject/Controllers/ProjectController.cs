@@ -234,6 +234,38 @@ namespace GraduateProject.Controllers
             return response;
         }
 
+        [HttpPost("get-info-review-by-hash-key")]
+        public Response GetInfoReview([FromBody] ProjectReviewKey req)
+        {
+            Response response = new Response();
+
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Validate Error");
+                return response;
+            }
+            try
+            {
+                response.Msg = "Sucess";
+                response.Code = 200;
+                response.ReturnObj = null;
+                if(req.Role == "MENTOR")
+                {
+                    response.ReturnObj = _projectService.GetProjectByHashKeyMentor(req.Key);
+                }
+                if(req.Role == "COMMENTATOR")
+                {
+                    response.ReturnObj = _projectService.GetProjectByHashKeyCommentator(req.Key);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
 
     }
 }

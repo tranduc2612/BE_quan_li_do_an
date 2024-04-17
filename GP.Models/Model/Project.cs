@@ -15,8 +15,6 @@ public partial class Project
 
     public string? UserNameMentor { get; set; }
 
-    public string? StatusProject { get; set; }
-
     public double? ScoreMentor { get; set; }
 
     public string? CommentMentor { get; set; }
@@ -46,6 +44,12 @@ public partial class Project
     public string? CommentCt { get; set; }
 
     public double? ScoreFinal { get; set; }
+
+    public string? StatusProject { get; set; }
+
+    public string? HashKeyMentor { get; set; }
+
+    public string? HashKeyCommentator { get; set; }
 
     public virtual Council? Council { get; set; }
 

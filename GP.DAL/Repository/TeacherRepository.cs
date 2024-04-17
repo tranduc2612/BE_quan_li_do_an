@@ -58,8 +58,6 @@ namespace GP.DAL.Repository
                    x.IsDelete == 0 &&
                    (String.IsNullOrEmpty(data.FullName) || x.FullName.Contains(data.FullName))
                    &&
-                   (String.IsNullOrEmpty(data.TeacherCode) || x.TeacherCode.Contains(data.TeacherCode))
-                   &&
                    (String.IsNullOrEmpty(data.MajorId) || x.MajorId.Contains(data.MajorId))
                    &&
                    (String.IsNullOrEmpty(data.UserName) || x.UserName.Contains(data.UserName))
@@ -72,17 +70,13 @@ namespace GP.DAL.Repository
                    x.IsDelete == 0 &&
                    (String.IsNullOrEmpty(data.FullName) || x.FullName.Contains(data.FullName))
                    &&
-                   (String.IsNullOrEmpty(data.TeacherCode) || x.TeacherCode.Contains(data.TeacherCode))
-                   &&
                    (String.IsNullOrEmpty(data.MajorId) || x.MajorId.Contains(data.MajorId))
                    &&
                    (String.IsNullOrEmpty(data.UserName) || x.UserName.Contains(data.UserName))
                    &&
                    (String.IsNullOrEmpty(data.Status) || x.Status.Contains(data.Status))
                    )
-                   .Include(x => x.Major)
-                   .Skip((data.PageIndex - 1) * data.PageSize)
-                   .Take(data.PageSize).ToList();
+                   .Include(x => x.Major).ToList();
 
             result.ListResult = _mapper.MapTeachersToTeacherDTOs(lstTeacher);
             result.TotalItem = totalItem;

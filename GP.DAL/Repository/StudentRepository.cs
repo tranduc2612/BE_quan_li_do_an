@@ -81,9 +81,7 @@ namespace GP.DAL.Repository
             //       (String.IsNullOrEmpty(data.SemesterId) || x.Project.SemesterId == data.SemesterId)
             //       );
 
-            List<Student> lstStudent = query.Skip((data.PageIndex - 1) * data.PageSize)
-                 .Take(data.PageSize)
-                 .ToList()
+            List<Student> lstStudent = query.ToList()
                  .Select(x =>
                  {
                      x.Student.Major = x.Major;
@@ -159,7 +157,7 @@ namespace GP.DAL.Repository
             AuthHelper.CreatePassHash(studentDTO.PasswordText, out byte[] passwordHash, out byte[] passwordSalt);
             student.Password = passwordHash;
             student.PasswordSalt = passwordSalt;
-            student.UserName = _common.GennerationUsernameStudent(studentDTO.FullName, studentDTO.StudentCode, studentDTO.SemesterId);
+            student.UserName = _common.GennerationUsernameStudent(studentDTO.StudentCode, studentDTO.SemesterId);
             _dbContext.Students.Add(student);
 
             new_project.UserName = student.UserName;
@@ -196,6 +194,8 @@ namespace GP.DAL.Repository
                    .ThenInclude(x => x.Semester)
                    .Include(x => x.Project)
                    .ThenInclude(x => x.Council)
+                   .Include(x => x.Project)
+                   .ThenInclude(x => x.ProjectOutline)
                    .FirstOrDefault(x=>x.UserName==username);
         }
 

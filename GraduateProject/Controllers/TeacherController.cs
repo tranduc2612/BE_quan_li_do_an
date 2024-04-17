@@ -1,4 +1,5 @@
 ﻿using GP.Business.IService;
+using GP.Common.DTO;
 using GP.Common.Helpers;
 using GP.Common.Models;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,7 @@ namespace GraduateProject.Controllers
     public class TeacherController : ControllerBase
     {
         private readonly IAccountService _accountService;
+
 
         public TeacherController(IAccountService accountService)
         {
@@ -71,5 +73,40 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
+
+        [HttpPut("update-teacher")]
+        public Response UpdateTeacher(TeacherModel model)
+        {
+            Response response = new Response();
+
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Lỗi tham số đầu vào");
+                return response;
+            }
+
+            try
+            {
+                string UserName = _accountService.UpdateTeacher(model);
+                if (UserName != null)
+                {
+                    response.ReturnObj = UserName;
+                    response.Msg = "Cập nhật thành công !";
+                    response.Code = 200;
+                }
+                else
+                {
+                    response.SetError(400, "Cập nhật thất bại !");
+                }
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
     }
 }

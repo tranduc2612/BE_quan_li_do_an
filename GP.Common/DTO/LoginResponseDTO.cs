@@ -33,6 +33,8 @@ namespace GP.Common.DTO
         public string? Education { get; set; }
         public virtual MajorDTO? Major { get; set; }
         public virtual ProjectDTO? Project { get; set; }
+        public virtual ProjectOutlineDTO? ProjectOutline { get; set; }
+
 
     }
 }

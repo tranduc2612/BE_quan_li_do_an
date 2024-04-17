@@ -27,6 +27,8 @@ namespace GP.Business.IService
         public void RegisterStudent(StudentModel studentReq);
         public void RegisterTeacher(TeacherModel teacherDTO);
         public string UpdateStudent(StudentModel studentReq);
+        public string UpdateTeacher(TeacherModel teacherReq);
+
         public bool DeleteStudent(string username);
         public bool DeleteTeacher(string username);
         public bool CheckValidRefreshToken(string refreshToken, out string message);

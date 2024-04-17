@@ -51,7 +51,7 @@ public partial class ManagementGraduationProjectContext : DbContext
     {
         modelBuilder.Entity<Classification>(entity =>
         {
-            entity.HasKey(e => e.ClassifiId).HasName("PK__Classifi__AE2013258D2223C7");
+            entity.HasKey(e => e.ClassifiId).HasName("PK__Classifi__AE20132595AF9086");
 
             entity.ToTable("Classification");
 
@@ -65,7 +65,7 @@ public partial class ManagementGraduationProjectContext : DbContext
 
         modelBuilder.Entity<Comment>(entity =>
         {
-            entity.HasKey(e => e.CommentId).HasName("PK__Comment__C3B4DFCA158A15F3");
+            entity.HasKey(e => e.CommentId).HasName("PK__Comment__C3B4DFCA978CB592");
 
             entity.ToTable("Comment");
 
@@ -89,7 +89,7 @@ public partial class ManagementGraduationProjectContext : DbContext
 
         modelBuilder.Entity<Council>(entity =>
         {
-            entity.HasKey(e => e.CouncilId).HasName("PK__Council__1BBAA5C1C8F060B1");
+            entity.HasKey(e => e.CouncilId).HasName("PK__Council__1BBAA5C14C9D8A3A");
 
             entity.ToTable("Council");
 
@@ -107,12 +107,12 @@ public partial class ManagementGraduationProjectContext : DbContext
 
             entity.HasOne(d => d.Semester).WithMany(p => p.Councils)
                 .HasForeignKey(d => d.SemesterId)
-                .HasConstraintName("FK__Council__Semeste__66EA454A");
+                .HasConstraintName("FK__Council__Semeste__37A5467C");
         });
 
         modelBuilder.Entity<DetailScheduleWeek>(entity =>
         {
-            entity.HasKey(e => new { e.ScheduleWeekId, e.UserNameProject }).HasName("PK__DetailSc__459D0554A16973F4");
+            entity.HasKey(e => new { e.ScheduleWeekId, e.UserNameProject }).HasName("PK__DetailSc__459D0554735485CA");
 
             entity.ToTable("DetailScheduleWeek");
 
@@ -120,10 +120,7 @@ public partial class ManagementGraduationProjectContext : DbContext
             entity.Property(e => e.UserNameProject).HasMaxLength(50);
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
-                .HasColumnType("date")
-                .HasColumnName("createdDate");
-            entity.Property(e => e.NameFile).HasColumnName("nameFile");
-            entity.Property(e => e.SizeFile).HasColumnName("sizeFile");
+                .HasColumnType("date");
 
             entity.HasOne(d => d.ScheduleWeek).WithMany(p => p.DetailScheduleWeeks)
                 .HasForeignKey(d => d.ScheduleWeekId)
@@ -138,7 +135,7 @@ public partial class ManagementGraduationProjectContext : DbContext
 
         modelBuilder.Entity<GroupReviewOutline>(entity =>
         {
-            entity.HasKey(e => e.GroupReviewOutlineId).HasName("PK__GroupRev__0C859B6FBBFC201F");
+            entity.HasKey(e => e.GroupReviewOutlineId).HasName("PK__GroupRev__0C859B6F5116BC51");
 
             entity.ToTable("GroupReviewOutline");
 
@@ -155,12 +152,12 @@ public partial class ManagementGraduationProjectContext : DbContext
 
             entity.HasOne(d => d.Semester).WithMany(p => p.GroupReviewOutlines)
                 .HasForeignKey(d => d.SemesterId)
-                .HasConstraintName("FK__GroupRevi__Semes__65F62111");
+                .HasConstraintName("FK__GroupRevi__Semes__44FF419A");
         });
 
         modelBuilder.Entity<Major>(entity =>
         {
-            entity.HasKey(e => e.MajorId).HasName("PK__Major__D5B8BF91CE1F5EB0");
+            entity.HasKey(e => e.MajorId).HasName("PK__Major__D5B8BF9132521469");
 
             entity.ToTable("Major");
 
@@ -169,7 +166,7 @@ public partial class ManagementGraduationProjectContext : DbContext
 
         modelBuilder.Entity<Project>(entity =>
         {
-            entity.HasKey(e => e.UserName).HasName("PK__Project__C9F284578EC0671A");
+            entity.HasKey(e => e.UserName).HasName("PK__Project__C9F28457C6E79EB4");
 
             entity.ToTable("Project");
 
@@ -188,7 +185,7 @@ public partial class ManagementGraduationProjectContext : DbContext
             entity.Property(e => e.SemesterId).HasMaxLength(50);
             entity.Property(e => e.StatusProject)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("('DOING')");
+                .HasDefaultValueSql("('START')");
             entity.Property(e => e.UserNameCommentator).HasMaxLength(50);
             entity.Property(e => e.UserNameMentor).HasMaxLength(50);
 
@@ -216,7 +213,7 @@ public partial class ManagementGraduationProjectContext : DbContext
 
         modelBuilder.Entity<ProjectOutline>(entity =>
         {
-            entity.HasKey(e => e.UserName).HasName("PK__ProjectO__C9F28457C77115FA");
+            entity.HasKey(e => e.UserName).HasName("PK__ProjectO__C9F284578A549C59");
 
             entity.ToTable("ProjectOutline");
 
@@ -235,7 +232,7 @@ public partial class ManagementGraduationProjectContext : DbContext
 
         modelBuilder.Entity<ScheduleSemester>(entity =>
         {
-            entity.HasKey(e => e.ScheduleSemesterId).HasName("PK__Schedule__81105223B17EFB46");
+            entity.HasKey(e => e.ScheduleSemesterId).HasName("PK__Schedule__811052238F36CD4A");
 
             entity.ToTable("ScheduleSemester");
 
@@ -263,7 +260,7 @@ public partial class ManagementGraduationProjectContext : DbContext
 
         modelBuilder.Entity<ScheduleWeek>(entity =>
         {
-            entity.HasKey(e => e.ScheduleWeekId).HasName("PK__Schedule__33DBB5B654EE4EF6");
+            entity.HasKey(e => e.ScheduleWeekId).HasName("PK__Schedule__33DBB5B69ECE85B4");
 
             entity.ToTable("ScheduleWeek");
 
@@ -287,7 +284,7 @@ public partial class ManagementGraduationProjectContext : DbContext
 
         modelBuilder.Entity<Semester>(entity =>
         {
-            entity.HasKey(e => e.SemesterId).HasName("PK__Semester__043301DD5311E3CC");
+            entity.HasKey(e => e.SemesterId).HasName("PK__Semester__043301DDB83928E4");
 
             entity.ToTable("Semester");
 
@@ -309,7 +306,7 @@ public partial class ManagementGraduationProjectContext : DbContext
 
         modelBuilder.Entity<Student>(entity =>
         {
-            entity.HasKey(e => e.UserName).HasName("PK__Student__C9F28457704A2DFE");
+            entity.HasKey(e => e.UserName).HasName("PK__Student__C9F28457CC31D740");
 
             entity.ToTable("Student");
 
@@ -349,7 +346,7 @@ public partial class ManagementGraduationProjectContext : DbContext
 
         modelBuilder.Entity<Teacher>(entity =>
         {
-            entity.HasKey(e => e.UserName).HasName("PK__Teacher__C9F2845761E39A3C");
+            entity.HasKey(e => e.UserName).HasName("PK__Teacher__C9F284573C546268");
 
             entity.ToTable("Teacher");
 
@@ -374,7 +371,6 @@ public partial class ManagementGraduationProjectContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasDefaultValueSql("('AUTH')");
-            entity.Property(e => e.TeacherCode).HasMaxLength(30);
             entity.Property(e => e.TokenCreated).HasColumnType("datetime");
             entity.Property(e => e.TokenExpires)
                 .HasColumnType("datetime")
@@ -387,7 +383,7 @@ public partial class ManagementGraduationProjectContext : DbContext
 
         modelBuilder.Entity<Teaching>(entity =>
         {
-            entity.HasKey(e => new { e.SemesterId, e.UserNameTeacher }).HasName("PK__Teaching__7EC252832CF81CB8");
+            entity.HasKey(e => new { e.SemesterId, e.UserNameTeacher }).HasName("PK__Teaching__7EC25283956449A7");
 
             entity.ToTable("Teaching");
 

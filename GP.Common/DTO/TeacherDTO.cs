@@ -24,8 +24,6 @@ namespace GP.Common.DTO
 
         public string? Status { get; set; }
 
-        public string? TeacherCode { get; set; }
-
         public string? MajorId { get; set; }
 
         public string? Education { get; set; }

@@ -17,9 +17,9 @@ public partial class Semester
 
     public string? CreatedBy { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
-
     public int? IsDelete { get; set; }
+
+    public DateTime? CreatedAt { get; set; }
 
     public virtual ICollection<Council> Councils { get; set; } = new List<Council>();
 

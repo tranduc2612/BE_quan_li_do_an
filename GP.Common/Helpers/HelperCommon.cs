@@ -69,14 +69,14 @@ namespace GP.Common.Helpers
             return str;
         }
 
-        public string GennerationUsernameStudent(string fullname = "", string studentCode = "", string semesterId = "")
+        public string GennerationUsernameStudent(string studentCode = "", string semesterId = "")
         {
-            return semesterId + "_" + ConvertFullnameCode(fullname) + "_" + studentCode;
+            return semesterId + "_" + studentCode;
         }
 
-        public string GennerationUsernameTeacher(string fullname = "", string teacherCode = "")
+        public string GennerationUsernameTeacher(string teacherCode = "")
         {
-            return ConvertFullnameCode(fullname) + "_" + teacherCode;
+            return teacherCode;
         }
 
         public bool IsExcelFile(string fileName)

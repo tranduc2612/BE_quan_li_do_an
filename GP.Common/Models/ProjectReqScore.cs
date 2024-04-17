@@ -19,4 +19,12 @@ namespace GP.Common.Models
         public string? Comment { get; set; }
 
     }
+
+    public class ProjectReviewKey
+    {
+        public string? Role { get; set; }
+        public string? Key { get; set; }
+
+
+    }
 }

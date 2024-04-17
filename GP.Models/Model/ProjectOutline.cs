@@ -15,9 +15,9 @@ public partial class ProjectOutline
 
     public string? ExpectResult { get; set; }
 
-    public string? GroupReviewOutlineId { get; set; }
-
     public string? ContentProject { get; set; }
+
+    public string? GroupReviewOutlineId { get; set; }
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 

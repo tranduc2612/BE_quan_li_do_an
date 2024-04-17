@@ -59,7 +59,7 @@ namespace GP.Business.Service
         {
             message = string.Empty;
          
-            Student student = _studentRepository.Get(_common.GennerationUsernameStudent(studentDTO.FullName, studentDTO.StudentCode, studentDTO.SemesterId));
+            Student student = _studentRepository.Get(_common.GennerationUsernameStudent(studentDTO.StudentCode, studentDTO.SemesterId));
             Semester semester = _semesterRepository.GetById(studentDTO.SemesterId);
             if (semester == null)
             {
@@ -79,7 +79,7 @@ namespace GP.Business.Service
         {
             message = string.Empty;
 
-            Teacher teacher = _teacherRepository.Get(_common.GennerationUsernameTeacher(teacherDTO.FullName, teacherDTO.TeacherCode));
+            Teacher teacher = _teacherRepository.Get(teacherDTO.UserName);
             if (teacher != null)
             {
                 message = "Tài khoản giảng viên này đã được tạo !";
@@ -227,12 +227,13 @@ namespace GP.Business.Service
         {
             Teacher teacher = _mapper.MapTeacherModelToTeacher(teacherModel);
             AuthHelper.CreatePassHash(teacherModel.PasswordText, out byte[] passwordHash, out byte[] passwordSalt);
-            teacher.IsAdmin = 0;
             teacher.Password = passwordHash;
             teacher.PasswordSalt = passwordSalt;
-            teacher.UserName = _common.GennerationUsernameTeacher(teacherModel.FullName, teacherModel.TeacherCode);
+            if(teacher.IsAdmin == 1)
+            {
+                teacher.Role = "ADMIN";
+            }
             _teacherRepository.Create(teacher);
-
         }
 
         public bool VerifyLoginInfo(AccountLogin login, out string message, out string typeError)
@@ -291,9 +292,26 @@ namespace GP.Business.Service
 
         public string UpdateStudent(StudentModel studentReq)
         {
-            Student student = _mapper.MapStudentModelToStudent(studentReq);
-            _studentRepository.Update(student);
-            return student.UserName;
+            //Student student = _mapper.MapStudentModelToStudent(studentReq);
+            Student find = _studentRepository.Get(studentReq.UserName);
+            if(find == null)
+            {
+                return null;
+            }
+            find.StudentCode = studentReq.StudentCode;
+            find.FullName= studentReq.FullName;
+            find.Phone = studentReq.Phone;
+            find.Email= studentReq.Email;
+            find.Address= studentReq.Address;
+            find.Gender = studentReq.Gender;
+            find.Dob = studentReq.Dob;
+            find.SchoolYearName = studentReq.SchoolYearName;
+            find.ClassName = studentReq.ClassName;
+            find.Gpa = studentReq.Gpa;
+            find.MajorId = studentReq.MajorId;
+            find.Avatar = studentReq.Avatar;
+            _studentRepository.Update(find);
+            return find.UserName;
         }
 
         public bool DeleteStudent(string username)
@@ -315,6 +333,33 @@ namespace GP.Business.Service
         {
             bool isDelete = _teacherRepository.Delete(username);
             return isDelete;
+        }
+
+        public string UpdateTeacher(TeacherModel teacherReq)
+        {
+            //Student student = _mapper.MapStudentModelToStudent(studentReq);
+            Teacher find = _teacherRepository.Get(teacherReq.UserName);
+            if (find == null)
+            {
+                return null;
+            }
+            find.FullName = teacherReq.FullName;
+            find.Phone = teacherReq.Phone;
+            find.Email = teacherReq.Email;
+            find.Address = teacherReq.Address;
+            find.Gender = teacherReq.Gender;
+            find.Dob = teacherReq.Dob;
+            find.MajorId = teacherReq.MajorId;
+            find.Avatar = teacherReq.Avatar;
+            find.Education = teacherReq.Education;
+            find.Status = teacherReq.Status;
+            find.IsAdmin = teacherReq.IsAdmin;
+            if (find.IsAdmin == 1)
+            {
+                find.Role = "ADMIN";
+            }
+            _teacherRepository.Update(find);
+            return find.UserName;
         }
     }
 }
