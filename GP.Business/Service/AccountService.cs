@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -298,18 +299,18 @@ namespace GP.Business.Service
             {
                 return null;
             }
-            find.StudentCode = studentReq.StudentCode;
-            find.FullName= studentReq.FullName;
-            find.Phone = studentReq.Phone;
-            find.Email= studentReq.Email;
-            find.Address= studentReq.Address;
-            find.Gender = studentReq.Gender;
-            find.Dob = studentReq.Dob;
-            find.SchoolYearName = studentReq.SchoolYearName;
-            find.ClassName = studentReq.ClassName;
-            find.Gpa = studentReq.Gpa;
-            find.MajorId = studentReq.MajorId;
-            find.Avatar = studentReq.Avatar;
+            find.StudentCode = studentReq.StudentCode != null ? studentReq.StudentCode : find.StudentCode;
+            find.FullName= studentReq.FullName != null ? studentReq.FullName : find.FullName;
+            find.Phone = studentReq.Phone != null ? studentReq.Phone : find.Phone;
+            find.Email= studentReq.Email != null ? studentReq.Email : find.Email;
+            find.Address= studentReq.Address != null ? studentReq.Address : find.Address;
+            find.Gender = studentReq.Gender != null ? studentReq.Gender : find.Gender;
+            find.Dob = studentReq.Dob != null ? studentReq.Dob : find.Dob;
+            find.SchoolYearName = studentReq.SchoolYearName != null ? studentReq.SchoolYearName : find.SchoolYearName;
+            find.ClassName = studentReq.ClassName != null ? studentReq.ClassName : find.ClassName;
+            find.Gpa = studentReq.Gpa != null ? studentReq.Gpa : find.Gpa;
+            find.MajorId = studentReq.MajorId != null ? studentReq.MajorId : find.MajorId;
+            find.Avatar = studentReq.Avatar != null ? studentReq.Avatar : find.Avatar;
             _studentRepository.Update(find);
             return find.UserName;
         }
@@ -323,9 +324,7 @@ namespace GP.Business.Service
         public StudentDTO GetStudent(string username)
         {
             Student student = _studentRepository.Get(username);
-
             StudentDTO studentDTO = _mapper.MapStudentToStudentDTO(student);
-
             return studentDTO;
         }
 
@@ -343,23 +342,163 @@ namespace GP.Business.Service
             {
                 return null;
             }
-            find.FullName = teacherReq.FullName;
-            find.Phone = teacherReq.Phone;
-            find.Email = teacherReq.Email;
-            find.Address = teacherReq.Address;
-            find.Gender = teacherReq.Gender;
-            find.Dob = teacherReq.Dob;
-            find.MajorId = teacherReq.MajorId;
-            find.Avatar = teacherReq.Avatar;
-            find.Education = teacherReq.Education;
-            find.Status = teacherReq.Status;
-            find.IsAdmin = teacherReq.IsAdmin;
+            find.FullName = teacherReq.FullName != null ? teacherReq.FullName : find.FullName;
+            find.Phone = teacherReq.Phone != null ? teacherReq.Phone : find.Phone;
+            find.Email = teacherReq.Email != null ? teacherReq.Email : find.Email;
+            find.Address = teacherReq.Address != null ? teacherReq.Address : find.Address;
+            find.Gender = teacherReq.Gender != null ? teacherReq.Gender : find.Gender;
+            find.Dob = teacherReq.Dob != null ? teacherReq.Dob : find.Dob;
+            find.MajorId = teacherReq.MajorId != null ? teacherReq.MajorId : find.MajorId;
+            find.Avatar = teacherReq.Avatar != null ? teacherReq.Avatar : find.Avatar;
+            find.EducationId = teacherReq.EducationId != null ? teacherReq.EducationId : find.EducationId;
+            find.Status = teacherReq.Status != null ? teacherReq.Status : find.Status;
+            find.IsAdmin = teacherReq.IsAdmin != null ? teacherReq.IsAdmin : find.IsAdmin;
             if (find.IsAdmin == 1)
             {
                 find.Role = "ADMIN";
             }
             _teacherRepository.Update(find);
             return find.UserName;
+        }
+
+        public bool ChangePassword(ChangePassword login, out string message)
+        {
+            if(login.PasswordNew != login.PasswordOld)
+            {
+                message = "Mật khẩu không khớp !";
+                return false;
+            }
+            if (login.Role == "STUDENT")
+            {
+                Student student = _studentRepository.Get(login.UserName);
+                if(student == null)
+                {
+                    message = "Sinh viên không hợp lệ !";
+                    return false;
+                }
+                AuthHelper.CreatePassHash(login.PasswordNew, out byte[] passwordHash, out byte[] passwordSalt);
+                student.Password = passwordHash;
+                student.PasswordSalt = passwordSalt;
+                _studentRepository.Update(student);
+                message = "Dổi mật khẩu thành công !";
+                return true;
+            }
+            if (login.Role == "TEACHER")
+            {
+                Teacher teacher =_teacherRepository.Get(login.UserName);
+                if (teacher == null)
+                {
+                    message = "Giảng viên không hợp lệ !";
+                    return false;
+                }
+                AuthHelper.CreatePassHash(login.PasswordNew, out byte[] passwordHash, out byte[] passwordSalt);
+                teacher.Password = passwordHash;
+                teacher.PasswordSalt = passwordSalt;
+                _teacherRepository.Update(teacher);
+                message = "Dổi mật khẩu thành công !";
+                return true;
+            }
+            message = "Tài khoản không tồn tại !";
+            return false;
+        }
+
+        public async Task<bool> ChangeAvatar(ChangeAvatar model)
+        {
+            if (model.Role == "STUDENT")
+            {
+                Student student = _studentRepository.Get(model.UserName);
+                if (student == null)
+                {
+                    //message = "Sinh viên không hợp lệ !";
+                    return false;
+                }
+                var filePath = Path.Combine("file", "user","student",student.UserName);
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+                var typeFile = model.file.ContentType;
+                filePath = Path.Combine("file", "user", "student", student.UserName, "avatar_"+ DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetExtension(model.file.FileName));
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.file.CopyToAsync(stream);
+                }
+                student.Avatar = filePath;
+                student.TypeFileAvatar = typeFile;
+                _studentRepository.Update(student);
+                //message = "Cập nhật ảnh đại diện thành công !";
+                return true;
+            }
+            if (model.Role == "TEACHER")
+            {
+                Teacher teacher = _teacherRepository.Get(model.UserName);
+                if (teacher == null)
+                {
+                    //message = "Giảng viên không hợp lệ !";
+                    return false;
+                }
+                var filePath = Path.Combine("file", "user", "teacher",teacher.UserName);
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+                filePath = Path.Combine("file", "user", "teacher", teacher.UserName, "avatar_" + DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetExtension(model.file.FileName));
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.file.CopyToAsync(stream);
+                }
+                var typeFile = model.file.ContentType;
+                teacher.Avatar = filePath;
+                teacher.TypeFileAvatar = typeFile;
+                _teacherRepository.Update(teacher);
+                //message = "Cập nhật ảnh đại diện thành công !";
+                return true;
+            }
+            //message = "Tài khoản không tồn tại";
+            return false;
+
+        }
+
+        public byte[] GetFileAvatar(string username, string role, out string image_type)
+        {
+            if (role == "STUDENT")
+            {
+                Student student = _studentRepository.Get(username);
+                if (student == null)
+                {
+                    image_type = "";
+                    return null;
+                }
+                if (!System.IO.File.Exists(student.Avatar))
+                {
+                    image_type = "";
+                    return null;
+                }
+
+                var imageBytes = System.IO.File.ReadAllBytes(student.Avatar);
+                image_type = student.TypeFileAvatar;
+                return imageBytes;
+            }
+            if (role == "TEACHER")
+            {
+                Teacher teacher = _teacherRepository.Get(username);
+                if (teacher == null)
+                {
+                    image_type = "";
+                    return null;
+                }
+                if (!System.IO.File.Exists(teacher.Avatar))
+                {
+                    image_type = "";
+                    return null;
+                }
+
+                var imageBytes = System.IO.File.ReadAllBytes(teacher.Avatar);
+                image_type = teacher.TypeFileAvatar;
+                return imageBytes;
+            }
+            image_type = "";
+            return null;
         }
     }
 }

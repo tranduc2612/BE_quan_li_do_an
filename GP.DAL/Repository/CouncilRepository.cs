@@ -98,7 +98,7 @@ namespace GP.DAL.Repository
 
         public List<Teaching> GetListTeachingNotInCouncil(TeachingListModel data)
         {
-            List<Teaching> query = _dbContext.Teachings.Include(x => x.UserNameTeacherNavigation)
+            List<Teaching> query = _dbContext.Teachings.Include(x => x.UserNameTeacherNavigation).ThenInclude(x=>x.Education)
                 .Where(x => (x.SemesterId == data.SemesterId)
                             && x.CouncilId == null
                             )

@@ -19,6 +19,7 @@ namespace GP.Business.IService
         public ProjectDTO GetProjectByHashKeyMentor(string key);
         public ProjectDTO GetProjectByHashKeyCommentator(string key);
         public List<ProjectDTO> GetListProjectByUsernameMentor(string username,string semesterId);
+        public List<ProjectDTO> GetListProjectByGroupId(ProjectOutlineListModel req);
         public bool UpdateNewProjectOutline(ProjectOutlineDTO projectOutlineDTO, out string message);
         public bool AddNewProjectOutline(ProjectOutlineDTO projectOutlineDTO, out string message);
         public bool AssignMentorTeacherToProject(string username_student,string username_teacher,out string message);

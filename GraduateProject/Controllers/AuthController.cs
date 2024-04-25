@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Office2013.PowerPoint.Roaming;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Vml;
 using DocumentFormat.OpenXml.Wordprocessing;
 using GP.Business.IService;
 using GP.Business.Service;
@@ -102,39 +103,95 @@ namespace GraduateProject.Controllers
             return response;
         }
 
-        //[HttpPost("update-student")]
-        //public Response UpdateStudent([FromBody] StudentModel studentDTO)
-        //{
-        //    Response response = new Response();
+        [HttpPost("change-password")]
+        public Response ChangePassword([FromBody] ChangePassword model)
+        {
+            Response response = new Response();
 
-        //    // Validate 
-        //    if (!ModelState.IsValid)
-        //    {
-        //        response.SetError(StatusCodes.Status422UnprocessableEntity, "Lỗi tham số đầu vào");
-        //        return response;
-        //    }
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Lỗi tham số đầu vào");
+                return response;
+            }
 
-        //    try
-        //    {
-        //        // kiểm tra đã tồn tại user trong hệ thống chưa
-        //        if (!_accountService.CheckStudent(studentDTO, out string message))
-        //        {
-        //            response.SetError("Tài khoản này không tồn tại");
-        //            return response;
-        //        }
+            try
+            {
 
-        //        response.Msg = "Cập nhật thành công !";
-        //        response.Code = 201;
-        //        // đăng kí: hash pass, tạo user mới ...
-        //        _accountService.(studentDTO);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.SetError("Có lỗi xảy ra");
-        //        response.ExceptionInfo = ex.ToString();
-        //    }
-        //    return response;
-        //}
+                if (!_accountService.ChangePassword(model, out string message))
+                {
+                    response.SetError(message);
+                    return response;
+                }
+
+                response.Msg = message;
+                response.Code = 200;
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
+        private bool IsImage(string contentType)
+        {
+            return contentType.StartsWith("image/");
+        }
+
+        [HttpPost("change-avatar")]
+        public async Task<Response> ChangeAvatar([FromForm] ChangeAvatar model)
+        {
+            Response response = new Response();
+
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Lỗi tham số đầu vào");
+                return response;
+            }
+            if (model.file == null || model.file.Length == 0)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Lỗi tham số đầu vào");
+                return response;
+            }
+            if (!IsImage(model.file.ContentType))
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Chỉ chập nhận file ảnh");
+                return response;
+            }
+
+            try
+            {
+                bool check = await _accountService.ChangeAvatar(model);
+                if (!check)
+                {
+                    response.SetError("Lỗi");
+                    return response;
+                }
+
+                response.Msg = "";
+                response.Code = 200;
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
+        [HttpGet("avatar")]
+        public IActionResult GetImageAvatar(string role, string username)
+        {
+            var namefilePath = _accountService.GetFileAvatar(username, role, out string type_image);
+            if (namefilePath == null)
+            {
+                return NotFound();
+            }
+            return File(namefilePath, type_image);
+        }
 
 
         [HttpPost("register-student-list-excel")]
@@ -345,12 +402,12 @@ namespace GraduateProject.Controllers
 
             try
             {
-                string path = Path.Combine("file/template/add_student/sample_add_student.xlsx");
+                string path = System.IO.Path.Combine("file","template","add_student", "sample_add_student.xlsx");
                 if (System.IO.File.Exists(path))
                 {
                     byte[] fileData = System.IO.File.ReadAllBytes(path);
                     // Lấy tên file từ đường dẫn
-                    string fileName = Path.GetFileName(path);
+                    string fileName = System.IO.Path.GetFileName(path);
 
                     // Trả về file dưới dạng phản hồi HTTP để tải xuống
                     return File(fileData, "application/octet-stream", fileName);

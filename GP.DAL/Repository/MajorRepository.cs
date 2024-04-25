@@ -25,7 +25,12 @@ namespace GP.DAL.Repository
             _dbContext.SaveChanges();
             return true;
         }
-
+        public bool Update(Major req)
+        {
+            _dbContext.Majors.Update(req);
+            _dbContext.SaveChanges();
+            return true;
+        }
         public Major Get(MajorDTO req)
         {
             return _dbContext.Majors.FirstOrDefault(x => x.MajorId == req.MajorId);

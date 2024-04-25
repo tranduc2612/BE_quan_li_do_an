@@ -10,5 +10,7 @@ namespace GP.Business.IService
     public interface IClassificationService
     {
         public List<Classification> GetListClassification(string code);
+        public Classification GetClassification(string type_code,string code);
+        public Classification Update(Classification model);
     }
 }

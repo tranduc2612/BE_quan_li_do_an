@@ -9,6 +9,10 @@ public partial class Major
 
     public string? MajorName { get; set; }
 
+    public DateTime? CreatedAt { get; set; }
+
+    public string? CreatedBy { get; set; }
+
     public virtual ICollection<Student> Students { get; set; } = new List<Student>();
 
     public virtual ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();

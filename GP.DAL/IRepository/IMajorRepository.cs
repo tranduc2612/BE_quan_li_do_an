@@ -15,5 +15,6 @@ namespace GP.DAL.IRepository
         public List<Major> GetList(MajorDTO req);
         public Major Get(MajorDTO req);
         public bool Add(Major req);
+        public bool Update(Major req);
     }
 }

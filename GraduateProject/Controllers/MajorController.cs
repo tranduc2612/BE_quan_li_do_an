@@ -78,5 +78,25 @@ namespace GraduateProject.Controllers
             return response;
         }
 
+        [HttpPut("update-major")]
+        public Response UpdateMajor([FromBody] MajorDTO req)
+        {
+            Response response = new Response();
+
+            try
+            {
+                response.Code = 200;
+                response.Success = _majorService.UpdateMajor(req, out string message);
+                response.Msg = message;
+                response.ReturnObj = null;
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
     }
 }

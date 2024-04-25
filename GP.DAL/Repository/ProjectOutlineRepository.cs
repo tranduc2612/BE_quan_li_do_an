@@ -33,7 +33,10 @@ namespace GP.DAL.Repository
 
         public ProjectOutline GetById(string username)
         {
-            return _dbContext.ProjectOutlines.Include(x=>x.GroupReviewOutline).Include(x=>x.UserNameNavigation).ThenInclude(x=>x.UserNameMentorNavigation).ThenInclude(x => x.Major).Include(x=>x.GroupReviewOutline).FirstOrDefault(x => x.UserName == username);
+            return _dbContext.ProjectOutlines.Include(x=>x.GroupReviewOutline)
+                .Include(x=>x.UserNameNavigation).ThenInclude(x=>x.UserNameMentorNavigation).ThenInclude(x => x.Major)
+                .Include(x => x.UserNameNavigation).ThenInclude(x => x.UserNameMentorNavigation).ThenInclude(x => x.Education)
+                .Include(x=>x.GroupReviewOutline).FirstOrDefault(x => x.UserName == username);
         }
 
         public List<ProjectOutlineDTO> GetListProjectOutlineInGroup(ProjectOutlineListModel req)
@@ -66,7 +69,10 @@ namespace GP.DAL.Repository
         }
         public List<ProjectOutlineDTO> GetListProjectOutline(ProjectOutlineListModel req)
         {
-            List<ProjectOutlineDTO> query = (from p in _dbContext.Projects
+            List<ProjectOutlineDTO> query = (from
+                                             stu in _dbContext.Students
+                                             join
+                                             p in _dbContext.Projects on stu.UserName equals p.UserName
                                              join
                                              po in _dbContext.ProjectOutlines on p.UserName equals po.UserName
                                              join 

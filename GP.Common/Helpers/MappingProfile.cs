@@ -51,6 +51,8 @@ namespace GP.Common.Helpers
                 cfg.CreateMap<ScheduleSemesterModel, ScheduleSemester>().ReverseMap();
                 cfg.CreateMap<CouncilModel, Council>().ReverseMap();
                 cfg.CreateMap<CouncilDTO, Council>().ReverseMap();
+                cfg.CreateMap<EducationDTO, Education>().ReverseMap();
+
 
 
 
@@ -159,11 +161,14 @@ namespace GP.Common.Helpers
             return _mapper.Map<List<StudentDTO>>(students);
         }
 
-        public Major MapMajorDTOToMajor(MajorDTO students)
+        public Major MapMajorDTOToMajor(MajorDTO major)
         {
-            return _mapper.Map<Major>(students);
+            return _mapper.Map<Major>(major);
         }
-
+        public Education MapEducationDTOToEducation(EducationDTO education)
+        {
+            return _mapper.Map<Education>(education);
+        }
         public Semester MapSemesterDTOToSemester(SemesterDTO semesterDTO)
         {
             return _mapper.Map<Semester>(semesterDTO);

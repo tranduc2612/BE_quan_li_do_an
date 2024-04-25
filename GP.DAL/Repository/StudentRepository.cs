@@ -186,6 +186,7 @@ namespace GP.DAL.Repository
         public Student Get(string username)
         {
            return _dbContext.Students
+                    .Include(x => x.Major)
                    .Include(x => x.Project)
                    .ThenInclude(x => x.UserNameCommentatorNavigation)
                    .Include(x => x.Project)

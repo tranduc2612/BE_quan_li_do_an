@@ -28,10 +28,12 @@ namespace GP.Business.IService
         public void RegisterTeacher(TeacherModel teacherDTO);
         public string UpdateStudent(StudentModel studentReq);
         public string UpdateTeacher(TeacherModel teacherReq);
-
+        public Task<bool> ChangeAvatar(ChangeAvatar model);
+        public byte[] GetFileAvatar(string username,string role, out string type_image);
         public bool DeleteStudent(string username);
         public bool DeleteTeacher(string username);
         public bool CheckValidRefreshToken(string refreshToken, out string message);
+        public bool ChangePassword(ChangePassword login, out string message);
         public AccountLogin GetCurrentUsername();
         public LoginResponseDTO CreateToken(AccountLogin login);
         public PaginatedResultBase<StudentDTO> GetListStudent(StudentListModel data);

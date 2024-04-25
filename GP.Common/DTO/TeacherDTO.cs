@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GP.Models.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,14 +27,16 @@ namespace GP.Common.DTO
 
         public string? MajorId { get; set; }
 
-        public string? Education { get; set; }
+        public string? EducationId { get; set; }
         public int? IsAdmin { get; set; }
         public string UserName { get; set; } = null!;
         public int? IsDelete { get; set; }
         public int? Gender { get; set; }
-
+        public string? TypeFileAvatar { get; set; }
         public string? Address { get; set; }
         public virtual MajorDTO? Major { get; set; }
+        public virtual Education? Education { get; set; }
+
 
 
     }

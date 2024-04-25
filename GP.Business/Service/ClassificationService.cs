@@ -25,9 +25,25 @@ namespace GP.Business.Service
             _mapper = mapper;
         }
 
+        public Classification GetClassification(string type_code, string code)
+        {
+            return _classificationRepository.GetByTypeCodeAndCode(type_code, code);
+        }
+
         public List<Classification> GetListClassification(string code)
         {
             return _classificationRepository.GetListByTypeCode(code);
+        }
+
+        public Classification Update(Classification model)
+        {
+            Classification classification = _classificationRepository.GetByTypeCodeAndCode(model.TypeCode, model.Code);
+            if(classification == null)
+            {
+                return null;
+            }
+            _classificationRepository.Update(model);
+            return model;
         }
     }
 }

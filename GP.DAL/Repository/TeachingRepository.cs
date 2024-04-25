@@ -25,7 +25,7 @@ namespace GP.DAL.Repository
 
         public Teaching GetByUserNameSemester(string username, string semesterId)
         {
-            return _dbContext.Teachings.Include(x=>x.Council).FirstOrDefault(x => x.UserNameTeacher == username && x.SemesterId == semesterId);
+            return _dbContext.Teachings.Include(x=>x.Council).Include(x => x.GroupReviewOutline).FirstOrDefault(x => x.UserNameTeacher == username && x.SemesterId == semesterId);
         }
 
         public Teaching GetDetail(TeachingListModel data)
@@ -39,13 +39,12 @@ namespace GP.DAL.Repository
 
         public List<Teaching> GetListTeaching(TeachingListModel data)
         {
-            List<Teaching> query = _dbContext.Teachings.Include(x => x.UserNameTeacherNavigation).Include(x=>x.GroupReviewOutline).Include(x=>x.Council)
+            List<Teaching> query = _dbContext.Teachings.Include(x => x.UserNameTeacherNavigation).ThenInclude(x=>x.Education).Include(x=>x.GroupReviewOutline)
                 .Where(x => (string.IsNullOrEmpty(data.SemesterId) || x.SemesterId == data.SemesterId) 
                             && (string.IsNullOrEmpty(data.UserNameTeacher) || x.UserNameTeacher.Contains(data.SemesterId))
-                            && (string.IsNullOrEmpty(data.CouncilId) || x.CouncilId == data.CouncilId)
                             && (string.IsNullOrEmpty(data.PositionInCouncil) || x.PositionInCouncil == data.PositionInCouncil)
                             )
-                .OrderBy(x => x.GroupReviewOutlineId == data.GroupReviewOutlineId ? 0 : 1)
+                //.OrderBy(x => x.GroupReviewOutlineId == data.GroupReviewOutlineId ? 0 : 1)
                 //.ThenBy(x => x.GroupReviewOutlineId)
                 .ToList();
 

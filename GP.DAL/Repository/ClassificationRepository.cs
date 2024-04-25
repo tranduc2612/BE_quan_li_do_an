@@ -21,9 +21,21 @@ namespace GP.DAL.Repository
             return _dbContext.Classifications.FirstOrDefault(x => x.Code == code);
         }
 
+        public Classification GetByTypeCodeAndCode(string type_code, string code)
+        {
+            return _dbContext.Classifications.FirstOrDefault(x => x.Code == code && x.TypeCode == type_code);
+        }
+
         public List<Classification> GetListByTypeCode(string code)
         {
             return _dbContext.Classifications.Where(x => x.TypeCode == code).ToList();
+        }
+
+        public Classification Update(Classification model)
+        {
+            _dbContext.Update(model);
+            _dbContext.SaveChanges();
+            return model;
         }
     }
 }

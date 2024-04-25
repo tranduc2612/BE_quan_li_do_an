@@ -53,6 +53,8 @@ public partial class Student
 
     public string? Role { get; set; }
 
+    public string? TypeFileAvatar { get; set; }
+
     public virtual Major? Major { get; set; }
 
     public virtual Project? Project { get; set; }

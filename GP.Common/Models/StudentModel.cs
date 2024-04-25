@@ -24,7 +24,7 @@ namespace GP.Common.Models
         public string? ClassName { get; set; }
         public string? MajorId { get; set; }
         public string? SchoolYearName { get; set; }
-        public string SemesterId { get; set; }
+        public string? SemesterId { get; set; }
         public int? Gender { get; set; }
         public string? Address { get; set; }
         public string? MsgError { get; set; }

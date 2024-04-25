@@ -9,8 +9,10 @@ namespace GP.Common.DTO
 {
     public class MajorDTO
     {
-        public string MajorId { get; set; } = null!;
+        public string? MajorId { get; set; }
 
         public string? MajorName { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public string? CreatedBy { get; set; }
     }
 }

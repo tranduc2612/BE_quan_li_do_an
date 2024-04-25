@@ -194,5 +194,10 @@ namespace GP.Business.Service
         {
             return _groupReviewOutlineRepository.GetById(id);
         }
+
+        public bool AutoAssignTeacherAndStudentInGroup(string semesterId, out string message)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -17,6 +17,7 @@ namespace GP.Business.IService
         public List<TeachingDTO> getListTeaching(TeachingListModel data);
         public List<ProjectOutlineDTO> getListProjectOutline(ProjectOutlineListModel data);
         public bool AddGroupReview(GroupReviewOutlineModel data, out string message);
+        public bool AutoAssignTeacherAndStudentInGroup(string semesterId, out string message);
         public bool UpdateGroupReview(GroupReviewOutlineModel data, out string message);
         public bool DeleteGroupReview(string id, out string message);
         public bool AssignTeachingToGroup(AssignTeachingGroupReviewOutlineModel model, out string message);

@@ -40,7 +40,23 @@ namespace GP.Business.Service
             {
                 message = "Chuyên nghành này đã tồn tại trong hệ thống !";
                 return false;
+            }
+        }
 
+        public bool UpdateMajor(MajorDTO req, out string message)
+        {
+            Major majorFind = _majorRepository.Get(req);
+            if (majorFind == null)
+            {
+                message = "Chuyên nghành này không tồn tại trong hệ thống !";
+                return false;
+            }
+            else
+            {
+                majorFind.MajorName = req.MajorName == null ? majorFind.MajorName : req.MajorName;
+                _majorRepository.Update(majorFind);
+                message = "Sửa thành công !";
+                return true;
             }
         }
     }

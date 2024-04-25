@@ -42,7 +42,7 @@ namespace GP.Common.DTO
         public int? Gender { get; set; }
         public string? Address { get; set; }
         public double? Gpa { get; set; }
-
+        public string? TypeFileAvatar { get; set; }
         public virtual MajorDTO? Major { get; set; }
 
         public virtual ProjectDTO? Project { get; set; }

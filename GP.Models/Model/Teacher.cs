@@ -29,8 +29,6 @@ public partial class Teacher
 
     public int? IsDelete { get; set; }
 
-    public string? Education { get; set; }
-
     public string? Token { get; set; }
 
     public byte[]? PasswordSalt { get; set; }
@@ -49,7 +47,13 @@ public partial class Teacher
 
     public string? Address { get; set; }
 
+    public string? TypeFileAvatar { get; set; }
+
+    public string? EducationId { get; set; }
+
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
+    public virtual Education? Education { get; set; }
 
     public virtual Major? Major { get; set; }
 

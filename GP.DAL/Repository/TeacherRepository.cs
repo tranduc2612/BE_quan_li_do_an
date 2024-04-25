@@ -76,7 +76,7 @@ namespace GP.DAL.Repository
                    &&
                    (String.IsNullOrEmpty(data.Status) || x.Status.Contains(data.Status))
                    )
-                   .Include(x => x.Major).ToList();
+                   .Include(x => x.Major).Include(x=>x.Education).ToList();
 
             result.ListResult = _mapper.MapTeachersToTeacherDTOs(lstTeacher);
             result.TotalItem = totalItem;

@@ -23,6 +23,8 @@ public partial class ManagementGraduationProjectContext : DbContext
 
     public virtual DbSet<DetailScheduleWeek> DetailScheduleWeeks { get; set; }
 
+    public virtual DbSet<Education> Educations { get; set; }
+
     public virtual DbSet<GroupReviewOutline> GroupReviewOutlines { get; set; }
 
     public virtual DbSet<Major> Majors { get; set; }
@@ -59,6 +61,10 @@ public partial class ManagementGraduationProjectContext : DbContext
                 .HasMaxLength(50)
                 .HasDefaultValueSql("(newid())");
             entity.Property(e => e.Code).HasMaxLength(50);
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
             entity.Property(e => e.Role).HasMaxLength(50);
             entity.Property(e => e.TypeCode).HasMaxLength(50);
         });
@@ -133,6 +139,19 @@ public partial class ManagementGraduationProjectContext : DbContext
                 .HasConstraintName("FK_DetailScheduleWeek_Project");
         });
 
+        modelBuilder.Entity<Education>(entity =>
+        {
+            entity.HasKey(e => e.EducationId).HasName("PK__Educatio__4BBE380524410639");
+
+            entity.ToTable("Education");
+
+            entity.Property(e => e.EducationId).HasMaxLength(50);
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+        });
+
         modelBuilder.Entity<GroupReviewOutline>(entity =>
         {
             entity.HasKey(e => e.GroupReviewOutlineId).HasName("PK__GroupRev__0C859B6F5116BC51");
@@ -162,6 +181,10 @@ public partial class ManagementGraduationProjectContext : DbContext
             entity.ToTable("Major");
 
             entity.Property(e => e.MajorId).HasMaxLength(10);
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Project>(entity =>
@@ -338,6 +361,7 @@ public partial class ManagementGraduationProjectContext : DbContext
             entity.Property(e => e.TokenExpires)
                 .HasColumnType("datetime")
                 .HasColumnName("tokenExpires");
+            entity.Property(e => e.TypeFileAvatar).HasMaxLength(50);
 
             entity.HasOne(d => d.Major).WithMany(p => p.Students)
                 .HasForeignKey(d => d.MajorId)
@@ -358,7 +382,7 @@ public partial class ManagementGraduationProjectContext : DbContext
             entity.Property(e => e.Dob)
                 .HasColumnType("date")
                 .HasColumnName("DOB");
-            entity.Property(e => e.Education).HasMaxLength(50);
+            entity.Property(e => e.EducationId).HasMaxLength(50);
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.IsDelete).HasDefaultValueSql("((0))");
             entity.Property(e => e.MajorId).HasMaxLength(10);
@@ -375,6 +399,11 @@ public partial class ManagementGraduationProjectContext : DbContext
             entity.Property(e => e.TokenExpires)
                 .HasColumnType("datetime")
                 .HasColumnName("tokenExpires");
+            entity.Property(e => e.TypeFileAvatar).HasMaxLength(50);
+
+            entity.HasOne(d => d.Education).WithMany(p => p.Teachers)
+                .HasForeignKey(d => d.EducationId)
+                .HasConstraintName("FK_Teacher_Education");
 
             entity.HasOne(d => d.Major).WithMany(p => p.Teachers)
                 .HasForeignKey(d => d.MajorId)

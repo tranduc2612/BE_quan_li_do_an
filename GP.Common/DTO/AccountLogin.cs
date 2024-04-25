@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -26,5 +27,24 @@ namespace GP.Common.DTO
         public string Password { get; set; }
         [Required]
         public string Role { get; set; }
+    }
+
+    public class ChangePassword
+    {
+        [Required]
+        public string UserName { get; set; }
+        [Required]
+        public string PasswordOld { get; set; }
+        [Required]
+        public string PasswordNew { get; set; }
+        [Required]
+        public string Role { get; set; }
+    }
+
+    public class ChangeAvatar
+    {
+        public string? Role { get; set; }
+        public string? UserName { get; set; }
+        public IFormFile? file { get; set; }
     }
 }

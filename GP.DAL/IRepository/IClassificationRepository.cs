@@ -11,5 +11,7 @@ namespace GP.DAL.IRepository
     {
         public List<Classification> GetListByTypeCode(string code);
         public Classification GetByCode(string code);
+        public Classification GetByTypeCodeAndCode(string type_code,string code);
+        public Classification Update(Classification model);
     }
 }

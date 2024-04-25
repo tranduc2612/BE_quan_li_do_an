@@ -24,6 +24,10 @@
 
   <ItemGroup>
     <Folder Include="file\file_week\" />
+    <Folder Include="file\images\" />
+    <Folder Include="file\user\student\1_2024_2025_201210096\" />
+    <Folder Include="file\user\teacher\" />
+    <Folder Include="file\user\teacher\hoangvanthong\" />
   </ItemGroup>
 
 </Project>

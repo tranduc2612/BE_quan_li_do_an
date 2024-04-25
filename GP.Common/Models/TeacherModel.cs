@@ -32,7 +32,7 @@ namespace GP.Common.Models
 
         public int? IsDelete { get; set; }
 
-        public string? Education { get; set; }
+        public string? EducationId { get; set; }
 
         public string? MajorId { get; set; }
         public int? Gender { get; set; }

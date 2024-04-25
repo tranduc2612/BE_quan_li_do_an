@@ -13,5 +13,6 @@ namespace GP.Business.IService
     {
         public List<Major> GetList(MajorDTO req);
         public bool AddMajor(MajorDTO req,out string message);
+        public bool UpdateMajor(MajorDTO req, out string message);
     }
 }

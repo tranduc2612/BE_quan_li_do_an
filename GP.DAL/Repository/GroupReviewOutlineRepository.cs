@@ -63,7 +63,7 @@ namespace GP.DAL.Repository
 
         public GroupReviewOutline GetById(string id)
         {
-            return _dbContext.GroupReviewOutlines.FirstOrDefault(x => x.GroupReviewOutlineId == id);
+            return _dbContext.GroupReviewOutlines.Include(x=>x.Teachings).FirstOrDefault(x => x.GroupReviewOutlineId == id);
         }
 
         public PaginatedResultBase<GroupReviewOutline> GetListPage(GroupReviewOutlineListModel data)

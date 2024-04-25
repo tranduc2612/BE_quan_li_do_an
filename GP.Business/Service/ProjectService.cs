@@ -93,6 +93,11 @@ namespace GP.Business.Service
 
         }
 
+        public List<ProjectDTO> GetListProjectByGroupId(ProjectOutlineListModel req)
+        {
+            return _mapper.MapProjectsToProjectDTOs(_projectRepository.GetListProjectByGroupId(req.SemesterId, req.GroupReviewOutlineId));
+        }
+
         public List<ProjectDTO> GetListProjectByUsernameMentor(string username, string semesterId)
         {
             List<Project> projectlst = _projectRepository.GetListProjectByUsernameMentor(username, semesterId);
@@ -103,12 +108,12 @@ namespace GP.Business.Service
 
         public ProjectDTO GetProjectByHashKeyCommentator(string key)
         {
-            return _mapper.MapProjectToProjectDTO(_projectRepository.GetProjectByHashKeyMentor(key));
+            return _mapper.MapProjectToProjectDTO(_projectRepository.GetProjectByHashKeyCommentator(key));
         }
 
         public ProjectDTO GetProjectByHashKeyMentor(string key)
         {
-            return _mapper.MapProjectToProjectDTO(_projectRepository.GetProjectByHashKeyCommentator(key));
+            return _mapper.MapProjectToProjectDTO(_projectRepository.GetProjectByHashKeyMentor(key));
         }
 
         public ProjectDTO GetProjectByUserName(string username)

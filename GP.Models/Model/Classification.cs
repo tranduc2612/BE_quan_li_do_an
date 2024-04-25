@@ -18,4 +18,8 @@ public partial class Classification
     public string? FileName { get; set; }
 
     public string? Url { get; set; }
+
+    public DateTime? CreatedAt { get; set; }
+
+    public string? CreatedBy { get; set; }
 }

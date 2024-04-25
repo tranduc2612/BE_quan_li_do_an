@@ -28,6 +28,17 @@ namespace GP.DAL.Repository
                       ).ToList();
         }
 
+        public List<Project> GetListProjectByGroupId(string semesterId, string groupId)
+        {
+            return _dbContext.Projects.Include(x => x.ProjectOutline).ThenInclude(x=>x.GroupReviewOutline).Include(x => x.UserNameNavigation)
+                .Where(x => x.SemesterId == semesterId
+                      &&
+                      (String.IsNullOrEmpty(groupId) || (x.ProjectOutline != null && x.ProjectOutline.GroupReviewOutlineId == groupId))
+                      &&
+                      x.ProjectOutline != null
+                      ).ToList();
+        }
+
         public List<Project> GetListProjectByUsernameMentor(string username_mentor,string semesterId)
         {
             //var query = from project in _dbContext.Projects
@@ -38,14 +49,20 @@ namespace GP.DAL.Repository
             return _dbContext.Projects.Include(x => x.UserNameNavigation).Include(x=>x.ProjectOutline).Where(x => x.SemesterId == semesterId && x.UserNameMentor == username_mentor).ToList();
         }
 
-        public Project GetProjectByHashKeyCommentator(string key)
-        {
-            return _dbContext.Projects.Include(x=>x.UserNameMentorNavigation).ThenInclude(x=>x.Major).Include(x=>x.ProjectOutline).Include(x=>x.UserNameNavigation).FirstOrDefault(x => x.HashKeyMentor == key);
-        }
-
         public Project GetProjectByHashKeyMentor(string key)
         {
-            return _dbContext.Projects.Include(x => x.UserNameCommentatorNavigation).ThenInclude(x => x.Major).Include(x => x.ProjectOutline).Include(x => x.UserNameNavigation).FirstOrDefault(x => x.HashKeyCommentator == key);
+            return _dbContext.Projects.Include(x=>x.UserNameMentorNavigation).ThenInclude(x=>x.Major)
+                .Include(x => x.UserNameMentorNavigation).ThenInclude(x => x.Education)
+                .Include(x=>x.ProjectOutline).Include(x=>x.UserNameNavigation).FirstOrDefault(x => x.HashKeyMentor == key);
+        }
+
+        public Project GetProjectByHashKeyCommentator(string key)
+        {
+            return _dbContext.Projects.Include(x => x.UserNameCommentatorNavigation).ThenInclude(x => x.Major)
+                .Include(x => x.UserNameCommentatorNavigation).ThenInclude(x => x.Education)
+                .Include(x => x.ProjectOutline)
+                .Include(x => x.UserNameNavigation)
+                .FirstOrDefault(x => x.HashKeyCommentator == key);
         }
 
         public Project GetProjectByUsername(string username)

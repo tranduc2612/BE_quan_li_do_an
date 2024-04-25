@@ -107,6 +107,34 @@ namespace GraduateProject.Controllers
             return response;
         }
 
+        [HttpPost("get-list-project-by-group-review")]
+        public Response GetListProjectByGroupReview(ProjectOutlineListModel req)
+        {
+            Response response = new Response();
+
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Validate Error");
+                return response;
+            }
+
+            try
+            {
+                response.Code = 200;
+                response.Success = true;
+                response.ReturnObj = _projectService.GetListProjectByGroupId(req);
+                response.Msg = "Lấy danh sach thành công !";
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
+
         [HttpGet("get-project-outline-id")]
         public Response ProjecOutlinetById(string id)
         {
