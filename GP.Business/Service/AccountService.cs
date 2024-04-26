@@ -363,17 +363,17 @@ namespace GP.Business.Service
 
         public bool ChangePassword(ChangePassword login, out string message)
         {
-            if(login.PasswordNew != login.PasswordOld)
-            {
-                message = "Mật khẩu không khớp !";
-                return false;
-            }
             if (login.Role == "STUDENT")
             {
                 Student student = _studentRepository.Get(login.UserName);
                 if(student == null)
                 {
                     message = "Sinh viên không hợp lệ !";
+                    return false;
+                }
+                if (!AuthHelper.VerifyPasswordHash(login.PasswordOld, student.Password, student.PasswordSalt))
+                {
+                    message = "Bạn đã nhập sai mật khẩu";
                     return false;
                 }
                 AuthHelper.CreatePassHash(login.PasswordNew, out byte[] passwordHash, out byte[] passwordSalt);
@@ -389,6 +389,11 @@ namespace GP.Business.Service
                 if (teacher == null)
                 {
                     message = "Giảng viên không hợp lệ !";
+                    return false;
+                }
+                if (!AuthHelper.VerifyPasswordHash(login.PasswordOld, teacher.Password, teacher.PasswordSalt))
+                {
+                    message = "Bạn đã nhập sai mật khẩu";
                     return false;
                 }
                 AuthHelper.CreatePassHash(login.PasswordNew, out byte[] passwordHash, out byte[] passwordSalt);
