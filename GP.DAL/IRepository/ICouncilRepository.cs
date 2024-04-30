@@ -14,6 +14,7 @@ namespace GP.DAL.IRepository
     {
         Council GetById(string id);
         List<CouncilDTO> GetList(CouncilModel req);
+        List<Council> GetListBySemesterId(string semesterId);
         public Council Add(Council council);
         public Council Update(Council council);
         public void Delete(Council council);

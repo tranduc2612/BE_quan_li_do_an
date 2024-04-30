@@ -1,6 +1,7 @@
 ﻿using GP.Common.Models;
 using GP.DAL.IRepository;
 using GP.Models.Model;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace GP.DAL.Repository
 
         public List<Project> GetListProjectByCouncilId(string semesterId, string councilId)
         {
-            return _dbContext.Projects.Include(x=>x.ProjectOutline).Include(x=>x.UserNameNavigation).Include(x=>x.Council)
+            return _dbContext.Projects.Include(x=>x.ProjectOutline).Include(x=>x.UserNameNavigation)
                 .Where(x => x.SemesterId == semesterId 
                       && 
                       (String.IsNullOrEmpty(councilId) || councilId == x.CouncilId)
@@ -80,6 +81,19 @@ namespace GP.DAL.Repository
             _dbContext.Update(project);
             _dbContext.SaveChanges();
            return project;
+        }
+
+        public List<Project> GetListProjectBySemesterId(string semesterId)
+        {
+            List<Project> lst = _dbContext.Projects.Include(x => x.UserNameNavigation).Include(x => x.ProjectOutline).Where(x => x.SemesterId == semesterId).ToList();
+            return lst;
+        }
+
+        public void CallProcAutoMationAssignMentor(string semesterId)
+        {
+
+            _dbContext.Database.ExecuteSqlRaw("EXECUTE AutoAssignMentor @semesterId",
+                new SqlParameter("@semesterId", semesterId));
         }
     }
 }

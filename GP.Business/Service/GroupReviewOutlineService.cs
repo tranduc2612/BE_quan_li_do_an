@@ -195,9 +195,148 @@ namespace GP.Business.Service
             return _groupReviewOutlineRepository.GetById(id);
         }
 
-        public bool AutoAssignTeacherAndStudentInGroup(string semesterId, out string message)
+        public bool AutomationSplitGroup(string semesterId, out string message)
         {
-            throw new NotImplementedException();
+            if(semesterId == null)
+            {
+                message = "Học kỳ không hợp lệ !";
+                return false;
+            }
+           List<ProjectOutline> projectOutlines = _projectOutlineRepository.GetListProjectOutlineBySemester(semesterId)
+                .Where(x => x.GroupReviewOutlineId == null 
+                && x.UserNameNavigation.UserNameMentor != null 
+                && x.UserNameNavigation.StatusProject != "DOING"
+            ).ToList();
+           List<GroupReviewOutline> groups = _groupReviewOutlineRepository.GetListGroupBySemesterId(semesterId);
+            List<Teaching> teachings = _teachingRepository.GetListTeachingBySemesterId(semesterId).Where(x=>x.GroupReviewOutlineId == null && x.UserNameTeacherNavigation?.Status == "AUTH" 
+                && x.UserNameTeacherNavigation?.IsDelete == 0).ToList();
+            if(groups.Count == 0)
+            {
+                message = "Nhóm xét duyệt phải lớn hơn 0 !";
+                return false;
+            }
+            if (projectOutlines.Count == 0)
+            {
+                message = "Tổng số sinh viên tham gia làm đồ án phải lớn hơn 0 !";
+                return false;
+            }
+
+            int maxTeachingsPerGroup = teachings.Count / groups.Count;
+
+            // Nếu số lượng đề cương không chia hết cho số lượng nhóm, làm tròn lên
+            if (teachings.Count % groups.Count != 0)
+            {
+                maxTeachingsPerGroup++;
+            }
+
+
+            // Duyệt qua từng giảng dạy để chia vào nhóm
+            int currentGroupIndex = 0;
+            foreach (Teaching teaching in teachings)
+            {
+
+                // nếu đề cương đã có nhóm xét duyệt thì sẽ bỏ qua
+                if (teaching.GroupReviewOutlineId != null)
+                {
+                    continue;
+                }
+
+                // Kiểm tra xem nhóm hiện tại đã đạt đến giới hạn số lượng đề cương chưa
+                if (groups[currentGroupIndex].Teachings.Count < maxTeachingsPerGroup)
+                {
+                    //teaching.GroupReviewOutlineId = groups[currentGroupIndex].GroupReviewOutlineId;
+                    groups[currentGroupIndex].Teachings.Add(teaching);
+                    _teachingRepository.Update(teaching);
+                }
+                else
+                {
+                    // Chuyển sang nhóm tiếp theo nếu nhóm hiện tại đã đầy
+                    currentGroupIndex++;
+                    // Kiểm tra nếu nhóm hiện tại đã vượt quá số lượng nhóm, quay trở lại nhóm đầu tiên
+                    if (currentGroupIndex >= groups.Count)
+                    {
+                        currentGroupIndex = 0;
+                    }
+
+                    //teaching.GroupReviewOutlineId = groups[currentGroupIndex].GroupReviewOutlineId;
+                    groups[currentGroupIndex].Teachings.Add(teaching);
+                    _teachingRepository.Update(teaching);
+                }
+            }
+
+            // Tính toán số lượng tối đa đề cương mỗi nhóm có thể chứa
+            int maxProjectsPerGroup = projectOutlines.Count / groups.Count;
+
+            // Nếu số lượng đề cương không chia hết cho số lượng nhóm, làm tròn lên
+            if (projectOutlines.Count % groups.Count != 0)
+            {
+                maxProjectsPerGroup++;
+            }
+
+
+            currentGroupIndex = 0;
+            foreach (GroupReviewOutline group in groups)
+            {
+                HashSet<string> allCouncilTeachers = new HashSet<string>();
+                foreach (var teaching in group.Teachings)
+                {
+                    allCouncilTeachers.Add(teaching.UserNameTeacher);
+                }
+
+                List<ProjectOutline> filteredProjects = projectOutlines
+                    .Where(projectOutline => projectOutline.UserNameNavigation.UserNameMentor != null
+                    && !allCouncilTeachers.Contains(projectOutline.UserNameNavigation.UserNameMentor)
+                    && projectOutline.GroupReviewOutlineId == null)
+                    .ToList();
+                int limitZoom = Math.Min(100, filteredProjects.Count);
+                for (int i = 0; i < limitZoom; i++)
+                {
+                    filteredProjects[i].GroupReviewOutlineId = group.GroupReviewOutlineId;
+                    _projectOutlineRepository.Update(filteredProjects[i]);
+                }
+            }
+
+            // gán toàn bộ sinh viên còn sót lại vào trong hội đồng còn chống
+            List<ProjectOutline> projectLeft = _projectOutlineRepository.GetListProjectOutlineBySemester(semesterId)
+                .Where(x => x.GroupReviewOutlineId == null
+                && x.UserNameNavigation.UserNameMentor != null
+                && x.UserNameNavigation.StatusProject != "DOING"
+            ).ToList();
+
+
+            foreach (ProjectOutline projectOutline in projectLeft)
+            {
+                // Tạo một danh sách các hội đồng không chứa giáo viên hướng dẫn của dự án
+                var eligibleGroups = groups.Where(group =>
+                    !group.Teachings.Any(teaching => teaching.UserNameTeacher == projectOutline.UserNameNavigation.UserNameMentor)
+                ).ToList();
+
+                if (eligibleGroups.Any())
+                {
+                    // Nếu có hội đồng thỏa mãn, chọn một trong số chúng để gán dự án vào
+                    Random random = new Random();
+                    int index = random.Next(0, eligibleGroups.Count);
+                    GroupReviewOutline selectedCouncil = eligibleGroups[index];
+
+                    // Gán dự án vào hội đồng đã chọn
+                    projectOutline.GroupReviewOutlineId = selectedCouncil.GroupReviewOutlineId;
+                }
+                else
+                {
+                    // Nếu không có hội đồng nào thỏa mãn, chọn một hội đồng ngẫu nhiên từ danh sách các hội đồng
+                    Random random = new Random();
+                    int index = random.Next(0, groups.Count);
+                    GroupReviewOutline selectedGriup = groups[index];
+
+                    // Gán dự án vào hội đồng đã chọn
+                    projectOutline.GroupReviewOutlineId = selectedGriup.GroupReviewOutlineId;
+                }
+
+                _projectOutlineRepository.Update(projectOutline);
+            }
+
+            message = "Okeee";
+            return true;
         }
     }
 }

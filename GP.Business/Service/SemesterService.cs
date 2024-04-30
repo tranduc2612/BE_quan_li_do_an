@@ -30,7 +30,7 @@ namespace GP.Business.Service
                 return false;
             }
 
-             List<Semester> lstSemesterCheck = _semesterRepository.GetByDate(req.FromDate, req.ToDate);
+            List<Semester> lstSemesterCheck = _semesterRepository.GetByDate(req.FromDate, req.ToDate);
             if(lstSemesterCheck.Count() > 0) {
                 message = "Khoảng thời gian này đã có học kỳ tồn tại !";
                 return false;

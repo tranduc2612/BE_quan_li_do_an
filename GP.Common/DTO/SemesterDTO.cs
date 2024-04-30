@@ -13,12 +13,13 @@ namespace GP.Common.DTO
         {
 
         }
-        public SemesterDTO(string semesterId, string? nameSemester, DateTime? fromDate, DateTime? toDate, DateTime? createdAt, int? totalProjectAmount, int? rejectProjectAmount, int? doingProjectAmount, int? acceptProjectAmount, int? pauseProjectAmount, double? avgScoreProject, TeacherDTO? createdByNavigation,int? isDelete, int? totalStudent)
+        public SemesterDTO(string semesterId, string? nameSemester, DateTime? fromDate, DateTime? toDate, DateTime? createdAt, string? createdBy, int? totalProjectAmount, int? rejectProjectAmount, int? doingProjectAmount, int? acceptProjectAmount, int? pauseProjectAmount, double? avgScoreProject,int? isDelete)
         {
             SemesterId = semesterId;
             NameSemester = nameSemester;
             FromDate = fromDate;
             ToDate = toDate;
+            CreatedBy = createdBy;
             CreatedAt = createdAt;
             TotalProjectAmount = totalProjectAmount;
             RejectProjectAmount = rejectProjectAmount;
@@ -26,9 +27,7 @@ namespace GP.Common.DTO
             AcceptProjectAmount = acceptProjectAmount;
             PauseProjectAmount = pauseProjectAmount;
             AvgScoreProject = avgScoreProject;
-            CreatedByNavigation = createdByNavigation;
             IsDelete = isDelete;
-            TotalStudent = totalStudent;
         }
 
         public string SemesterId { get; set; } = null!;
@@ -43,13 +42,11 @@ namespace GP.Common.DTO
         public string? CreatedBy { get; set; }
         public int? IsDelete { get; set; }
         public DateTime? CreatedAt { get; set; }
-        public int? TotalStudent { get; set; }
         public int? TotalProjectAmount { get; set; }
         public int? RejectProjectAmount { get; set; }
         public int? DoingProjectAmount { get; set; }
         public int? AcceptProjectAmount { get; set; }
         public int? PauseProjectAmount { get; set; }
         public double? AvgScoreProject { get; set; }
-        public virtual TeacherDTO? CreatedByNavigation { get; set; }
     }
 }

@@ -31,6 +31,8 @@ namespace GP.Common.DTO
         public string? ClassName { get; set; }
         public string? SchoolYearName { get; set; }
         public string? Education { get; set; }
+        public string? UserNameMentorRegister { get; set; }
+        public int? IsFirstTime { get; set; }
         public virtual MajorDTO? Major { get; set; }
         public virtual ProjectDTO? Project { get; set; }
         public virtual ProjectOutlineDTO? ProjectOutline { get; set; }

@@ -15,6 +15,7 @@ namespace GP.DAL.IRepository
         public ProjectOutline Update(ProjectOutline data);
 
         public ProjectOutline GetById(string username);
+        public List<ProjectOutline> GetListProjectOutlineBySemester(string semesterId);
         public List<ProjectOutlineDTO> GetListProjectOutlineInGroup(ProjectOutlineListModel req);
         public List<ProjectOutlineDTO> GetListProjectOutline(ProjectOutlineListModel req);
     }

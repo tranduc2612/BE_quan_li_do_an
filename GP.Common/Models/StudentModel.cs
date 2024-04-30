@@ -32,6 +32,8 @@ namespace GP.Common.Models
 
         public double? Gpa { get; set; }
         public string? StatusProject { get; set; }
+        public string? UserNameMentorRegister { get; set; }
+        public int? IsFirstTime { get; set; }
 
     }
     

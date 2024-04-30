@@ -23,6 +23,8 @@ namespace GP.Business.IService
         public bool UpdateNewProjectOutline(ProjectOutlineDTO projectOutlineDTO, out string message);
         public bool AddNewProjectOutline(ProjectOutlineDTO projectOutlineDTO, out string message);
         public bool AssignMentorTeacherToProject(string username_student,string username_teacher,out string message);
+        public bool AutomationAssignMentorTeacherToProject(string semesterId, out string message);
+        public bool CallProcAutomationAssignMentorTeacherToProject(string semesterId, out string message);
         public bool AssignUserNameCommentatorToProject(string username_student, string username_teacher, out string message);
         public bool UpdateScoreToProject(string username , string role, string score, string comment, out string message);
     }

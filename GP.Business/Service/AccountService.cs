@@ -257,6 +257,13 @@ namespace GP.Business.Service
                 return false;
             }
 
+            if(check_data?.Status == "BLOCK")
+            {
+                message = "Tài khoản đã bị khóa";
+                typeError = "username";
+                return false;
+            }
+
             if (!AuthHelper.VerifyPasswordHash(login.Password, check_data.Password, check_data.PasswordSalt))
             {
                 message = "Sai mật khẩu";
@@ -311,6 +318,15 @@ namespace GP.Business.Service
             find.Gpa = studentReq.Gpa != null ? studentReq.Gpa : find.Gpa;
             find.MajorId = studentReq.MajorId != null ? studentReq.MajorId : find.MajorId;
             find.Avatar = studentReq.Avatar != null ? studentReq.Avatar : find.Avatar;
+            find.UserNameMentorRegister = studentReq.UserNameMentorRegister != null ? studentReq.UserNameMentorRegister : find.UserNameMentorRegister;
+            find.IsFirstTime = studentReq.IsFirstTime != null ? studentReq.IsFirstTime : find.IsFirstTime;
+            find.Status = studentReq.Status != null ? studentReq.Status : find.Status;
+            if (studentReq.StatusProject != null)
+            {
+                Project findProject = _projectRepository.GetProjectByUsername(studentReq.UserName);
+                findProject.StatusProject = studentReq.StatusProject;
+                _projectRepository.Update(findProject);
+            }
             _studentRepository.Update(find);
             return find.UserName;
         }
@@ -380,7 +396,7 @@ namespace GP.Business.Service
                 student.Password = passwordHash;
                 student.PasswordSalt = passwordSalt;
                 _studentRepository.Update(student);
-                message = "Dổi mật khẩu thành công !";
+                message = "Đổi mật khẩu thành công !";
                 return true;
             }
             if (login.Role == "TEACHER")
@@ -400,7 +416,7 @@ namespace GP.Business.Service
                 teacher.Password = passwordHash;
                 teacher.PasswordSalt = passwordSalt;
                 _teacherRepository.Update(teacher);
-                message = "Dổi mật khẩu thành công !";
+                message = "Đổi mật khẩu thành công !";
                 return true;
             }
             message = "Tài khoản không tồn tại !";

@@ -1,4 +1,6 @@
-﻿using GP.Business.IService;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Spreadsheet;
+using GP.Business.IService;
 using GP.Common.DTO;
 using GP.Common.Helpers;
 using GP.Common.Models;
@@ -184,6 +186,243 @@ namespace GP.Business.Service
         public Teaching getTeaching(string username, string semesterId)
         {
             return _teachingRepository.GetByUserNameSemester(username, semesterId);
+        }
+
+        public bool AutoAssignTeachingToCouncil(string semesterId, string currentUsername, out string message)
+        {
+            // Tạo một danh sách chứa các Teaching đã được sắp xếp ngẫu nhiên
+            List<Teaching> shuffledTeachings = _teachingRepository
+                .GetListTeachingBySemesterId(semesterId)
+                .Where(x=>x.UserNameTeacherNavigation.IsDelete == 0 && x.UserNameTeacherNavigation.Status == "AUTH" && x.CouncilId == null)
+                .OrderBy(x => Guid.NewGuid()).ToList();
+            
+            List<Council> councils = _councilRepository.GetListBySemesterId(semesterId).Where(x=>x.IsDelete == 0).ToList();
+            if(shuffledTeachings == null)
+            {
+                message = "Không có giảng viên !";
+                return true;
+            }
+            if (councils == null)
+            {
+                message = "Không có Hội đồng !";
+                return true;
+            }
+
+            int currentIndex = 0;
+            int councilIndex = 0;
+
+            var availablePositions = new List<string> { "CT", "TK", "UV1", "UV2", "UV3" };
+
+            while (currentIndex < shuffledTeachings.Count)
+            {
+                if (councils[councilIndex].Teachings.Count >= 5)
+                {
+                    // chuyển qua hội đồng khác
+                    councilIndex++;
+
+                    // nếu không còn hội đồng nào thì tạo
+                    if (councilIndex >= councils.Count)
+                    {
+                        // Nếu không còn council nào có sẵn, tạo thêm một council mới
+                        Council newCouncil = new Council();
+                        newCouncil.CouncilName = "Hội đồng " + councils.Count + 1;
+                        newCouncil.CreatedBy = currentUsername;
+                        newCouncil.SemesterId = semesterId;
+                        newCouncil.IsDelete = 0;
+                        // Thêm council mới vào danh sách councils
+                        councils.Add(newCouncil);
+                        _councilRepository.Add(newCouncil);
+                        councilIndex = councils.Count - 1;
+                    }
+
+                    // Reset danh sách các vị trí còn trống cho council mới
+                    availablePositions = new List<string> { "CT", "TK", "UV1", "UV2", "UV3" };
+                }
+
+                // Lấy teaching hiện tại từ danh sách shuffledTeachings
+                Teaching currentTeaching = shuffledTeachings[currentIndex];
+
+                // Lọc ra các vị trí đã được gán trong council hiện tại
+                var occupiedPositions = councils[councilIndex].Teachings.Select(t => t.PositionInCouncil);
+
+                // Ưu tiên gán vị trí "CT" và "TK" trước
+                string selectedPosition = null;
+                if (!occupiedPositions.Contains("CT"))
+                {
+                    selectedPosition = "CT";
+                }
+                else if (!occupiedPositions.Contains("TK"))
+                {
+                    selectedPosition = "TK";
+                }
+                else
+                {
+                    // Nếu không có "CT" hoặc "TK" đã được gán, chọn vị trí còn lại theo thứ tự
+                    selectedPosition = availablePositions.FirstOrDefault(p => !occupiedPositions.Contains(p));
+                }
+
+                // Kiểm tra xem còn vị trí nào còn trống không
+                if (selectedPosition == null)
+                {
+                    // Nếu không còn vị trí trống, tiến hành chuyển sang council tiếp theo
+                    continue;
+                }
+
+
+                // Gán vị trí cho teaching hiện tại
+                currentTeaching.PositionInCouncil = selectedPosition;
+                // Gán council cho teaching hiện tại
+                currentTeaching.CouncilId = councils[councilIndex].CouncilId;
+                _teachingRepository.Update(currentTeaching);
+
+                // Loại bỏ vị trí đã được gán ra khỏi danh sách các vị trí còn trống
+                availablePositions.Remove(selectedPosition);
+                // Tăng chỉ số cho teaching tiếp theo
+                currentIndex++;
+            }
+            message = "Phân giảng viên vào hội đồng thành công !";
+            return true;
+
+        }
+
+        public bool AutoAssignProjectToCouncil(string semesterId,string currentUsername, out string message)
+        {
+            // tự động gán giảng viên vào hội đồng
+            bool AssignTeachingToCouncil = AutoAssignTeachingToCouncil(semesterId, currentUsername, out string messageTeaching);
+            
+
+            if (AssignTeachingToCouncil)
+            {
+                // gán sinh viên vào hội đồng
+                List<Project> projects = _projectRepository
+                    .GetListProjectBySemesterId(semesterId)
+                    .Where(x=>x.UserNameMentor != null 
+                              && 
+                              x.UserNameNavigation?.Status == "AUTH"
+                              &&
+                              x.CouncilId == null
+                              //&&
+                              //x.ProjectOutline != null
+                           )
+                    .ToList();
+                List<Council> councils = _councilRepository.GetListBySemesterId(semesterId).Where(x=>x.IsDelete == 0).ToList();
+                
+                foreach(Council council in councils)
+                {
+                    HashSet<string> allCouncilTeachers = new HashSet<string>();
+                    foreach (var teaching in council.Teachings)
+                    {
+                        allCouncilTeachers.Add(teaching.UserNameTeacher);
+                    }
+                    List<Project> filteredProjects = projects
+                        .Where(project => project.UserNameMentor != null 
+                        && !allCouncilTeachers.Contains(project.UserNameMentor) 
+                        && project.CouncilId == null)
+                        .ToList();
+                    int limitZoom = Math.Min(100, filteredProjects.Count);
+                    for (int i=0;i<limitZoom;i++)
+                    {
+                        filteredProjects[i].CouncilId = council.CouncilId;
+                        _projectRepository.Update(filteredProjects[i]);
+                    }
+
+                    //projects = projects
+                    //    .Where(project => project.UserNameMentor != null && allCouncilTeachers.Contains(project.UserNameMentor))
+                    //    .ToList();
+
+                }
+
+
+                // gán toàn bộ sinh viên còn sót lại vào trong hội đồng còn chống
+                List<Project> projectLeft = _projectRepository
+                    .GetListProjectBySemesterId(semesterId)
+                    .Where(x => x.UserNameMentor != null
+                              &&
+                              x.UserNameNavigation?.Status == "AUTH"
+                              &&
+                              x.CouncilId == null
+                           //&&
+                           //x.ProjectOutline != null
+                           )
+                    .ToList();
+
+                
+                foreach(Project project in projectLeft)
+                {
+                    // Tạo một danh sách các hội đồng không chứa giáo viên hướng dẫn của dự án
+                    var eligibleCouncils = councils.Where(council =>
+                        !council.Teachings.Any(teaching => teaching.UserNameTeacher == project.UserNameMentor)
+                    ).ToList();
+
+                    if (eligibleCouncils.Any())
+                    {
+                        // Nếu có hội đồng thỏa mãn, chọn một trong số chúng để gán dự án vào
+                        Random random = new Random();
+                        int index = random.Next(0, eligibleCouncils.Count);
+                        Council selectedCouncil = eligibleCouncils[index];
+
+                        // Gán dự án vào hội đồng đã chọn
+                        project.CouncilId = selectedCouncil.CouncilId;
+                    }
+                    else
+                    {
+                        // Nếu không có hội đồng nào thỏa mãn, chọn một hội đồng ngẫu nhiên từ danh sách các hội đồng
+                        Random random = new Random();
+                        int index = random.Next(0, councils.Count);
+                        Council selectedCouncil = councils[index];
+
+                        // Gán dự án vào hội đồng đã chọn
+                        project.CouncilId = selectedCouncil.CouncilId;
+                    }
+
+
+                    _projectRepository.Update(project);
+                }
+
+
+
+                
+            }
+            // gán giảng viên phản biện
+            AutoAssignTeacherCommentator(semesterId, currentUsername, out string messageCommentator);
+            message = "Phân chia giảng viên và sinh viên thành công !";
+            return true;
+        }
+
+        public bool AutoAssignTeacherCommentator(string semesterId, string currentUsername, out string message)
+        {
+            List<Council> councils = _councilRepository.GetListBySemesterId(semesterId).Where(x => x.IsDelete == 0).ToList();
+            if(councils.Count == 0)
+            {
+                message = "Hội đồng không hợp lệ !";
+                return false;
+            }
+            foreach(Council item in councils) {
+                List<Teaching> teachings = item.Teachings.ToList();
+                List<Project> projectsInCouncil = _projectRepository.GetListProjectByCouncilId(semesterId,item.CouncilId);
+
+                int numberOfProjects = projectsInCouncil.Count;
+                int numberOfTeachers = teachings.Count;
+
+                // Chia đều các giáo viên vào các dự án
+                int teacherIndex = 0;
+                for (int i = 0; i < numberOfProjects; i++)
+                {
+                    // Lấy giáo viên tiếp theo
+                    string currentTeacher = teachings[teacherIndex].UserNameTeacher;
+
+                    // Gán giáo viên vào dự án
+                    projectsInCouncil[i].UserNameCommentator = currentTeacher;
+
+                    _projectRepository.Update(projectsInCouncil[i]);
+                    // Chuyển sang giáo viên tiếp theo trong danh sách
+                    teacherIndex = (teacherIndex + 1) % numberOfTeachers;
+                }
+
+            }
+
+            message = "Hoàn thiện thuật toán chia đều giảng viên phản biện !";
+            return true;
         }
     }
 }

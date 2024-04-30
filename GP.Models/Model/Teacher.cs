@@ -67,5 +67,7 @@ public partial class Teacher
 
     public virtual ICollection<Semester> Semesters { get; set; } = new List<Semester>();
 
+    public virtual ICollection<Student> Students { get; set; } = new List<Student>();
+
     public virtual ICollection<Teaching> Teachings { get; set; } = new List<Teaching>();
 }

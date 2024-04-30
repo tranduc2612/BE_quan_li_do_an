@@ -101,5 +101,11 @@ namespace GP.DAL.Repository
             _dbContext.SaveChanges();
             return data;
         }
+
+        public List<ProjectOutline> GetListProjectOutlineBySemester(string semesterId)
+        {
+            return _dbContext.ProjectOutlines.Include(x => x.UserNameNavigation)
+                .Where(x => x.UserNameNavigation.SemesterId == semesterId).ToList();        
+        }
     }
 }

@@ -66,6 +66,11 @@ namespace GP.DAL.Repository
             return _dbContext.GroupReviewOutlines.Include(x=>x.Teachings).FirstOrDefault(x => x.GroupReviewOutlineId == id);
         }
 
+        public List<GroupReviewOutline> GetListGroupBySemesterId(string semesterId)
+        {
+            return _dbContext.GroupReviewOutlines.Include(x=>x.Teachings).Where(x => x.SemesterId == semesterId && x.IsDelete == 0).ToList();
+        }
+
         public PaginatedResultBase<GroupReviewOutline> GetListPage(GroupReviewOutlineListModel data)
         {
             PaginatedResultBase<GroupReviewOutline> result = new PaginatedResultBase<GroupReviewOutline>();

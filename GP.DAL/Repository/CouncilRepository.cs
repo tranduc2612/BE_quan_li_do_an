@@ -82,6 +82,11 @@ namespace GP.DAL.Repository
             return lstCouncil;
         }
 
+        public List<Council> GetListBySemesterId(string semesterId)
+        {
+            return _dbContext.Councils.Include(x=>x.Teachings).Where(x=>x.SemesterId == semesterId).ToList();
+        }
+
         public List<Teaching> GetListTeachingInCouncil(TeachingListModel data)
         {
             List<Teaching> query = _dbContext.Teachings.Include(x => x.UserNameTeacherNavigation)

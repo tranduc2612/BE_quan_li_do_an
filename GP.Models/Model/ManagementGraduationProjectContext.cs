@@ -345,6 +345,7 @@ public partial class ManagementGraduationProjectContext : DbContext
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.Gpa).HasColumnName("GPA");
             entity.Property(e => e.IsDelete).HasDefaultValueSql("((0))");
+            entity.Property(e => e.IsFirstTime).HasDefaultValueSql("((1))");
             entity.Property(e => e.MajorId).HasMaxLength(10);
             entity.Property(e => e.Phone).HasMaxLength(20);
             entity.Property(e => e.RefreshToken).IsUnicode(false);
@@ -362,10 +363,15 @@ public partial class ManagementGraduationProjectContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("tokenExpires");
             entity.Property(e => e.TypeFileAvatar).HasMaxLength(50);
+            entity.Property(e => e.UserNameMentorRegister).HasMaxLength(50);
 
             entity.HasOne(d => d.Major).WithMany(p => p.Students)
                 .HasForeignKey(d => d.MajorId)
                 .HasConstraintName("FK_Student_Major");
+
+            entity.HasOne(d => d.UserNameMentorRegisterNavigation).WithMany(p => p.Students)
+                .HasForeignKey(d => d.UserNameMentorRegister)
+                .HasConstraintName("FK__Student__UserNam__3D2915A8");
         });
 
         modelBuilder.Entity<Teacher>(entity =>

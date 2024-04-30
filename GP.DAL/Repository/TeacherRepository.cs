@@ -51,6 +51,11 @@ namespace GP.DAL.Repository
             return _dbContext.Teachers.Include(x=>x.Major).FirstOrDefault(x => x.UserName == username);
         }
 
+        public List<Teacher> GetAllListOnly()
+        {
+            return _dbContext.Teachers.Include(x=>x.Major).Include(x=>x.Education).ToList();
+        }
+
         public PaginatedResultBase<TeacherDTO> GetList(TeacherListModel data)
         {
             PaginatedResultBase<TeacherDTO> result = new PaginatedResultBase<TeacherDTO>();

@@ -55,7 +55,13 @@ public partial class Student
 
     public string? TypeFileAvatar { get; set; }
 
+    public string? UserNameMentorRegister { get; set; }
+
+    public int? IsFirstTime { get; set; }
+
     public virtual Major? Major { get; set; }
 
     public virtual Project? Project { get; set; }
+
+    public virtual Teacher? UserNameMentorRegisterNavigation { get; set; }
 }

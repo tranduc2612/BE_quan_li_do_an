@@ -53,6 +53,16 @@ namespace GP.DAL.Repository
             return query;
         }
 
+        public List<Teaching> GetListTeachingByCouncilId(string councilId)
+        {
+            return _dbContext.Teachings.Where(x => x.CouncilId == councilId).ToList();
+        }
+
+        public List<Teaching> GetListTeachingBySemesterId(string semesterId)
+        {
+            return _dbContext.Teachings.Include(x=>x.UserNameTeacherNavigation).Include(x=>x.GroupReviewOutline).Where(x => x.SemesterId == semesterId).ToList();
+        }
+
         public List<Teaching> GetListWithTeachingCondition(TeachingListModel data)
         {
             List<Teaching> query = _dbContext.Teachings.Include(x=>x.UserNameTeacherNavigation)

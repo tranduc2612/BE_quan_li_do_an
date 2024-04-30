@@ -13,6 +13,7 @@ namespace GP.DAL.IRepository
     {
         public Teacher Get(string username);
         public PaginatedResultBase<TeacherDTO> GetList(TeacherListModel data);
+        public List<Teacher> GetAllListOnly();
         public Teacher Create(Teacher teacher);
         public Teacher Update(Teacher teacher);
         public bool Delete(string username);

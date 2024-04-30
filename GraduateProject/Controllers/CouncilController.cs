@@ -3,6 +3,7 @@ using GP.Business.Service;
 using GP.Common.DTO;
 using GP.Common.Helpers;
 using GP.Common.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +14,13 @@ namespace GraduateProject.Controllers
     public class CouncilController : ControllerBase
     {
         private readonly ICouncilService _councilService;
+        private readonly AuthHelper _authHelper;
 
-        public CouncilController(ICouncilService councilService)
+
+        public CouncilController(ICouncilService councilService, AuthHelper authHelper)
         {
             _councilService = councilService;
+            _authHelper = authHelper;
         }
 
         [HttpGet("get-council")]
@@ -233,5 +237,35 @@ namespace GraduateProject.Controllers
             return response;
         }
 
+
+        [HttpPost("auto-assign-council")]
+        //[Authorize]
+        public Response AutoAssignCouncil(string semesterId,string currentUsername)
+        {
+            Response response = new Response();
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Lỗi tham số đầu vào");
+                return response;
+            }
+            try
+            {
+                response.Msg = "Sucess";
+                response.Code = 201;
+                string userName = _authHelper.GetCurrentUsername();
+                bool check = _councilService.AutoAssignProjectToCouncil(semesterId, currentUsername, out string message);
+                if (!check)
+                {
+                    response.SetError(400, message);
+                }
+                response.Msg = message;
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
     }
 }

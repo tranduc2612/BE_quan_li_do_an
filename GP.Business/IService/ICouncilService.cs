@@ -19,6 +19,9 @@ namespace GP.Business.IService
         public List<ProjectDTO> getListProjectInCouncil(StudentCouncilListModel data);
         public Teaching getTeaching(string username,string semesterId);
         public bool UpdateCouncil(CouncilModel req, out string message);
+        public bool AutoAssignTeachingToCouncil(string semesterId, string currentUsername, out string message);
+        public bool AutoAssignTeacherCommentator(string semesterId, string currentUsername, out string message);
+        public bool AutoAssignProjectToCouncil(string semesterId,string currentUsername, out string message);
         public bool AssignTeachingToCouncil(AssignTeachingCouncilModel model, out string message);
         public bool AssignProjectToCouncil(AssignProjectCouncilModel model, out string message);
 

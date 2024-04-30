@@ -13,7 +13,7 @@ namespace GP.DAL.IRepository
     {
         public PaginatedResultBase<GroupReviewOutline> GetListPage(GroupReviewOutlineListModel data);
         public List<GroupReviewOutlineDTO> GetListPageSemester(GroupReviewOutlineListSemesterModel data);
-
+        public List<GroupReviewOutline> GetListGroupBySemesterId(string semesterId);
         public GroupReviewOutline GetById(string id);
         public void Add(GroupReviewOutline data);
         public void Update(GroupReviewOutline data);

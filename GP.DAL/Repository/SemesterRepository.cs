@@ -76,57 +76,38 @@ namespace GP.DAL.Repository
         public PaginatedResultBase<SemesterDTO> GetListPage(SemesterListModel req)
         {
             PaginatedResultBase<SemesterDTO> result = new PaginatedResultBase<SemesterDTO>();
-            var query = (from semester in _dbContext.Semesters
-                         join teacher in _dbContext.Teachers on semester.CreatedBy equals teacher.UserName
-                         join project in _dbContext.Projects on semester.SemesterId equals project.SemesterId into projectJoin
-                         from project in projectJoin.DefaultIfEmpty()
-                         join project_outline in _dbContext.ProjectOutlines on project.UserName equals project_outline.UserName into projectOutlineJoin
-                         from project_outline in projectOutlineJoin.DefaultIfEmpty()
-                         where
-                             ((req.FromDate.HasValue && semester.FromDate >= req.FromDate.Value) || !req.FromDate.HasValue) &&
-                            ((req.ToDate.HasValue && semester.ToDate <= req.ToDate.Value) || !req.ToDate.HasValue) &&
-                            (string.IsNullOrEmpty(req.SemesterId) || semester.SemesterId.Contains(req.SemesterId)) &&
-                            (string.IsNullOrEmpty(req.NameSemester) || semester.NameSemester.Contains(req.NameSemester))
-                         select new
-                         {
-                             Semester = semester,
-                             Teacher = teacher,
-                             Project = project,
-                             ProjectOutline = project_outline
-                         });
 
-            var groupedQuery = query.AsEnumerable()
-                .GroupBy(x => new
-                {
-                    SemesterId = x.Semester.SemesterId,
-                    NameSemester = x.Semester.NameSemester,
-                    FromDate = x.Semester.FromDate,
-                    ToDate = x.Semester.ToDate,
-                    CreatedAt = x.Semester.CreatedAt,
-                    IsDelete = x.Semester.IsDelete,
-                });
+            var query = _dbContext.Semesters
+                    .Where(x => ((req.FromDate.HasValue && x.FromDate >= req.FromDate.Value) || !req.FromDate.HasValue) &&
+                                ((req.ToDate.HasValue && x.ToDate <= req.ToDate.Value) || !req.ToDate.HasValue) &&
+                                (string.IsNullOrEmpty(req.SemesterId) || x.SemesterId.Contains(req.SemesterId)) &&
+                                (string.IsNullOrEmpty(req.NameSemester) || x.NameSemester.Contains(req.NameSemester))).ToList().Select(semester =>
+                                {
+                                    var lstProject = _dbContext.Projects.Where(p => p.SemesterId == semester.SemesterId).ToList();
+                                    double avgScoreProject = lstProject.Any() ? Math.Round(lstProject.Average(p => p.ScoreFinal ?? 0),3) : 0;
+                                    return new SemesterDTO
+                                    {
+                                        SemesterId = semester.SemesterId,
+                                        NameSemester = semester.NameSemester,
+                                        FromDate = semester.FromDate,
+                                        ToDate = semester.ToDate,
+                                        CreatedAt = semester.CreatedAt,
+                                        CreatedBy = semester.CreatedBy,
+                                        TotalProjectAmount = lstProject.Count,
+                                        RejectProjectAmount = lstProject.Count(p => p.StatusProject == "REJECT"),
+                                        DoingProjectAmount = lstProject.Count(p => p.StatusProject == "DOING"),
+                                        AcceptProjectAmount = lstProject.Count(p => p.StatusProject == "ACCEPT"),
+                                        PauseProjectAmount = lstProject.Count(p => p.StatusProject == "PAUSE"),
+                                        AvgScoreProject = avgScoreProject,
+                                        IsDelete = semester.IsDelete
+                                    };
+                                });
 
-            int totalItem = groupedQuery.Count();
+            int totalItem = query.Count();
 
-            List<SemesterDTO> lstSemester = groupedQuery
+            List<SemesterDTO> lstSemester = query
                 .Skip((req.PageIndex - 1) * req.PageSize)
                 .Take(req.PageSize)
-                .Select(x => new SemesterDTO(
-                    x.Key.SemesterId,
-                    x.Key.NameSemester,
-                    x.Key.FromDate,
-                    x.Key.ToDate,
-                    x.Key.CreatedAt,
-                    x.Count(p => p.ProjectOutline != null),
-                    x.Count(p => p.Project != null && p.Project.StatusProject == "REJECT"),
-                    x.Count(p => p.Project != null && p.Project.StatusProject == "DOING"),
-                    x.Count(p => p.Project != null && p.Project.StatusProject == "ACCEPT"),
-                    x.Count(p => p.Project != null && p.Project.StatusProject == "PAUSE"),
-                    x.Average(p => p.Project?.ScoreFinal ?? 0),
-                    _mapper.MapTeacherToTeacherDTO(x.First().Teacher),
-                    x.Key.IsDelete,
-                    x.Count(p => p.Project != null)
-                ))
                 .ToList();
 
             result.ListResult = lstSemester;

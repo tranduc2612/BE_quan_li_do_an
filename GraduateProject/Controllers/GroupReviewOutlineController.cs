@@ -190,7 +190,35 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
-        
+
+        [HttpPost("automation-split-group")]
+        public Response AutomationSplitGroup([FromQuery] string semesterId)
+        {
+            Response response = new Response();
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Lỗi tham số đầu vào");
+                return response;
+            }
+            try
+            {
+                response.Msg = "Sucess";
+                response.Code = 201;
+                bool check = _groupReviewOutlineService.AutomationSplitGroup(semesterId, out string message);
+                if (!check)
+                {
+                    response.SetError(400, message);
+                }
+                response.Msg = message;
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
         [HttpPut("update-group-review-outline")]
         public Response UpdateGroupReviewOutline(GroupReviewOutlineModel model)
         {

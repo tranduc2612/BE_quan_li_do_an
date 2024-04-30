@@ -5,6 +5,7 @@ using GP.Common.Helpers;
 using GP.Common.Models;
 using GP.Models.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 
 namespace GraduateProject.Controllers
 {
@@ -77,6 +78,53 @@ namespace GraduateProject.Controllers
             return response;
         }
 
+        [HttpPost("auto-assign-mentor")]
+        public Response AutoAssignMentor([FromQuery]string semesterId)
+        {
+            Response response = new Response();
+
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Validate Error");
+                return response;
+            }
+
+            try
+            {
+                //response.Code = 200;
+                //response.Success = _projectService.AutomationAssignMentorTeacherToProject(semesterId, out string message);
+                //response.Msg = message;
+                //if (response.Success == false)
+                //{
+                //    response.Code = 400;
+                //}
+
+                response.Code = 200;
+                response.ReturnObj = _projectService.AutomationAssignMentorTeacherToProject(semesterId, out string message);
+                response.Msg = message;
+                if (response.Success == false)
+                {
+                    response.Code = 400;
+                }
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number  == 2812)
+                {
+                    response.SetError("Thủ tục không tồn tại trong cơ sở dữ liệu.");
+                    response.ExceptionInfo = ex.ToString();
+                }
+                else
+                {
+                    response.SetError("Lỗi khi thực thi thủ tục: " + ex.Message);
+                    response.ExceptionInfo = ex.ToString();
+                }
+                
+            }
+            return response;
+        }
+
         [HttpPost("assign-commentator")]
         public Response AssignCommentator(string username_student, string username_teacher)
         {
@@ -106,6 +154,8 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
+
+
 
         [HttpPost("get-list-project-by-group-review")]
         public Response GetListProjectByGroupReview(ProjectOutlineListModel req)
