@@ -48,6 +48,12 @@ namespace GP.Common.DTO
         public string? CommentCt { get; set; }
         public string? HashKeyMentor { get; set; }
         public string? HashKeyCommentator { get; set; }
+        public string? NameFileFinal { get; set; }
+
+        public string? SizeFileFinal { get; set; }
+
+        public string? TypeFileFinal { get; set; }
+
         public virtual StudentDTO? UserNameNavigation { get; set; }
         public virtual TeacherDTO? UserNameCommentatorNavigation { get; set; }
         public virtual TeacherDTO? UserNameMentorNavigation { get; set; }

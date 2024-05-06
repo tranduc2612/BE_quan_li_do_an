@@ -1,9 +1,10 @@
-using GP.Business.IService;
+﻿using GP.Business.IService;
 using GP.Business.Service;
 using GP.Common.Helpers;
 using GP.DAL.IRepository;
 using GP.DAL.Repository;
 using GP.Models.Model;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Text;
+using Hangfire.MySql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +30,7 @@ builder.Services.AddControllers(
 
 builder.Services.AddDbContext<ManagementGraduationProjectContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("QuizletDb"));
+    options.UseMySql(builder.Configuration.GetConnectionString("DB"),new MySqlServerVersion(new Version(8,0,30)));
 });
 
 // Turn off default Validate
@@ -50,6 +52,7 @@ builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IScheduleWeekService, ScheduleWeekService>();
 builder.Services.AddScoped<ICouncilService, CouncilService>();
 builder.Services.AddScoped<IEducationService, EducationService>();
+builder.Services.AddScoped<IJobService, JobService>();
 
 
 
@@ -102,7 +105,7 @@ builder.Services.AddSwaggerGen(options =>
 
 //builder.Services.AddDbContext<ManagementGraduationProjectContext>(options =>
 //{
-//    options.UseSqlServer("Data Source=MSI\\SQLEXPRESS;Initial Catalog=ManagementGraduationProject;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+//    options.UseMySql(builder.Configuration.GetConnectionString("DB"));
 //    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 //});
 
@@ -123,20 +126,36 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins("Access-Control-Allow-Origin:*",
-                                "http://localhost:5173").AllowAnyOrigin()
+                                "http://qlda-utc.site/").AllowAnyOrigin()
                                                          .AllowAnyMethod()
                                                          .AllowAnyHeader();
         });
 });
 
+//builder.Services.AddHangfire(configuration =>
+//                                configuration
+//                                .UseSimpleAssemblyNameTypeSerializer()
+//                                .UseRecommendedSerializerSettings()
+//                                .UseSqlServerStorage(builder.Configuration.GetConnectionString("DB")));
+//builder.Services.AddHangfireServer();
+
+// Thêm dịch vụ Hangfire với cấu hình MySQL
+builder.Services.AddHangfire(configuration =>
+    configuration
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseStorage(new MySqlStorage(builder.Configuration.GetConnectionString("DB"),new MySqlStorageOptions()))); // Sử dụng MySQLStorage thay vì SqlServerStorage
+
+builder.Services.AddHangfireServer();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+ //Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseCors(builder =>
 {
@@ -145,12 +164,17 @@ app.UseCors(builder =>
            .AllowAnyHeader();
 });
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseHangfireDashboard();
+app.MapHangfireDashboard();
+
+RecurringJob.AddOrUpdate<IJobService>(x => x.JobExcuteScheduleSemester(), Cron.Minutely);
+
 app.MapControllers();
 
-app.Run();
+app.Run($"http://*:5000");

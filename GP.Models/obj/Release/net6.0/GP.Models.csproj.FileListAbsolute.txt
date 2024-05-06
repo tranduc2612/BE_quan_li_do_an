@@ -1,0 +1,14 @@
+E:\QLDoAn\be_quan_li_do_an\GP.Models\bin\Release\net6.0\GP.Models.deps.json
+E:\QLDoAn\be_quan_li_do_an\GP.Models\bin\Release\net6.0\GP.Models.runtimeconfig.json
+E:\QLDoAn\be_quan_li_do_an\GP.Models\bin\Release\net6.0\GP.Models.dll
+E:\QLDoAn\be_quan_li_do_an\GP.Models\bin\Release\net6.0\GP.Models.pdb
+E:\QLDoAn\be_quan_li_do_an\GP.Models\obj\Release\net6.0\GP.Models.csproj.AssemblyReference.cache
+E:\QLDoAn\be_quan_li_do_an\GP.Models\obj\Release\net6.0\GP.Models.GeneratedMSBuildEditorConfig.editorconfig
+E:\QLDoAn\be_quan_li_do_an\GP.Models\obj\Release\net6.0\GP.Models.AssemblyInfoInputs.cache
+E:\QLDoAn\be_quan_li_do_an\GP.Models\obj\Release\net6.0\GP.Models.AssemblyInfo.cs
+E:\QLDoAn\be_quan_li_do_an\GP.Models\obj\Release\net6.0\GP.Models.csproj.CoreCompileInputs.cache
+E:\QLDoAn\be_quan_li_do_an\GP.Models\obj\Release\net6.0\GP.Models.dll
+E:\QLDoAn\be_quan_li_do_an\GP.Models\obj\Release\net6.0\refint\GP.Models.dll
+E:\QLDoAn\be_quan_li_do_an\GP.Models\obj\Release\net6.0\GP.Models.pdb
+E:\QLDoAn\be_quan_li_do_an\GP.Models\obj\Release\net6.0\GP.Models.genruntimeconfig.cache
+E:\QLDoAn\be_quan_li_do_an\GP.Models\obj\Release\net6.0\ref\GP.Models.dll

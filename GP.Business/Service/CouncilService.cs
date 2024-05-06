@@ -301,13 +301,17 @@ namespace GP.Business.Service
                               x.UserNameNavigation?.Status == "AUTH"
                               &&
                               x.CouncilId == null
+                              &&
+                              x.StatusProject == "ACCEPT"
                               //&&
                               //x.ProjectOutline != null
                            )
                     .ToList();
-                List<Council> councils = _councilRepository.GetListBySemesterId(semesterId).Where(x=>x.IsDelete == 0).ToList();
-                
-                foreach(Council council in councils)
+                List<Council> councils = _councilRepository.GetListBySemesterId(semesterId).Where(x=>x.IsDelete == 0 && x.Teachings.Count > 0).ToList();
+
+                int maxTeachingsPerCouncil = projects.Count / councils.Count;
+
+                foreach (Council council in councils)
                 {
                     HashSet<string> allCouncilTeachers = new HashSet<string>();
                     foreach (var teaching in council.Teachings)
@@ -319,7 +323,7 @@ namespace GP.Business.Service
                         && !allCouncilTeachers.Contains(project.UserNameMentor) 
                         && project.CouncilId == null)
                         .ToList();
-                    int limitZoom = Math.Min(100, filteredProjects.Count);
+                    int limitZoom = Math.Min(maxTeachingsPerCouncil, filteredProjects.Count);
                     for (int i=0;i<limitZoom;i++)
                     {
                         filteredProjects[i].CouncilId = council.CouncilId;
@@ -341,6 +345,8 @@ namespace GP.Business.Service
                               x.UserNameNavigation?.Status == "AUTH"
                               &&
                               x.CouncilId == null
+                              &&
+                              x.StatusProject == "ACCEPT"
                            //&&
                            //x.ProjectOutline != null
                            )
@@ -403,6 +409,10 @@ namespace GP.Business.Service
 
                 int numberOfProjects = projectsInCouncil.Count;
                 int numberOfTeachers = teachings.Count;
+                if (numberOfTeachers == 0)
+                {
+                    continue;
+                }
 
                 // Chia đều các giáo viên vào các dự án
                 int teacherIndex = 0;

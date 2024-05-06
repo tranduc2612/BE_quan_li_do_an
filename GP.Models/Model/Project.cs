@@ -51,6 +51,12 @@ public partial class Project
 
     public string? HashKeyCommentator { get; set; }
 
+    public string? NameFileFinal { get; set; }
+
+    public string? SizeFileFinal { get; set; }
+
+    public string? TypeFileFinal { get; set; }
+
     public virtual Council? Council { get; set; }
 
     public virtual ICollection<DetailScheduleWeek> DetailScheduleWeeks { get; set; } = new List<DetailScheduleWeek>();

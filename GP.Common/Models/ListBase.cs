@@ -86,7 +86,6 @@ namespace GP.Common.Models
         public string? GroupReviewOutlineId { get; set; }
         public string? UserName { get; set; }
         public string? NameProject { get; set; }
-        public int? IsGetAll { get; set; }
 
     }
 }

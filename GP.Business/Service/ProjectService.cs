@@ -1,4 +1,6 @@
-﻿using GP.Business.IService;
+﻿using AutoMapper;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using GP.Business.IService;
 using GP.Common.DTO;
 using GP.Common.Helpers;
 using GP.Common.Models;
@@ -245,7 +247,9 @@ namespace GP.Business.Service
 
         public List<ProjectDTO> GetListProjectByGroupId(ProjectOutlineListModel req)
         {
-            return _mapper.MapProjectsToProjectDTOs(_projectRepository.GetListProjectByGroupId(req.SemesterId, req.GroupReviewOutlineId));
+            //return _mapper.MapProjectsToProjectDTOs(_projectRepository.GetListProjectByGroupId(req.SemesterId, req.GroupReviewOutlineId));
+            return _projectRepository.GetListProjectByGroupId(req.SemesterId, req.GroupReviewOutlineId);
+
         }
 
         public List<ProjectDTO> GetListProjectByUsernameMentor(string username, string semesterId)
@@ -276,6 +280,73 @@ namespace GP.Business.Service
             return _projectOutlineRepository.GetById(username);
         }
 
+        public Project HandleUploadFinalFile(ProjectFinalFile data, out string message, out bool check)
+        {
+            Project find = _projectRepository.GetProjectByUsername(data.UserName);
+            if(find == null)
+            {
+                check = false;
+                message = "Sinh viên không tồn tại";
+                return null;
+            }
+            if (find != null && data.Function == "D")
+            {
+                if (File.Exists(Path.Combine("file", "final", data.UserName, find.NameFileFinal ?? "no_name")))
+                {
+                    File.Delete(Path.Combine("file", "final", data.UserName, find.NameFileFinal ?? "no_name"));
+                }
+                find.NameFileFinal = null;
+                find.TypeFileFinal = null;
+                find.SizeFileFinal = null;
+                
+                _projectRepository.Update(find);
+                check = true;
+                message = "Xóa thành công";
+                return null;
+            }
+            if (data.file == null || data.file.Length == 0)
+            {
+                check = false;
+                message = "file không hợp lệ !";
+                return null;
+            }
+            var randomName = $"{Path.GetFileNameWithoutExtension(data.file.FileName)}_{DateTime.Now.ToString("yyyyMMddHHmmss")}_{new Random().Next(1000, 9999)}_{Path.GetExtension(data.file.FileName)}";
+            if (!Directory.Exists(Path.Combine("file", "final", data.UserName)))
+            {
+                // Tạo thư mục cha nếu nó chưa tồn tại
+                Directory.CreateDirectory(Path.Combine("file", "final", data.UserName));
+            }
+            var filePath = Path.Combine("file", "final", data.UserName, randomName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                data.SizeFileFinal = data.file.Length.ToString();
+                data.NameFileFinal = randomName;
+                data.TypeFileFinal = data.file.ContentType.ToString();
+                if(data.Function == "U" || data.Function == "C")
+                {
+                    if (data.Function == "U")
+                    {
+                        if (File.Exists(Path.Combine("file", "final", data.UserName, find.NameFileFinal ?? "no_name")))
+                        {
+                            File.Delete(Path.Combine("file", "final", data.UserName, find.NameFileFinal ?? "no_name"));
+                        }
+                    }
+                    find.NameFileFinal = data.NameFileFinal;
+                    find.SizeFileFinal = data.SizeFileFinal;
+                    find.TypeFileFinal = data.TypeFileFinal;
+                    check = true;
+                    message = "Cập nhật thành công";
+                    Project new_data = _projectRepository.Update(find);
+                    data.file.CopyTo(stream);
+                    return new_data;
+                }
+                check = false;
+                message = "Chức năng không hợp lệ !";
+                return null;
+            }
+        }
+
         public bool UpdateNewProjectOutline(ProjectOutlineDTO projectOutlineDTO, out string message)
         {
             Project project_find = _projectRepository.GetProjectByUsername(projectOutlineDTO.UserName);
@@ -303,105 +374,6 @@ namespace GP.Business.Service
 
         public bool UpdateScoreToProject(string username, string role, string score, string comment, out string message)
         {
-            //Project project = _projectRepository.GetProjectByUsername(username);
-            //if(project == null)
-            //{
-            //    message = "Đồ án không tồn tại !";
-            //    return false;
-            //}
-            //bool successParse = double.TryParse(score, out double resultScore);
-            //if(!successParse)
-            //{
-            //    message = "Điểm không hợp lệ !";
-            //    return false;
-            //}
-            //if (role == "CT")
-            //{
-            //    project.ScoreCt = resultScore;
-            //    project.CommentCt = comment;
-            //    double totalHD = ((project.ScoreCt ?? 0) + (project.ScoreTk ?? 0) + (project.ScoreUv1 ?? 0) + (project.ScoreUv2 ?? 0) + (project.ScoreUv3 ?? 0)) / 5;
-            //    double totalQT = ((project.ScoreMentor ?? 0) + (project.ScoreCommentator ?? 0)) / 2;
-            //    double total = (totalHD*0.7 + totalQT*0.3);
-            //    project.ScoreFinal = Math.Round(total,2);
-            //    _projectRepository.Update(project);
-            //    message = "Cập nhật đồ án thành công !";
-            //    return true;
-            //}
-            //if (role == "TK")
-            //{
-            //    project.ScoreTk = resultScore;
-            //    project.CommentTk = comment;
-            //    double totalHD = ((project.ScoreCt ?? 0) + (project.ScoreTk ?? 0) + (project.ScoreUv1 ?? 0) + (project.ScoreUv2 ?? 0) + (project.ScoreUv3 ?? 0)) / 5;
-            //    double totalQT = ((project.ScoreMentor ?? 0) + (project.ScoreCommentator ?? 0)) / 2;
-            //    double total = (totalHD*0.7 + totalQT*0.3);
-            //    project.ScoreFinal = Math.Round(total,2);
-            //    _projectRepository.Update(project);
-            //    message = "Cập nhật đồ án thành công !";
-            //    return true;
-            //}
-            //if (role == "UV1")
-            //{
-            //    project.ScoreUv1 = resultScore;
-            //    project.CommentUv1 = comment;
-            //    double totalHD = ((project.ScoreCt ?? 0) + (project.ScoreTk ?? 0) + (project.ScoreUv1 ?? 0) + (project.ScoreUv2 ?? 0) + (project.ScoreUv3 ?? 0)) / 5;
-            //    double totalQT = ((project.ScoreMentor ?? 0) + (project.ScoreCommentator ?? 0)) / 2;
-            //    double total = (totalHD*0.7 + totalQT*0.3);
-            //    project.ScoreFinal = Math.Round(total,2);
-            //    _projectRepository.Update(project);
-            //    message = "Cập nhật đồ án thành công !";
-            //    return true;
-            //}
-            //if (role == "UV2")
-            //{
-            //    project.ScoreUv2 = resultScore;
-            //    project.CommentUv2 = comment;
-            //    double totalHD = ((project.ScoreCt ?? 0) + (project.ScoreTk ?? 0) + (project.ScoreUv1 ?? 0) + (project.ScoreUv2 ?? 0) + (project.ScoreUv3 ?? 0)) / 5;
-            //    double totalQT = ((project.ScoreMentor ?? 0) + (project.ScoreCommentator ?? 0)) / 2;
-            //    double total = (totalHD*0.7 + totalQT*0.3);
-            //    project.ScoreFinal = Math.Round(total,2);
-            //    _projectRepository.Update(project);
-            //    message = "Cập nhật đồ án thành công !";
-            //    return true;
-            //}
-            //if (role == "UV3")
-            //{
-            //    project.ScoreUv3 = resultScore;
-            //    project.CommentUv3 = comment;
-            //    double totalHD = ((project.ScoreCt ?? 0) + (project.ScoreTk ?? 0) + (project.ScoreUv1 ?? 0) + (project.ScoreUv2 ?? 0) + (project.ScoreUv3 ?? 0)) / 5;
-            //    double totalQT = ((project.ScoreMentor ?? 0) + (project.ScoreCommentator ?? 0)) / 2;
-            //    double total = (totalHD*0.7 + totalQT*0.3);
-            //    project.ScoreFinal = Math.Round(total,2);
-            //    _projectRepository.Update(project);
-            //    message = "Cập nhật đồ án thành công !";
-            //    return true;
-            //}
-            //if (role == "MENTOR")
-            //{
-            //    project.ScoreMentor = resultScore;
-            //    project.CommentMentor = comment;
-            //    double totalHD = ((project.ScoreCt ?? 0) + (project.ScoreTk ?? 0) + (project.ScoreUv1 ?? 0) + (project.ScoreUv2 ?? 0) + (project.ScoreUv3 ?? 0)) / 5;
-            //    double totalQT = ((project.ScoreMentor ?? 0) + (project.ScoreCommentator ?? 0)) / 2;
-            //    double total = (totalHD*0.7 + totalQT*0.3);
-            //    project.ScoreFinal = Math.Round(total, 2);
-            //    _projectRepository.Update(project);
-            //    message = "Cập nhật đồ án thành công !";
-            //    return true;
-            //}
-            //if (role == "COMMENTATOR")
-            //{
-            //    project.ScoreCommentator = resultScore;
-            //    project.CommentCommentator = comment;
-            //    double totalHD = ((project.ScoreCt ?? 0) + (project.ScoreTk ?? 0) + (project.ScoreUv1 ?? 0) + (project.ScoreUv2 ?? 0) + (project.ScoreUv3 ?? 0)) / 5;
-            //    double totalQT = ((project.ScoreMentor ?? 0) + (project.ScoreCommentator ?? 0)) / 2;
-            //    double total = (totalHD*0.7 + totalQT*0.3);
-            //    project.ScoreFinal = Math.Round(total, 2);
-            //    _projectRepository.Update(project);
-            //    message = "Cập nhật đồ án thành công !";
-            //    return true;
-            //}
-            //message = "Vai trò không hợp lệ !";
-            //return false;
-
             Project project = _projectRepository.GetProjectByUsername(username);
             if (project == null)
             {

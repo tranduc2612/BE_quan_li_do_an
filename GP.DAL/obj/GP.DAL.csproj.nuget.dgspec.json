@@ -190,6 +190,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.15, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[7.0.0, )"
             }
           },
           "imports": [

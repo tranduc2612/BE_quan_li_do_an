@@ -521,5 +521,75 @@ namespace GP.Business.Service
             image_type = "";
             return null;
         }
+
+        public LoginResponseDTO VerifyUserName(CheckUserName check, out string message, out string typeError)
+        {
+            if (check.Role == "STUDENT")
+            {
+                LoginResponseDTO studentCheck = _mapper.MapStudentToLoginResponseDTO(_studentRepository.Get(check.UserName));
+                if(studentCheck == null)
+                {
+                    typeError = "username";
+                    message = "Tài khoản không tồn tại !";
+                    return null;
+                }
+                typeError = "";
+                message = "";
+                return studentCheck;
+            }
+
+            if (check.Role == "TEACHER")
+            {
+                LoginResponseDTO studentCheck = _mapper.MapTeacherToLoginResponseDTO(_teacherRepository.Get(check.UserName));
+                if (studentCheck == null)
+                {
+                    typeError = "username";
+                    message = "Tài khoản không tồn tại !";
+                    return null;
+                }
+                typeError = "";
+                message = "";
+                return studentCheck;
+            }
+            typeError = "role";
+            message = "Vai trò không hợp lệ";
+            return null;
+        }
+
+        public bool ForgotPassword(ChangePassword login, out string message)
+        {
+            if (login.Role == "STUDENT")
+            {
+                Student student = _studentRepository.Get(login.UserName);
+                if (student == null)
+                {
+                    message = "Sinh viên không hợp lệ !";
+                    return false;
+                }
+                AuthHelper.CreatePassHash(login.PasswordNew, out byte[] passwordHash, out byte[] passwordSalt);
+                student.Password = passwordHash;
+                student.PasswordSalt = passwordSalt;
+                _studentRepository.Update(student);
+                message = "Đổi mật khẩu thành công !";
+                return true;
+            }
+            if (login.Role == "TEACHER")
+            {
+                Teacher teacher = _teacherRepository.Get(login.UserName);
+                if (teacher == null)
+                {
+                    message = "Giảng viên không hợp lệ !";
+                    return false;
+                }
+                AuthHelper.CreatePassHash(login.PasswordNew, out byte[] passwordHash, out byte[] passwordSalt);
+                teacher.Password = passwordHash;
+                teacher.PasswordSalt = passwordSalt;
+                _teacherRepository.Update(teacher);
+                message = "Đổi mật khẩu thành công !";
+                return true;
+            }
+            message = "Tài khoản không tồn tại !";
+            return false;
+        }
     }
 }

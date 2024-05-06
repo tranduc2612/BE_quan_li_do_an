@@ -18,6 +18,7 @@ namespace GP.DAL.Repository
         }
         public void Add(Comment comment)
         {
+            comment.CommentId = Guid.NewGuid().ToString();
             _dbContext.Add(comment);
             _dbContext.SaveChanges();
         }

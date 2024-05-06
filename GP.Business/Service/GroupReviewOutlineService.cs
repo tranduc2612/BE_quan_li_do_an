@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Drawing.Charts;
+﻿using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using GP.Business.IService;
@@ -37,6 +38,7 @@ namespace GP.Business.Service
         public bool AddGroupReview(GroupReviewOutlineModel data, out string message)
         {
             GroupReviewOutline group = new GroupReviewOutline();
+            group.GroupReviewOutlineId = Guid.NewGuid().ToString();
             group.NameGroupReviewOutline = data.NameGroupReviewOutline;
             group.CreatedBy= data.CreatedBy;
             group.SemesterId = data.SemesterId;
@@ -190,7 +192,7 @@ namespace GP.Business.Service
             return _projectOutlineRepository.GetListProjectOutline(data);
         }
 
-        public GroupReviewOutline getProjectOutline(string id)
+        public GroupReviewOutline getGroupProjectOutline(string id)
         {
             return _groupReviewOutlineRepository.GetById(id);
         }
@@ -205,7 +207,8 @@ namespace GP.Business.Service
            List<ProjectOutline> projectOutlines = _projectOutlineRepository.GetListProjectOutlineBySemester(semesterId)
                 .Where(x => x.GroupReviewOutlineId == null 
                 && x.UserNameNavigation.UserNameMentor != null 
-                && x.UserNameNavigation.StatusProject != "DOING"
+                && x.UserNameNavigation.StatusProject != "PAUSE"
+                && x.UserNameNavigation.StatusProject != "REJECT"
             ).ToList();
            List<GroupReviewOutline> groups = _groupReviewOutlineRepository.GetListGroupBySemesterId(semesterId);
             List<Teaching> teachings = _teachingRepository.GetListTeachingBySemesterId(semesterId).Where(x=>x.GroupReviewOutlineId == null && x.UserNameTeacherNavigation?.Status == "AUTH" 
@@ -224,10 +227,10 @@ namespace GP.Business.Service
             int maxTeachingsPerGroup = teachings.Count / groups.Count;
 
             // Nếu số lượng đề cương không chia hết cho số lượng nhóm, làm tròn lên
-            if (teachings.Count % groups.Count != 0)
-            {
-                maxTeachingsPerGroup++;
-            }
+            //if (teachings.Count % groups.Count != 0)
+            //{
+            //    maxTeachingsPerGroup++;
+            //}
 
 
             // Duyệt qua từng giảng dạy để chia vào nhóm
@@ -264,18 +267,20 @@ namespace GP.Business.Service
                 }
             }
 
+            List<GroupReviewOutline> groupsAvailable = _groupReviewOutlineRepository.GetListGroupBySemesterId(semesterId).Where(x=>x.Teachings.Count > 0).ToList();
+
             // Tính toán số lượng tối đa đề cương mỗi nhóm có thể chứa
-            int maxProjectsPerGroup = projectOutlines.Count / groups.Count;
+            int maxProjectsPerGroup = projectOutlines.Count / groupsAvailable.Count;
 
             // Nếu số lượng đề cương không chia hết cho số lượng nhóm, làm tròn lên
-            if (projectOutlines.Count % groups.Count != 0)
-            {
-                maxProjectsPerGroup++;
-            }
+            //if (projectOutlines.Count % groups.Count != 0)
+            //{
+            //    maxProjectsPerGroup++;
+            //}
 
 
             currentGroupIndex = 0;
-            foreach (GroupReviewOutline group in groups)
+            foreach (GroupReviewOutline group in groupsAvailable)
             {
                 HashSet<string> allCouncilTeachers = new HashSet<string>();
                 foreach (var teaching in group.Teachings)
@@ -288,7 +293,7 @@ namespace GP.Business.Service
                     && !allCouncilTeachers.Contains(projectOutline.UserNameNavigation.UserNameMentor)
                     && projectOutline.GroupReviewOutlineId == null)
                     .ToList();
-                int limitZoom = Math.Min(100, filteredProjects.Count);
+                int limitZoom = Math.Min(maxProjectsPerGroup, filteredProjects.Count);
                 for (int i = 0; i < limitZoom; i++)
                 {
                     filteredProjects[i].GroupReviewOutlineId = group.GroupReviewOutlineId;
@@ -337,6 +342,12 @@ namespace GP.Business.Service
 
             message = "Okeee";
             return true;
+        }
+
+
+        public List<TeachingDTO> getListTeachingByGroupId(string groupId)
+        {
+            return _mapper.MapTeachingsToTeachingDTOs(_teachingRepository.GetListTeachingByGroupReview(groupId));
         }
     }
 }

@@ -58,6 +58,11 @@ namespace GP.DAL.Repository
             return _dbContext.Teachings.Where(x => x.CouncilId == councilId).ToList();
         }
 
+        public List<Teaching> GetListTeachingByGroupReview(string groupId)
+        {
+            return _dbContext.Teachings.Include(x => x.UserNameTeacherNavigation).Include(x => x.GroupReviewOutline).Where(x => x.GroupReviewOutlineId == groupId).ToList();
+        }
+
         public List<Teaching> GetListTeachingBySemesterId(string semesterId)
         {
             return _dbContext.Teachings.Include(x=>x.UserNameTeacherNavigation).Include(x=>x.GroupReviewOutline).Where(x => x.SemesterId == semesterId).ToList();

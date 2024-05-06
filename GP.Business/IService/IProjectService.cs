@@ -27,5 +27,8 @@ namespace GP.Business.IService
         public bool CallProcAutomationAssignMentorTeacherToProject(string semesterId, out string message);
         public bool AssignUserNameCommentatorToProject(string username_student, string username_teacher, out string message);
         public bool UpdateScoreToProject(string username , string role, string score, string comment, out string message);
+        public Project HandleUploadFinalFile(ProjectFinalFile file, out string message, out bool check);
+
+
     }
 }

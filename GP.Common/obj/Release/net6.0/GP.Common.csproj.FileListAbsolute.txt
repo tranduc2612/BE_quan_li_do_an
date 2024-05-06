@@ -1,0 +1,15 @@
+E:\QLDoAn\be_quan_li_do_an\GP.Common\bin\Release\net6.0\GP.Common.deps.json
+E:\QLDoAn\be_quan_li_do_an\GP.Common\bin\Release\net6.0\GP.Common.dll
+E:\QLDoAn\be_quan_li_do_an\GP.Common\bin\Release\net6.0\GP.Common.pdb
+E:\QLDoAn\be_quan_li_do_an\GP.Common\bin\Release\net6.0\GP.Models.dll
+E:\QLDoAn\be_quan_li_do_an\GP.Common\bin\Release\net6.0\GP.Models.pdb
+E:\QLDoAn\be_quan_li_do_an\GP.Common\obj\Release\net6.0\GP.Common.csproj.AssemblyReference.cache
+E:\QLDoAn\be_quan_li_do_an\GP.Common\obj\Release\net6.0\GP.Common.GeneratedMSBuildEditorConfig.editorconfig
+E:\QLDoAn\be_quan_li_do_an\GP.Common\obj\Release\net6.0\GP.Common.AssemblyInfoInputs.cache
+E:\QLDoAn\be_quan_li_do_an\GP.Common\obj\Release\net6.0\GP.Common.AssemblyInfo.cs
+E:\QLDoAn\be_quan_li_do_an\GP.Common\obj\Release\net6.0\GP.Common.csproj.CoreCompileInputs.cache
+E:\QLDoAn\be_quan_li_do_an\GP.Common\obj\Release\net6.0\GP.Common.csproj.CopyComplete
+E:\QLDoAn\be_quan_li_do_an\GP.Common\obj\Release\net6.0\GP.Common.dll
+E:\QLDoAn\be_quan_li_do_an\GP.Common\obj\Release\net6.0\refint\GP.Common.dll
+E:\QLDoAn\be_quan_li_do_an\GP.Common\obj\Release\net6.0\GP.Common.pdb
+E:\QLDoAn\be_quan_li_do_an\GP.Common\obj\Release\net6.0\ref\GP.Common.dll

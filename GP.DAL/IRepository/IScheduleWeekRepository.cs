@@ -18,6 +18,8 @@ namespace GP.DAL.IRepository
         public void DeleteDetailScheduleWeek(DetailScheduleWeek req);
         public DetailScheduleWeek UpdateDetailScheduleWeek(DetailScheduleWeek req);
         public DetailScheduleWeek GetDetailScheduleWeek(string idUserName,string idScheduleWeek);
+        public bool ScanScheduleSemester();
+
 
     }
 }

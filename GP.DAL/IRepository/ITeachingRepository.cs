@@ -17,6 +17,7 @@ namespace GP.DAL.IRepository
         public List<Teaching> GetListTeaching(TeachingListModel data);
         public List<Teaching> GetListTeachingBySemesterId(string semesterId);
         public List<Teaching> GetListTeachingByCouncilId(string councilId);
+        public List<Teaching> GetListTeachingByGroupReview(string groupId);
         public List<Teaching> GetListWithTeachingCondition(TeachingListModel data);
 
     }

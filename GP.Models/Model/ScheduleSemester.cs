@@ -27,6 +27,8 @@ public partial class ScheduleSemester
 
     public string? Note { get; set; }
 
+    public string? StatusSend { get; set; }
+
     public virtual Teacher? CreatedByNavigation { get; set; }
 
     public virtual Semester? Semester { get; set; }

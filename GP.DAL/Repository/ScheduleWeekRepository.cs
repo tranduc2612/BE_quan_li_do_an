@@ -23,6 +23,7 @@ namespace GP.DAL.Repository
 
         public string Add(ScheduleWeek req)
         {
+            req.ScheduleWeekId = Guid.NewGuid().ToString();
             _dbContext.ScheduleWeeks.Add(req);
             _dbContext.SaveChanges();
             return req.ScheduleWeekId;
@@ -75,6 +76,54 @@ namespace GP.DAL.Repository
             _dbContext.DetailScheduleWeeks.Update(req);
             _dbContext.SaveChanges();
             return req;
+        }
+
+        public bool ScanScheduleSemester()
+        {
+            var scheduleSemesters = _dbContext.ScheduleSemesters.ToList();
+
+            if (scheduleSemesters == null || !scheduleSemesters.Any())
+            {
+                return false;
+            }
+
+            foreach (var schedule in scheduleSemesters)
+            {
+                DateTime currentDate = DateTime.Now;
+                if (currentDate < schedule.FromDate)
+                {
+                    continue;
+                }
+
+                List<Project> projectInSemester = null;
+
+                if ((schedule.TypeSchedule == "SCHEDULE_FOR_MENTOR" || schedule.TypeSchedule == "SCHEDULE_FOR_COMMENTATOR") && schedule.StatusSend == "W")
+                {
+                    schedule.StatusSend = "S";
+                    _dbContext.Update(schedule);
+                    _dbContext.SaveChanges();
+                    projectInSemester = _dbContext.Projects
+                                                    .Where(x => x.SemesterId == schedule.SemesterId)
+                                                    .ToList();
+
+                    foreach (var project in projectInSemester)
+                    {
+                        if (schedule.TypeSchedule == "SCHEDULE_FOR_MENTOR")
+                        {
+                            project.HashKeyMentor = Guid.NewGuid().ToString();
+                        }
+                        else if (schedule.TypeSchedule == "SCHEDULE_FOR_COMMENTATOR")
+                        {
+                            project.HashKeyCommentator = Guid.NewGuid().ToString();
+                        }
+                    }
+
+                    _dbContext.UpdateRange(projectInSemester);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return true;
         }
     }
 }

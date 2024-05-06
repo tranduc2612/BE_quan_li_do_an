@@ -11,10 +11,11 @@ namespace GP.Business.IService
 {
     public interface IGroupReviewOutlineService
     {
-        public GroupReviewOutline getProjectOutline(string id);
+        public GroupReviewOutline getGroupProjectOutline(string id);
         public PaginatedResultBase<GroupReviewOutline> getListGroupReview(GroupReviewOutlineListModel data);
         public List<GroupReviewOutlineDTO> getListGroupReviewSemester(GroupReviewOutlineListSemesterModel data);
         public List<TeachingDTO> getListTeaching(TeachingListModel data);
+        public List<TeachingDTO> getListTeachingByGroupId(string groupId);
         public List<ProjectOutlineDTO> getListProjectOutline(ProjectOutlineListModel data);
         public bool AddGroupReview(GroupReviewOutlineModel data, out string message);
         public bool UpdateGroupReview(GroupReviewOutlineModel data, out string message);

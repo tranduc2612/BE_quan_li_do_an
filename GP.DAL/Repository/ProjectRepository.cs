@@ -1,4 +1,6 @@
-﻿using GP.Common.Models;
+﻿using GP.Common.DTO;
+using GP.Common.Helpers;
+using GP.Common.Models;
 using GP.DAL.IRepository;
 using GP.Models.Model;
 using Microsoft.Data.SqlClient;
@@ -14,8 +16,11 @@ namespace GP.DAL.Repository
     public class ProjectRepository: IProjectRepository
     {
         private readonly ManagementGraduationProjectContext _dbContext;
-        public ProjectRepository(ManagementGraduationProjectContext dbContext) {
+        private readonly MappingProfile _mapper;
+
+        public ProjectRepository(ManagementGraduationProjectContext dbContext, MappingProfile mapper) {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         public List<Project> GetListProjectByCouncilId(string semesterId, string councilId)
@@ -29,15 +34,13 @@ namespace GP.DAL.Repository
                       ).ToList();
         }
 
-        public List<Project> GetListProjectByGroupId(string semesterId, string groupId)
+        public List<ProjectDTO> GetListProjectByGroupId(string semesterId, string groupId)
         {
-            return _dbContext.Projects.Include(x => x.ProjectOutline).ThenInclude(x=>x.GroupReviewOutline).Include(x => x.UserNameNavigation)
-                .Where(x => x.SemesterId == semesterId
-                      &&
-                      (String.IsNullOrEmpty(groupId) || (x.ProjectOutline != null && x.ProjectOutline.GroupReviewOutlineId == groupId))
-                      &&
-                      x.ProjectOutline != null
-                      ).ToList();
+
+            var query = _dbContext.Projects.Include(x => x.ProjectOutline).ThenInclude(x => x.GroupReviewOutline).Include(x => x.UserNameNavigation)
+                        .Where(p => p.SemesterId == semesterId && (string.IsNullOrEmpty(groupId) || p.ProjectOutline.GroupReviewOutlineId == groupId));
+            List<ProjectDTO> result = _mapper.MapProjectsToProjectDTOs(query.ToList());
+            return result;
         }
 
         public List<Project> GetListProjectByUsernameMentor(string username_mentor,string semesterId)

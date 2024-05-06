@@ -32,11 +32,19 @@ namespace GP.Common.DTO
     public class ChangePassword
     {
         [Required]
+        public string? UserName { get; set; }
+        [Required]
+        public string? PasswordOld { get; set; }
+        [Required]
+        public string? PasswordNew { get; set; }
+        [Required]
+        public string? Role { get; set; }
+    }
+
+    public class CheckUserName
+    {
+        [Required]
         public string UserName { get; set; }
-        [Required]
-        public string PasswordOld { get; set; }
-        [Required]
-        public string PasswordNew { get; set; }
         [Required]
         public string Role { get; set; }
     }

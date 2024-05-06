@@ -16,5 +16,6 @@ namespace GP.DAL.IRepository
         public List<Semester> GetList(SemesterDTO req);
         public PaginatedResultBase<SemesterDTO> GetListPage(SemesterListModel req);
         public bool Add(Semester req);
+
     }
 }

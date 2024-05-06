@@ -24,6 +24,7 @@ namespace GP.DAL.Repository
         }
         public Council Add(Council council)
         {
+            council.CouncilId = Guid.NewGuid().ToString();
             _dbContext.Add(council);
             _dbContext.SaveChanges();
             return council;

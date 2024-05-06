@@ -24,6 +24,7 @@ namespace GP.Business.IService
         /// <returns></returns>
         public bool CheckRole(string roleCode);
         public bool VerifyLoginInfo(AccountLogin login, out string message, out string typeError);
+        public LoginResponseDTO VerifyUserName(CheckUserName check, out string message, out string typeError);
         public void RegisterStudent(StudentModel studentReq);
         public void RegisterTeacher(TeacherModel teacherDTO);
         public string UpdateStudent(StudentModel studentReq);
@@ -34,6 +35,7 @@ namespace GP.Business.IService
         public bool DeleteTeacher(string username);
         public bool CheckValidRefreshToken(string refreshToken, out string message);
         public bool ChangePassword(ChangePassword login, out string message);
+        public bool ForgotPassword(ChangePassword login, out string message);
         public AccountLogin GetCurrentUsername();
         public LoginResponseDTO CreateToken(AccountLogin login);
         public PaginatedResultBase<StudentDTO> GetListStudent(StudentListModel data);

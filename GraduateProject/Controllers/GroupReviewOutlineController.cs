@@ -30,7 +30,7 @@ namespace GraduateProject.Controllers
             {
                 response.Msg = "Sucess";
                 response.Code = 200;
-                response.ReturnObj = _groupReviewOutlineService.getProjectOutline(id);
+                response.ReturnObj = _groupReviewOutlineService.getGroupProjectOutline(id);
             }
             catch (Exception ex)
             {
@@ -76,6 +76,29 @@ namespace GraduateProject.Controllers
                 response.Msg = "Sucess";
                 response.Code = 200;
                 response.ReturnObj = _groupReviewOutlineService.getListTeaching(model);
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
+        [HttpGet("get-list-teaching-by-group-id")]
+        public Response GetListTeachingByGroupId(string id)
+        {
+            Response response = new Response();
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Lỗi tham số đầu vào");
+                return response;
+            }
+            try
+            {
+                response.Msg = "Sucess";
+                response.Code = 200;
+                response.ReturnObj = _groupReviewOutlineService.getListTeachingByGroupId(id);
             }
             catch (Exception ex)
             {

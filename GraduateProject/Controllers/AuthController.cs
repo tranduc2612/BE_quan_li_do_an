@@ -135,6 +135,39 @@ namespace GraduateProject.Controllers
             return response;
         }
 
+
+        [HttpPost("forgot-password")]
+        public Response ForGotPassword([FromBody] ChangePassword model)
+        {
+            Response response = new Response();
+
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Lỗi tham số đầu vào");
+                return response;
+            }
+
+            try
+            {
+
+                if (!_accountService.ForgotPassword(model, out string message))
+                {
+                    response.SetError(message);
+                    return response;
+                }
+
+                response.Msg = message;
+                response.Code = 200;
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
         private bool IsImage(string contentType)
         {
             return contentType.StartsWith("image/");
@@ -472,6 +505,59 @@ namespace GraduateProject.Controllers
                 response.ExceptionInfo = ex.ToString();
             }
             
+            return response;
+        }
+
+        /// <summary>
+        /// 788878
+        /// </summary>
+        /// <param name="check">aksnansdaksdnlkasdnkads</param>
+        /// <returns></returns>
+        [HttpPost("check-user")]
+        public Response CheckUserName([FromBody] CheckUserName check)
+        {
+            Response response = new Response();
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Lỗi tham số đầu vào");
+                return response;
+            }
+            try
+            {
+                if (!_accountService.CheckRole(check.Role))
+                {
+                    response.SetError("Quyền trong hệ thống không hợp lệ !");
+                    return response;
+                }
+                // Nếu thông tin đăng nhập ko đúng
+                LoginResponseDTO checkUserName = _accountService.VerifyUserName(check, out string message, out string typeError);
+                if (checkUserName == null)
+                {
+                    response.SetError(message);
+                    response.ReturnObj = new
+                    {
+                        typeError = typeError,
+                        messageError = message
+                    };
+                    return response;
+                }
+                else
+                {
+                    response.ReturnObj = new
+                    {
+                        typeError = typeError,
+                        messageError = message,
+                        data = checkUserName
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+
             return response;
         }
 

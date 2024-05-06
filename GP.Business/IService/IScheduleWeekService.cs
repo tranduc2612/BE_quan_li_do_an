@@ -20,5 +20,6 @@ namespace GP.Business.IService
         public DetailScheduleWeek HandleScheduleWeekDetail(ScheduleWeekDetailModel file, out string message, out bool check);
         public DetailScheduleWeek GetScheduleWeekDetail(string userName,string idScheduleWeek);
         public DetailScheduleWeek UpdateComment(ScheduleWeekDetailModel data, out string message);
+
     }
 }

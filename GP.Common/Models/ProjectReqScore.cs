@@ -1,5 +1,6 @@
 ﻿using GP.Common.DTO;
 using GP.Models.Model;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,7 +25,19 @@ namespace GP.Common.Models
     {
         public string? Role { get; set; }
         public string? Key { get; set; }
+    }
 
+    public class ProjectFinalFile
+    {
+        public string? Function { get; set; }
+
+        public string? UserName { get; set; }
+        public string? NameFileFinal { get; set; }
+
+        public string? SizeFileFinal { get; set; }
+
+        public string? TypeFileFinal { get; set; }
+        public IFormFile? file { get; set; }
 
     }
 }

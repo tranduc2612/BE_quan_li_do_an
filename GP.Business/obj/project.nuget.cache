@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "EiRSq2mVSrXXHgxGrIlA71BYayV3pL77000j3/GFL1ESEs0IDopmsBsd22va4XWLd52Prtmx+QkhQh7mPvA9dw==",
+  "dgSpecHash": "gqAsvXecs8tYfNkfbwfaJ8YNa/b6mMnlWt4Zc+insUL/m3SI/4yRjRnFuSLJChW9KXMxTpKowodAB40/e5huWg==",
   "success": true,
   "projectFilePath": "E:\\QLDoAn\\be_quan_li_do_an\\GP.Business\\GP.Business.csproj",
   "expectedPackageFiles": [
@@ -50,8 +50,10 @@
     "C:\\Users\\OSC\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "C:\\Users\\OSC\\.nuget\\packages\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\OSC\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
+    "C:\\Users\\OSC\\.nuget\\packages\\mysqlconnector\\2.2.5\\mysqlconnector.2.2.5.nupkg.sha512",
     "C:\\Users\\OSC\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
     "C:\\Users\\OSC\\.nuget\\packages\\open-xml-sdk\\2.9.1\\open-xml-sdk.2.9.1.nupkg.sha512",
+    "C:\\Users\\OSC\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\7.0.0\\pomelo.entityframeworkcore.mysql.7.0.0.nupkg.sha512",
     "C:\\Users\\OSC\\.nuget\\packages\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\OSC\\.nuget\\packages\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\OSC\\.nuget\\packages\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",

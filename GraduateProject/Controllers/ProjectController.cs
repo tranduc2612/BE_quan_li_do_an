@@ -47,6 +47,33 @@ namespace GraduateProject.Controllers
             return response;
         }
 
+        [HttpGet("get-project-by-username")]
+        public Response GetProjectByUsername(string username)
+        {
+            Response response = new Response();
+
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Validate Error");
+                return response;
+            }
+
+            try
+            {
+                response.Code = 200;
+                response.Success = true;
+                response.ReturnObj = _projectService.GetProjectByUserName(username);
+                response.Msg = "thành công !";
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
 
         [HttpPost("assign-mentor")]
         public Response AssignMentor(string username_student,string username_teacher)
@@ -344,6 +371,68 @@ namespace GraduateProject.Controllers
             }
             return response;
         }
+
+        [HttpPost("handle-upload-file-final-project")]
+        public Response UploadFileFinalProject([FromForm] ProjectFinalFile req)
+        {
+            Response response = new Response();
+
+            // Validate 
+            if (!ModelState.IsValid)
+            {
+                response.SetError(StatusCodes.Status422UnprocessableEntity, "Validate Error");
+                return response;
+            }
+            try
+            {
+                response.Code = 201;
+                response.ReturnObj = _projectService.HandleUploadFinalFile(req, out string message, out bool check);
+                response.Msg = message;
+                if (!check)
+                {
+                    response.Success = false;
+                    response.Code = 400;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.SetError("Có lỗi xảy ra");
+                response.ExceptionInfo = ex.ToString();
+            }
+            return response;
+        }
+
+        [HttpGet("dowload-file-project-final")]
+        public IActionResult DownloadFileFinal(string Username)
+        {
+
+            try
+            {
+                ProjectDTO find = _projectService.GetProjectByUserName(Username);
+                if (find != null)
+                {
+                    string path = Path.Combine("file", "final", find.UserName, find.NameFileFinal);
+                    byte[] fileData = System.IO.File.ReadAllBytes(path);
+                    // Lấy tên file từ đường dẫn
+                    string fileName = Path.GetFileName(path);
+
+                    // Trả về file dưới dạng phản hồi HTTP để tải xuống
+                    return File(fileData, "application/octet-stream", fileName);
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return NotFound();
+            }
+        }
+
 
     }
 }

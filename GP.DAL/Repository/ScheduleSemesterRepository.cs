@@ -18,9 +18,10 @@ namespace GP.DAL.Repository
         }
         public string Add(ScheduleSemester req)
         {
+            req.ScheduleSemesterId = Guid.NewGuid().ToString();
             _dbContext.ScheduleSemesters.Add(req);
             _dbContext.SaveChanges();
-            return req.ScheduleSemesterId;
+            return req.ScheduleSemesterId.ToString();
         }
 
         public void Delete(ScheduleSemester scheduleSemester)

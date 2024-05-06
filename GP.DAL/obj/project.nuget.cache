@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "SW+CBrpNbhr4hkpFakV7iBN772ISixgeASfUZbndDCdn0QU1Ok8x4tjGq3+5l0DThZG5MC/J5/j9hRkqYv5e6A==",
+  "dgSpecHash": "uOn5DLlTSAxHmsBaYImarpSKGhaIQtJgbJQv8Ix62z6aTbycAPxf3trYxJdI1Cd/T8cp720FmU6YEUAJ8WiQxQ==",
   "success": true,
   "projectFilePath": "E:\\QLDoAn\\be_quan_li_do_an\\GP.DAL\\GP.DAL.csproj",
   "expectedPackageFiles": [
@@ -39,6 +39,8 @@
     "C:\\Users\\OSC\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\OSC\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "C:\\Users\\OSC\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
+    "C:\\Users\\OSC\\.nuget\\packages\\mysqlconnector\\2.2.5\\mysqlconnector.2.2.5.nupkg.sha512",
+    "C:\\Users\\OSC\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\7.0.0\\pomelo.entityframeworkcore.mysql.7.0.0.nupkg.sha512",
     "C:\\Users\\OSC\\.nuget\\packages\\system.configuration.configurationmanager\\6.0.1\\system.configuration.configurationmanager.6.0.1.nupkg.sha512",
     "C:\\Users\\OSC\\.nuget\\packages\\system.diagnostics.diagnosticsource\\6.0.0\\system.diagnostics.diagnosticsource.6.0.0.nupkg.sha512",
     "C:\\Users\\OSC\\.nuget\\packages\\system.drawing.common\\6.0.0\\system.drawing.common.6.0.0.nupkg.sha512",
