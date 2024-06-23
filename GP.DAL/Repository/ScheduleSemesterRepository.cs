@@ -37,7 +37,7 @@ namespace GP.DAL.Repository
 
         public List<ScheduleSemester> GetListScheduleSemester(string semesterId)
         {
-            return _dbContext.ScheduleSemesters.Include(x => x.CreatedByNavigation).Include(x => x.Semester).Where(x=>x.SemesterId==semesterId).ToList();
+            return _dbContext.ScheduleSemesters.Include(x => x.CreatedByNavigation).Include(x => x.Semester).Where(x=>x.SemesterId==semesterId).OrderBy(x=>x.CreatedDate).ToList();
         }
 
         public void Update(ScheduleSemester req)

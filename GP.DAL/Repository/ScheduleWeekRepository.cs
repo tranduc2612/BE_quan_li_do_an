@@ -90,7 +90,7 @@ namespace GP.DAL.Repository
             foreach (var schedule in scheduleSemesters)
             {
                 DateTime currentDate = DateTime.Now;
-                if (currentDate < schedule.FromDate)
+                if (currentDate < schedule.FromDate || currentDate > schedule.ToDate)
                 {
                     continue;
                 }

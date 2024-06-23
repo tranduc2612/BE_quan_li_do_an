@@ -207,7 +207,7 @@ namespace GP.Business.Service
            List<ProjectOutline> projectOutlines = _projectOutlineRepository.GetListProjectOutlineBySemester(semesterId)
                 .Where(x => x.GroupReviewOutlineId == null 
                 && x.UserNameNavigation.UserNameMentor != null 
-                && x.UserNameNavigation.StatusProject != "PAUSE"
+                && x.UserNameNavigation.StatusProject != "INTERN"
                 && x.UserNameNavigation.StatusProject != "REJECT"
             ).ToList();
            List<GroupReviewOutline> groups = _groupReviewOutlineRepository.GetListGroupBySemesterId(semesterId);

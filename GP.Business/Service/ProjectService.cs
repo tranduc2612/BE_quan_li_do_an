@@ -137,41 +137,49 @@ namespace GP.Business.Service
                 if (studentRegisterTeacher != null)
                 {
                     Teacher findTeacherRegister = teachers.Find(x => x.UserName == studentRegisterTeacher);
-
                     // kiểm tra xem giảng viên đó còn có thể hướng dẫn sinh viên nữa không
-                    var studentCanMentor = findTeacherRegister.Education?.MaxStudentMentor;
-                    if(studentCanMentor != null)
+                    var studentCanMentor = findTeacherRegister?.Education?.MaxStudentMentor;
+                    if (studentCanMentor != null)
                     {
                         int? remainingSlots = studentCanMentor - findTeacherRegister.ProjectUserNameMentorNavigations.Count;
                         if (remainingSlots > 0)
                         {
                             //findTeacherRegister.ProjectUserNameMentorNavigations.Add(project);
                             project.UserNameMentor = findTeacherRegister.UserName;
-                            _projectRepository.Update(project); 
+                            _projectRepository.Update(project);
                             continue;
-                        }                   
+                        }
                     }
                 }
 
                 if(student?.MajorId != null)
                 {
                     // Lấy danh sách giảng viên thuộc chuyên ngành của sinh viên
-                    List<Teacher> teachersInMajor = teachers.Where(t => t.MajorId == project.UserNameNavigation.MajorId).ToList();
-
                     // Ưu tiên phân phối sinh viên cho giảng viên trong chuyên ngành
-                    foreach (Teacher teacher in teachersInMajor)
+                    List<Teacher> teachersInMajor = teachers.Where(t => t.MajorId == project.UserNameNavigation.MajorId).ToList();
+                    int randomCount = 0;
+                    if(teachersInMajor.Count > 0)
                     {
-                        int? remainingSlots = teacher.Education.MaxStudentMentor - teacher.ProjectUserNameMentorNavigations.Count;
-
-                        if (remainingSlots > 0)
+                        while (randomCount <= teachersInMajor.Count)
                         {
-                            //teacher.ProjectUserNameMentorNavigations.Add(project);
-                            project.UserNameMentor = teacher.UserName;
-                            _projectRepository.Update(project);
-                            break;
+                            Random random = new Random();
+                            int index = random.Next(0, teachersInMajor.Count);
+                            Teacher teacherRand = teachersInMajor[index];
+
+                            if (teacherRand != null)
+                            {
+                                int? remainingSlots = teacherRand.Education?.MaxStudentMentor - teacherRand.ProjectUserNameMentorNavigations.Count;
+                                if (remainingSlots > 0)
+                                {
+                                    //teacher.ProjectUserNameMentorNavigations.Add(project);
+                                    project.UserNameMentor = teacherRand.UserName;
+                                    _projectRepository.Update(project);
+                                    break;
+                                }
+                            }
                         }
                     }
-
+                    
                     // nếu đã hết giảng viên thuộc chuyên ngành đó có thể hướng dẫn thì sinh viên đó sẽ phải đẩy sang đợt 2
                     // không thể chia tiếp ở đây vì nếu chia tiếp thì:
                     // có thể sinh viên này sẽ được xếp vào giảng viên chuyên ngành khác

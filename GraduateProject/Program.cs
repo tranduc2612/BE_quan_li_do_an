@@ -150,12 +150,12 @@ builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
- //Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
+//Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
-//}
+}
 
 app.UseCors(builder =>
 {
@@ -164,7 +164,7 @@ app.UseCors(builder =>
            .AllowAnyHeader();
 });
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
@@ -177,4 +177,6 @@ RecurringJob.AddOrUpdate<IJobService>(x => x.JobExcuteScheduleSemester(), Cron.M
 
 app.MapControllers();
 
-app.Run($"http://*:5000");
+//app.Run($"http://*:5000");
+app.Run();
+

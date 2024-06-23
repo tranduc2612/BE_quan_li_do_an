@@ -318,6 +318,7 @@ namespace GP.Business.Service
                     {
                         allCouncilTeachers.Add(teaching.UserNameTeacher);
                     }
+                    // lấy ra danh sách các sinh viên không có giảng viên hướng dẫn trong hội đồng
                     List<Project> filteredProjects = projects
                         .Where(project => project.UserNameMentor != null 
                         && !allCouncilTeachers.Contains(project.UserNameMentor) 
@@ -403,6 +404,7 @@ namespace GP.Business.Service
                 message = "Hội đồng không hợp lệ !";
                 return false;
             }
+            // chia giảng viên phản biện cho sinh viên trong hội đồng
             foreach(Council item in councils) {
                 List<Teaching> teachings = item.Teachings.ToList();
                 List<Project> projectsInCouncil = _projectRepository.GetListProjectByCouncilId(semesterId,item.CouncilId);
@@ -429,6 +431,23 @@ namespace GP.Business.Service
                     teacherIndex = (teacherIndex + 1) % numberOfTeachers;
                 }
 
+            }
+
+
+            // chia giảng viên phản biện cho sinh viên bảo lưu
+            List<Project> projectPause  = _projectRepository.GetListProjectBySemesterId(semesterId).Where(x=>x.StatusProject == "PAUSE").ToList();
+            List<Teacher> teachers = _teacherRepository.GetAllListOnly();
+            if (projectPause.Count > 0)
+            {
+                foreach(Project project in projectPause)
+                {
+                    Random random = new Random();
+                    int index = random.Next(0, councils.Count);
+                    Teacher teacherRand = teachers[index];
+
+                    project.UserNameCommentator = teacherRand.UserName;
+                    _projectRepository.Update(project);
+                }
             }
 
             message = "Hoàn thiện thuật toán chia đều giảng viên phản biện !";

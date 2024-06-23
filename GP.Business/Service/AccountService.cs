@@ -306,6 +306,7 @@ namespace GP.Business.Service
             {
                 return null;
             }
+            
             find.StudentCode = studentReq.StudentCode != null ? studentReq.StudentCode : find.StudentCode;
             find.FullName= studentReq.FullName != null ? studentReq.FullName : find.FullName;
             find.Phone = studentReq.Phone != null ? studentReq.Phone : find.Phone;
@@ -324,7 +325,8 @@ namespace GP.Business.Service
             if (studentReq.StatusProject != null)
             {
                 Project findProject = _projectRepository.GetProjectByUsername(studentReq.UserName);
-                findProject.StatusProject = studentReq.StatusProject;
+                findProject.SemesterId = studentReq.SemesterId != null ? studentReq.SemesterId : findProject.SemesterId;
+                findProject.StatusProject = studentReq.StatusProject != null ? studentReq.StatusProject : findProject.StatusProject; ;
                 _projectRepository.Update(findProject);
             }
             _studentRepository.Update(find);
