@@ -1,5 +1,4 @@
 -- Tạo bảng Classification
-use ductmweb_social;
 drop database ductmweb_ManagementGraduationProject;
 create database ductmweb_ManagementGraduationProject;
 use ductmweb_ManagementGraduationProject;
