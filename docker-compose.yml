@@ -8,14 +8,13 @@ services:
     image: mysql:8.0
     container_name: mysql_container
     environment:
-      MYSQL_ROOT_PASSWORD: "YourStrong!Passw0rd"
-      MYSQL_DATABASE: "ductmweb_ManagementGraduationProject"
-      MYSQL_USER: "myuser"
-      MYSQL_PASSWORD: "mypassword"
+      MYSQL_DATABASE: ductmweb_ManagementGraduationProject
+      MYSQL_ROOT_PASSWORD: 123456
     ports:
       - "3307:3306"
     volumes:
-      - ./my_database.sql:/docker-entrypoint-initdb.d/my_database.sql
+      - mysql_data_1:/var/lib/mysql
+      - ./sql-scripts:/docker-entrypoint-initdb.d
     restart: always
     networks:
       - my_network
@@ -24,10 +23,12 @@ services:
     build: .
     container_name: aspnet6_container
     ports:
-      - "5000:80"
+      - "5000:7274"
     depends_on:
       - mysql
     environment:
-      ConnectionStrings__DefaultConnection: "Server=mysql;Database=ductmweb_ManagementGraduationProject;User=myuser;Password=mypassword;"
+      ConnectionStrings__DB: "Server=mysql;Port=3306;Database=ManagementGraduationProject;Uid=root;Pwd=123456;"
     networks:
       - my_network
+volumes:
+  mysql_data_1:
