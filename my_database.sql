@@ -4,35 +4,35 @@ create database ductmweb_ManagementGraduationProject;
 use ductmweb_ManagementGraduationProject;
 
 CREATE TABLE Classification (
-  ClassifiId VARCHAR(50),
-  TypeCode VARCHAR(50) DEFAULT NULL,
-  Code VARCHAR(50) DEFAULT NULL,
+  ClassifiId NVARCHAR(50),
+  TypeCode NVARCHAR(50) DEFAULT NULL,
+  Code NVARCHAR(50) DEFAULT NULL,
   Value TEXT,
-  Role VARCHAR(50) DEFAULT NULL,
+  Role NVARCHAR(50) DEFAULT NULL,
   FileName TEXT,
   Url TEXT,
   CreatedAt DATETIME DEFAULT NULL,
-  CreatedBy VARCHAR(50) DEFAULT NULL,
+  CreatedBy NVARCHAR(50) DEFAULT NULL,
   PRIMARY KEY (ClassifiId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tạo bảng Comment
 CREATE TABLE Comment (
-  CommentId VARCHAR(50) NOT NULL,
+  CommentId NVARCHAR(50) NOT NULL,
   ContentComment TEXT,
-  CreatedBy VARCHAR(50) DEFAULT NULL,
+  CreatedBy NVARCHAR(50) DEFAULT NULL,
   CreatedDate DATETIME DEFAULT NULL,
-  UserName VARCHAR(50) DEFAULT NULL,
+  UserName NVARCHAR(50) DEFAULT NULL,
   PRIMARY KEY (CommentId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tạo bảng Council
 CREATE TABLE Council (
-  CouncilId VARCHAR(50) NOT NULL,
-  CouncilName VARCHAR(100) DEFAULT NULL,
-  CouncilZoom VARCHAR(100) DEFAULT NULL,
-  CreatedBy VARCHAR(50) DEFAULT NULL,
-  SemesterId VARCHAR(50) DEFAULT NULL,
+  CouncilId NVARCHAR(50) NOT NULL,
+  CouncilName NVARCHAR(100) DEFAULT NULL,
+  CouncilZoom NVARCHAR(100) DEFAULT NULL,
+  CreatedBy NVARCHAR(50) DEFAULT NULL,
+  SemesterId NVARCHAR(50) DEFAULT NULL,
   IsDelete INT DEFAULT NULL,
   CreatedDate DATETIME DEFAULT NULL,
   PRIMARY KEY (CouncilId)
@@ -40,8 +40,8 @@ CREATE TABLE Council (
 
 -- Tạo bảng DetailScheduleWeek
 CREATE TABLE DetailScheduleWeek (
-  ScheduleWeekId VARCHAR(50),
-  UserNameProject VARCHAR(50) NOT NULL,
+  ScheduleWeekId NVARCHAR(50),
+  UserNameProject NVARCHAR(50) NOT NULL,
   Comment TEXT,
   NameFile TEXT,
   SizeFile TEXT,
@@ -51,41 +51,41 @@ CREATE TABLE DetailScheduleWeek (
 
 -- Tạo bảng Education
 CREATE TABLE Education (
-  EducationId VARCHAR(50) NOT NULL,
+  EducationId NVARCHAR(50) NOT NULL,
   EducationName TEXT,
   MaxStudentMentor INT DEFAULT NULL,
   CreatedAt DATETIME DEFAULT NULL,
-  CreatedBy VARCHAR(50) DEFAULT NULL,
+  CreatedBy NVARCHAR(50) DEFAULT NULL,
   PRIMARY KEY (EducationId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tạo bảng GroupReviewOutline
 CREATE TABLE GroupReviewOutline (
-  GroupReviewOutlineId VARCHAR(50) NOT NULL,
-  NameGroupReviewOutline VARCHAR(50) DEFAULT NULL,
-  CreatedBy VARCHAR(50) DEFAULT NULL,
+  GroupReviewOutlineId NVARCHAR(50) NOT NULL,
+  NameGroupReviewOutline NVARCHAR(50) DEFAULT NULL,
+  CreatedBy NVARCHAR(50) DEFAULT NULL,
   CreatedDate DATETIME DEFAULT NULL,
-  SemesterId VARCHAR(50) DEFAULT NULL,
+  SemesterId NVARCHAR(50) DEFAULT NULL,
   IsDelete INT DEFAULT NULL,
   PRIMARY KEY (GroupReviewOutlineId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tạo bảng Major cho MySQL
 CREATE TABLE Major (
-  MajorId VARCHAR(10) NOT NULL,
+  MajorId NVARCHAR(10) NOT NULL,
   MajorName TEXT,
   CreatedAt DATETIME DEFAULT NULL,
-  CreatedBy VARCHAR(50) DEFAULT NULL,
+  CreatedBy NVARCHAR(50) DEFAULT NULL,
   PRIMARY KEY (MajorId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tạo bảng Project cho MySQL
 CREATE TABLE Project (
-  UserName VARCHAR(50) NOT NULL,
-  SemesterId VARCHAR(50) DEFAULT NULL,
-  CouncilId VARCHAR(50) DEFAULT NULL,
-  UserNameCommentator VARCHAR(50) DEFAULT NULL,
-  UserNameMentor VARCHAR(50) DEFAULT NULL,
+  UserName NVARCHAR(50) NOT NULL,
+  SemesterId NVARCHAR(50) DEFAULT NULL,
+  CouncilId NVARCHAR(50) DEFAULT NULL,
+  UserNameCommentator NVARCHAR(50) DEFAULT NULL,
+  UserNameMentor NVARCHAR(50) DEFAULT NULL,
   ScoreMentor FLOAT DEFAULT NULL,
   CommentMentor TEXT,
   CommentCommentator TEXT,
@@ -101,7 +101,7 @@ CREATE TABLE Project (
   ScoreCT FLOAT DEFAULT NULL,
   CommentCT TEXT,
   ScoreFinal FLOAT DEFAULT NULL,
-  StatusProject VARCHAR(50) DEFAULT NULL,
+  StatusProject NVARCHAR(50) DEFAULT NULL,
   HashKeyMentor TEXT,
   HashKeyCommentator TEXT,
   NameFileFinal TEXT,
@@ -112,41 +112,41 @@ CREATE TABLE Project (
 
 -- Tạo bảng ProjectOutline cho MySQL
 CREATE TABLE ProjectOutline (
-  UserName VARCHAR(50) NOT NULL,
+  UserName NVARCHAR(50) NOT NULL,
   NameProject TEXT,
   PlantOutline TEXT,
   TechProject TEXT,
   ExpectResult TEXT,
   ContentProject TEXT,
-  GroupReviewOutlineId VARCHAR(50) DEFAULT NULL,
+  GroupReviewOutlineId NVARCHAR(50) DEFAULT NULL,
   PRIMARY KEY (UserName)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tạo bảng ScheduleSemester cho MySQL
 CREATE TABLE ScheduleSemester (
-  ScheduleSemesterId VARCHAR(50) NOT NULL,
+  ScheduleSemesterId NVARCHAR(50) NOT NULL,
   FromDate DATETIME DEFAULT NULL,
   ToDate DATETIME DEFAULT NULL,
-  TypeSchedule VARCHAR(50) DEFAULT NULL,
-  SemesterId VARCHAR(50) DEFAULT NULL,
-  CreatedBy VARCHAR(50) DEFAULT NULL,
+  TypeSchedule NVARCHAR(50) DEFAULT NULL,
+  SemesterId NVARCHAR(50) DEFAULT NULL,
+  CreatedBy NVARCHAR(50) DEFAULT NULL,
   CreatedDate DATETIME DEFAULT NULL,
   Title TEXT,
-  Implementer VARCHAR(200) DEFAULT NULL,
+  Implementer NVARCHAR(200) DEFAULT NULL,
   Content TEXT,
   Note TEXT,
-  StatusSend VARCHAR(10) DEFAULT NULL,
+  StatusSend NVARCHAR(10) DEFAULT NULL,
   PRIMARY KEY (ScheduleSemesterId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tạo bảng ScheduleWeek cho MySQL
 CREATE TABLE ScheduleWeek (
-  ScheduleWeekId VARCHAR(50) NOT NULL,
+  ScheduleWeekId NVARCHAR(50) NOT NULL,
   FromDate DATETIME DEFAULT NULL,
   ToDate DATETIME DEFAULT NULL,
-  CreatedBy VARCHAR(50) DEFAULT NULL,
+  CreatedBy NVARCHAR(50) DEFAULT NULL,
   CreatedDate DATETIME DEFAULT NULL,
-  SemesterId VARCHAR(50) DEFAULT NULL,
+  SemesterId NVARCHAR(50) DEFAULT NULL,
   Title TEXT,
   Content TEXT,
   PRIMARY KEY (ScheduleWeekId)
@@ -154,12 +154,12 @@ CREATE TABLE ScheduleWeek (
 
 -- Tạo bảng Semester cho MySQL
 CREATE TABLE Semester (
-  SemesterId VARCHAR(50) NOT NULL,
-  NameSemester VARCHAR(50) DEFAULT NULL,
+  SemesterId NVARCHAR(50) NOT NULL,
+  NameSemester NVARCHAR(50) DEFAULT NULL,
   FromDate DATE DEFAULT NULL,
   ToDate DATE DEFAULT NULL,
-  ScheduleSemesterId VARCHAR(50) DEFAULT NULL,
-  CreatedBy VARCHAR(50) DEFAULT NULL,
+  ScheduleSemesterId NVARCHAR(50) DEFAULT NULL,
+  CreatedBy NVARCHAR(50) DEFAULT NULL,
   IsDelete INT DEFAULT NULL,
   CreatedAt DATETIME DEFAULT NULL,
   PRIMARY KEY (SemesterId)
@@ -167,20 +167,20 @@ CREATE TABLE Semester (
 
 -- Tạo bảng Student cho MySQL
 CREATE TABLE Student (
-  UserName VARCHAR(50) NOT NULL,
+  UserName NVARCHAR(50) NOT NULL,
   Password BLOB DEFAULT NULL,
   FullName TEXT,
   DOB DATE DEFAULT NULL,
-  Phone VARCHAR(20) DEFAULT NULL,
-  Email VARCHAR(50) DEFAULT NULL,
+  Phone NVARCHAR(20) DEFAULT NULL,
+  Email NVARCHAR(50) DEFAULT NULL,
   Avatar TEXT,
   CreatedAt DATETIME DEFAULT NULL,
-  CreatedBy VARCHAR(50) DEFAULT NULL,
-  Status VARCHAR(50) DEFAULT NULL,
-  StudentCode VARCHAR(30) DEFAULT NULL,
-  MajorId VARCHAR(10) DEFAULT NULL,
-  ClassName VARCHAR(50) DEFAULT NULL,
-  SchoolYearName VARCHAR(50) DEFAULT NULL,
+  CreatedBy NVARCHAR(50) DEFAULT NULL,
+  Status NVARCHAR(50) DEFAULT NULL,
+  StudentCode NVARCHAR(30) DEFAULT NULL,
+  MajorId NVARCHAR(10) DEFAULT NULL,
+  ClassName NVARCHAR(50) DEFAULT NULL,
+  SchoolYearName NVARCHAR(50) DEFAULT NULL,
   IsDelete INT DEFAULT NULL,
   Token TEXT,
   PasswordSalt BLOB DEFAULT NULL,
@@ -190,25 +190,25 @@ CREATE TABLE Student (
   Gender INT DEFAULT NULL,
   GPA FLOAT DEFAULT NULL,
   Address TEXT,
-  Role VARCHAR(10) DEFAULT NULL,
-  TypeFileAvatar VARCHAR(50) DEFAULT NULL,
-  UserNameMentorRegister VARCHAR(50) DEFAULT NULL,
+  Role NVARCHAR(10) DEFAULT NULL,
+  TypeFileAvatar NVARCHAR(50) DEFAULT NULL,
+  UserNameMentorRegister NVARCHAR(50) DEFAULT NULL,
   IsFirstTime INT DEFAULT NULL,
   PRIMARY KEY (UserName)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tạo bảng Teacher cho MySQL
 CREATE TABLE Teacher (
-  UserName VARCHAR(50) NOT NULL,
+  UserName NVARCHAR(50) NOT NULL,
   FullName TEXT,
   Password BLOB DEFAULT NULL,
   DOB DATE DEFAULT NULL,
-  Phone VARCHAR(20) DEFAULT NULL,
-  Email VARCHAR(50) DEFAULT NULL,
+  Phone NVARCHAR(20) DEFAULT NULL,
+  Email NVARCHAR(50) DEFAULT NULL,
   Avatar TEXT,
   CreatedAt DATETIME DEFAULT NULL,
-  CreatedBy VARCHAR(50) DEFAULT NULL,
-  Status VARCHAR(50) DEFAULT NULL,
+  CreatedBy NVARCHAR(50) DEFAULT NULL,
+  Status NVARCHAR(50) DEFAULT NULL,
   IsAdmin INT DEFAULT NULL,
   IsDelete INT DEFAULT NULL,
   Token TEXT,
@@ -216,34 +216,34 @@ CREATE TABLE Teacher (
   RefreshToken TEXT,
   TokenCreated DATETIME DEFAULT NULL,
   TokenExpires DATETIME DEFAULT NULL,
-  MajorId VARCHAR(10) DEFAULT NULL,
+  MajorId NVARCHAR(10) DEFAULT NULL,
   Gender INT DEFAULT NULL,
-  Role VARCHAR(10) DEFAULT NULL,
+  Role NVARCHAR(10) DEFAULT NULL,
   Address TEXT,
-  TypeFileAvatar VARCHAR(50) DEFAULT NULL,
-  EducationId VARCHAR(50) DEFAULT NULL,
+  TypeFileAvatar NVARCHAR(50) DEFAULT NULL,
+  EducationId NVARCHAR(50) DEFAULT NULL,
   PRIMARY KEY (UserName)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 -- Tạo bảng Teaching cho MySQL
 CREATE TABLE Teaching (
-  UserNameTeacher VARCHAR(50) NOT NULL,
-  SemesterId VARCHAR(50) NOT NULL,
-  GroupReviewOutlineId VARCHAR(50) DEFAULT NULL,
-  CouncilId VARCHAR(50) DEFAULT NULL,
-  PositionInCouncil VARCHAR(50) DEFAULT NULL,
+  UserNameTeacher NVARCHAR(50) NOT NULL,
+  SemesterId NVARCHAR(50) NOT NULL,
+  GroupReviewOutlineId NVARCHAR(50) DEFAULT NULL,
+  CouncilId NVARCHAR(50) DEFAULT NULL,
+  PositionInCouncil NVARCHAR(50) DEFAULT NULL,
   PRIMARY KEY (SemesterId, UserNameTeacher)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-ALTER TABLE Classification MODIFY COLUMN ClassifiID VARCHAR(50) DEFAULT (uuid());
+ALTER TABLE Classification MODIFY COLUMN ClassifiID NVARCHAR(50) DEFAULT (uuid());
 ALTER TABLE Classification MODIFY COLUMN CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
-ALTER TABLE Comment MODIFY COLUMN CommentId VARCHAR(50) DEFAULT (uuid());
+ALTER TABLE Comment MODIFY COLUMN CommentId NVARCHAR(50) DEFAULT (uuid());
 ALTER TABLE Comment MODIFY COLUMN CreatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
-ALTER TABLE Council MODIFY COLUMN CouncilId VARCHAR(50) DEFAULT (uuid());
+ALTER TABLE Council MODIFY COLUMN CouncilId NVARCHAR(50) DEFAULT (uuid());
 ALTER TABLE Council MODIFY COLUMN IsDelete INT DEFAULT 0;
 ALTER TABLE Council MODIFY COLUMN CreatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
@@ -251,33 +251,33 @@ ALTER TABLE DetailScheduleWeek MODIFY COLUMN CreatedDate TIMESTAMP DEFAULT CURRE
 
 ALTER TABLE Education MODIFY COLUMN CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
-ALTER TABLE GroupReviewOutline MODIFY COLUMN GroupReviewOutlineId VARCHAR(50) DEFAULT (uuid());
+ALTER TABLE GroupReviewOutline MODIFY COLUMN GroupReviewOutlineId NVARCHAR(50) DEFAULT (uuid());
 ALTER TABLE GroupReviewOutline MODIFY COLUMN CreatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE GroupReviewOutline MODIFY COLUMN IsDelete INT DEFAULT 0;
 
 ALTER TABLE Major MODIFY COLUMN CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
-ALTER TABLE Project MODIFY COLUMN StatusProject VARCHAR(50) DEFAULT 'START';
+ALTER TABLE Project MODIFY COLUMN StatusProject NVARCHAR(50) DEFAULT 'START';
 
-ALTER TABLE ScheduleSemester MODIFY COLUMN ScheduleSemesterId VARCHAR(50) DEFAULT (uuid());
+ALTER TABLE ScheduleSemester MODIFY COLUMN ScheduleSemesterId NVARCHAR(50) DEFAULT (uuid());
 ALTER TABLE ScheduleSemester MODIFY COLUMN CreatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE ScheduleSemester MODIFY COLUMN StatusSend CHAR(1) DEFAULT 'W';
 
-ALTER TABLE ScheduleWeek MODIFY COLUMN ScheduleWeekId VARCHAR(50) DEFAULT (uuid());
+ALTER TABLE ScheduleWeek MODIFY COLUMN ScheduleWeekId NVARCHAR(50) DEFAULT (uuid());
 
 ALTER TABLE Semester MODIFY COLUMN IsDelete INT DEFAULT 0;
 ALTER TABLE Semester MODIFY COLUMN CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
 ALTER TABLE Student MODIFY COLUMN CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
-ALTER TABLE Student MODIFY COLUMN Status VARCHAR(50) DEFAULT 'AUTH';
+ALTER TABLE Student MODIFY COLUMN Status NVARCHAR(50) DEFAULT 'AUTH';
 ALTER TABLE Student MODIFY COLUMN IsDelete INT DEFAULT 0;
-ALTER TABLE Student MODIFY COLUMN Role VARCHAR(50) DEFAULT 'STUDENT';
+ALTER TABLE Student MODIFY COLUMN Role NVARCHAR(50) DEFAULT 'STUDENT';
 ALTER TABLE Student MODIFY COLUMN IsFirstTime INT DEFAULT 1;
 
 ALTER TABLE Teacher MODIFY COLUMN CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
-ALTER TABLE Teacher MODIFY COLUMN Status VARCHAR(50) DEFAULT 'AUTH';
+ALTER TABLE Teacher MODIFY COLUMN Status NVARCHAR(50) DEFAULT 'AUTH';
 ALTER TABLE Teacher MODIFY COLUMN IsDelete INT DEFAULT 0;
-ALTER TABLE Teacher MODIFY COLUMN Role VARCHAR(50) DEFAULT 'TEACHER';
+ALTER TABLE Teacher MODIFY COLUMN Role NVARCHAR(50) DEFAULT 'TEACHER';
 
 ALTER TABLE Comment ADD CONSTRAINT FK_Comment_ProjectOutline FOREIGN KEY(UserName) REFERENCES ProjectOutline(UserName);
 ALTER TABLE Comment ADD CONSTRAINT FK_Comment_Teacher FOREIGN KEY(CreatedBy) REFERENCES Teacher(UserName);
@@ -317,34 +317,34 @@ ALTER TABLE Teaching ADD CONSTRAINT FK_Teaching_GroupReviewOutline FOREIGN KEY(G
 ALTER TABLE Teaching ADD CONSTRAINT FK_Teaching_Semester FOREIGN KEY(SemesterId) REFERENCES Semester(SemesterId);
 ALTER TABLE Teaching ADD CONSTRAINT FK_Teaching_Teacher FOREIGN KEY(UserNameTeacher) REFERENCES Teacher(UserName);
 
-insert Classification(TypeCode,Code,Value,Role) values('ROLE_SYSTEM','STUDENT','Sinh viên','ADMIN');
-insert Classification(TypeCode,Code,Value,Role) values('ROLE_SYSTEM','TEACHER','Giảng viên','ADMIN');
-insert Classification(TypeCode,Code,Value,Role) values('ROLE_SYSTEM','ADMIN','Quản trị viên','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('ROLE_SYSTEM','STUDENT',N'Sinh viên','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('ROLE_SYSTEM','TEACHER',N'Giảng viên','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('ROLE_SYSTEM','ADMIN',N'Quản trị viên','ADMIN');
 
-insert Classification(TypeCode,Code,Value,Role) values('STATUS_SYSTEM','AUTH','Hoạt dộng','ADMIN');
-insert Classification(TypeCode,Code,Value,Role) values('STATUS_SYSTEM','BLOCK','Đã khóa','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('STATUS_SYSTEM','AUTH',N'Hoạt dộng','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('STATUS_SYSTEM','BLOCK',N'Đã khóa','ADMIN');
 
-insert Classification(TypeCode,Code,Value,Role) values('STATUS_PROJECT','PAUSE','Bảo lưu','ADMIN');
-insert Classification(TypeCode,Code,Value,Role) values('STATUS_PROJECT','DOING','Đang làm đồ án','ADMIN');
-insert Classification(TypeCode,Code,Value,Role) values('STATUS_PROJECT','ACCEPT','Được bảo vệ','ADMIN');
-insert Classification(TypeCode,Code,Value,Role) values('STATUS_PROJECT','INTERN','Chỉ thực tập','ADMIN');
-insert Classification(TypeCode,Code,Value,Role) values('STATUS_PROJECT','REJECT','Không được bảo vệ','ADMIN');
-insert Classification(TypeCode,Code,Value,Role) values('STATUS_PROJECT','START','Mới tạo','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('STATUS_PROJECT','PAUSE',N'Bảo lưu','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('STATUS_PROJECT','DOING',N'Đang làm đồ án','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('STATUS_PROJECT','ACCEPT',N'Được bảo vệ','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('STATUS_PROJECT','INTERN',N'Chỉ thực tập','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('STATUS_PROJECT','REJECT',N'Không được bảo vệ','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('STATUS_PROJECT','START',N'Mới tạo','ADMIN');
 
-insert Classification(TypeCode,Code,Value,Role) values('TEMPLATE_FILE','REVIEW_MENTOR','Biểu mẫu đánh giá của giảng viên hướng dẫn','ADMIN');
-insert Classification(TypeCode,Code,Value,Role) values('TEMPLATE_FILE','REVIEW_COMMENTATOR','Biểu mẫu đánh giá của giảng viên phản biện','ADMIN');
-insert Classification(TypeCode,Code,Value,Role) values('TEMPLATE_FILE','OUTLINE','Biểu mẫu đề cương đồ án','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('TEMPLATE_FILE','REVIEW_MENTOR',N'Biểu mẫu đánh giá của giảng viên hướng dẫn','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('TEMPLATE_FILE','REVIEW_COMMENTATOR',N'Biểu mẫu đánh giá của giảng viên phản biện','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('TEMPLATE_FILE','OUTLINE',N'Biểu mẫu đề cương đồ án','ADMIN');
 
-insert Classification(TypeCode,Code,Value,Role) values('TYPE_SCHEDULE','SCHEDULE_NORMAL','Lịch thông báo','ADMIN');
-insert Classification(TypeCode,Code,Value,Role) values('TYPE_SCHEDULE','SCHEDULE_FOR_OUTLINE','Lịch chốt đề cương','ADMIN');
-insert Classification(TypeCode,Code,Value,Role) values('TYPE_SCHEDULE','SCHEDULE_FOR_MENTOR','Chốt điểm GVHD','ADMIN');
-insert Classification(TypeCode,Code,Value,Role) values('TYPE_SCHEDULE','SCHEDULE_FOR_COMMENTATOR','Chốt điểm GVPB','ADMIN');
-insert Classification(TypeCode,Code,Value,Role) values('TYPE_SCHEDULE','SCHEDULE_FINAL_FILE','Nộp báo cáo cuối cùng','ADMIN');
-insert Classification(TypeCode,Code,Value,Role) values('TYPE_SCHEDULE','SCHEDULE_FINAL_SCORE','Chốt điểm tổng kết','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('TYPE_SCHEDULE','SCHEDULE_NORMAL',N'Lịch thông báo','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('TYPE_SCHEDULE','SCHEDULE_FOR_OUTLINE',N'Lịch chốt đề cương','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('TYPE_SCHEDULE','SCHEDULE_FOR_MENTOR',N'Chốt điểm GVHD','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('TYPE_SCHEDULE','SCHEDULE_FOR_COMMENTATOR',N'Chốt điểm GVPB','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('TYPE_SCHEDULE','SCHEDULE_FINAL_FILE',N'Nộp báo cáo cuối cùng','ADMIN');
+insert Classification(TypeCode,Code,Value,Role) values('TYPE_SCHEDULE','SCHEDULE_FINAL_SCORE',N'Chốt điểm tổng kết','ADMIN');
 
-insert Education(EducationId,EducationName,MaxStudentMentor,CreatedBy) values('KS','Kỹ sư',20,'hoangvanthong');
-insert Education(EducationId,EducationName,MaxStudentMentor,CreatedBy) values('ThS','Thạc sĩ',25,'hoangvanthong');
-insert Education(EducationId,EducationName,MaxStudentMentor,CreatedBy) values('TS','Tiến sĩ',30,'hoangvanthong');
+insert Education(EducationId,EducationName,MaxStudentMentor,CreatedBy) values('KS',N'Kỹ sư',20,'hoangvanthong');
+insert Education(EducationId,EducationName,MaxStudentMentor,CreatedBy) values('ThS',N'Thạc sĩ',25,'hoangvanthong');
+insert Education(EducationId,EducationName,MaxStudentMentor,CreatedBy) values('TS',N'Tiến sĩ',30,'hoangvanthong');
 
 INSERT Major (MajorId, MajorName, CreatedAt, CreatedBy) VALUES (N'AI', N'Trí tuệ nhân tạo', CAST(N'2024-04-25T08:32:56.613' AS DateTime), N'hoangvanthong');
 INSERT Major (MajorId, MajorName, CreatedAt, CreatedBy) VALUES (N'CNPM', N'Công nghệ phần mềm', CAST(N'2024-04-25T08:32:56.613' AS DateTime), N'hoangvanthong');

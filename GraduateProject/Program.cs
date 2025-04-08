@@ -177,6 +177,7 @@ RecurringJob.AddOrUpdate<IJobService>(x => x.JobExcuteScheduleSemester(), Cron.M
 
 app.MapControllers();
 
-//app.Run($"http://*:5000");
+// app.Run($"http://*:5000");
 app.Run();
+Console.WriteLine($"🚀 App is running on port: {builder.Configuration["ASPNETCORE_URLS"] ?? "default"}");
 

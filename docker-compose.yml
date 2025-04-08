@@ -8,7 +8,7 @@ services:
     image: mysql:8.0
     container_name: mysql_container
     environment:
-      MYSQL_DATABASE: ductmweb_ManagementGraduationProject
+      MYSQL_DATABASE: ManagementGraduationProject
       MYSQL_ROOT_PASSWORD: 123456
     ports:
       - "3307:3306"
@@ -20,10 +20,14 @@ services:
       - my_network
 
   webapi:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
     container_name: aspnet6_container
     ports:
       - "5000:7274"
+      - "8080:80"
+      - "5001:5000"
     depends_on:
       - mysql
     environment:

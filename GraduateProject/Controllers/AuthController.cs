@@ -435,7 +435,7 @@ namespace GraduateProject.Controllers
 
             try
             {
-                string path = System.IO.Path.Combine("file","template","add_student", "sample_add_student.xlsx");
+                string path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "file","template","add_student", "sample_add_student.xlsx");
                 if (System.IO.File.Exists(path))
                 {
                     byte[] fileData = System.IO.File.ReadAllBytes(path);

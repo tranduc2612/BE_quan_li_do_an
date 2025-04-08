@@ -25,6 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="file\**\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="file\file_week\" />
     <Folder Include="file\final\1_2024_2025_201210096\" />
     <Folder Include="file\images\" />
